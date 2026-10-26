@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Your Account - Roommate Finder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="nav-brand">
+        <span class="brand-icon">🏠</span>
+        <span>Roommate Finder</span>
+      </a>
+      <ul class="nav-menu" id="nav-menu"></ul>
+      <div class="nav-actions" id="nav-actions">
+        <a href="/login.html" class="btn btn-secondary btn-sm">Log In</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Auth Content -->
+  <main class="main-content auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>Create Account</h1>
+        <p>Join Roommate Finder to discover compatible housemates</p>
+      </div>
+
+      <div id="alert-container"></div>
+
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="full_name">Full Name</label>
+          <input type="text" id="full_name" class="form-control" placeholder="Alex Morgan" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="alex@university.edu" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="password-input-group">
+            <input type="password" id="password" class="form-control" placeholder="At least 6 characters" required autocomplete="new-password">
+            <button type="button" id="toggle-password" class="password-toggle-btn" aria-label="Toggle password visibility">👁️</button>
+          </div>
+          <div class="password-requirements">
+            Password must be at least 6 characters long.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="confirm_password">Confirm Password</label>
+          <input type="password" id="confirm_password" class="form-control" placeholder="Re-type your password" required autocomplete="new-password">
+        </div>
+
+        <div class="form-group" style="margin-top: 1rem;">
+          <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--slate-600); cursor: pointer;">
+            <input type="checkbox" id="terms" required style="margin-top: 0.2rem;">
+            <span>I agree to Roommate Finder's community guidelines and respectful roommate policy.</span>
+          </label>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+          Create Account
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="/login.html">Sign in here</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/register.js"></script>
+</body>
+</html>

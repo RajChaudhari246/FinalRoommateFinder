@@ -1,0 +1,33 @@
+{
+  "name": "roommate-finder",
+  "version": "1.0.0",
+  "description": "Full-Stack Roommate Finder Web Application with MySQL, Express, and Vanilla JavaScript",
+  "main": "backend/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js",
+    "db:init": "node database/init.js",
+    "db:seed": "node database/seed.js",
+    "test": "node --test backend/tests/*.test.js"
+  },
+  "keywords": [
+    "roommate-finder",
+    "express",
+    "mysql",
+    "session-auth",
+    "matching-algorithm"
+  ],
+  "author": "Antigravity Engineering",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-mysql-session": "^3.0.3",
+    "express-rate-limit": "^7.4.0",
+    "express-session": "^1.18.0",
+    "helmet": "^7.1.0",
+    "mysql2": "^3.11.0"
+  }
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roommate Interests - Roommate Finder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .tab-bar {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 2px solid var(--slate-200);
+      margin-bottom: 2rem;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--slate-500);
+      padding: 0.75rem 0.5rem;
+      cursor: pointer;
+      position: relative;
+    }
+    .tab-btn:hover {
+      color: var(--slate-900);
+    }
+    .tab-btn.active {
+      color: var(--primary-600);
+    }
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--primary-600);
+      border-radius: var(--radius-full);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="nav-brand">
+        <span class="brand-icon">🏠</span>
+        <span>Roommate Finder</span>
+      </a>
+      <ul class="nav-menu" id="nav-menu"></ul>
+      <div class="nav-actions" id="nav-actions"></div>
+    </div>
+  </header>
+
+  <!-- Interests Content -->
+  <main class="main-content">
+    <div class="container" style="max-width: 900px;">
+
+      <div style="margin-bottom: 1.5rem;">
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Connection Requests</h1>
+        <p style="color: var(--slate-500);">Review incoming interest requests or manage requests you've sent to other roommates.</p>
+      </div>
+
+      <div id="alert-container"></div>
+
+      <!-- Tab Buttons -->
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-received">Received Requests</button>
+        <button class="tab-btn" id="tab-sent">Sent Requests</button>
+      </div>
+
+      <!-- Dynamic Interests List -->
+      <div id="interests-list">
+        <!-- Rendered by interests.js -->
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/interests.js"></script>
+</body>
+</html>

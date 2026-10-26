@@ -1,0 +1,59 @@
+/**
+ * Server Entry Point
+ * Validates environment, tests database connection, and starts Express HTTP server.
+ */
+require('dotenv').config();
+const http = require('http');
+const app = require('./app');
+const { testConnection, pool } = require('./config/database');
+
+const PORT = parseInt(process.env.PORT, 10) || 3000;
+
+async function startServer() {
+  console.log('==================================================');
+  console.log('       ROOMMATE FINDER - SERVER STARTUP          ');
+  console.log('==================================================');
+
+  // Verify Database Connection
+  const isConnected = await testConnection();
+  if (!isConnected) {
+    console.warn('\n[Warning] Could not establish connection to MySQL.');
+    console.warn('The application is starting, but database queries will fail until MySQL credentials in .env are configured.');
+    console.warn('Run "npm run db:init" once your credentials are ready.\n');
+  } else {
+    console.log('[Database] Ready to process requests.');
+  }
+
+  const server = http.createServer(app);
+
+  server.listen(PORT, () => {
+    console.log(`\n✓ Server running successfully!`);
+    console.log(`  Local URL:   http://localhost:${PORT}`);
+    console.log(`  Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log('==================================================\n');
+  });
+
+  // Graceful Shutdown
+  function handleGracefulShutdown(signal) {
+    console.log(`\nReceived ${signal}. Gracefully shutting down...`);
+    server.close(async () => {
+      console.log('HTTP server closed.');
+      try {
+        await pool.end();
+        console.log('MySQL connection pool closed.');
+      } catch (err) {
+        console.error('Error closing MySQL pool:', err.message);
+      }
+      process.exit(0);
+    });
+  }
+
+  process.on('SIGTERM', () => handleGracefulShutdown('SIGTERM'));
+  process.on('SIGINT', () => handleGracefulShutdown('SIGINT'));
+}
+
+if (require.main === module) {
+  startServer();
+}
+
+module.exports = startServer;

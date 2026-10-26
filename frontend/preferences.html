@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roommate Preferences - Roommate Finder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="nav-brand">
+        <span class="brand-icon">🏠</span>
+        <span>Roommate Finder</span>
+      </a>
+      <ul class="nav-menu" id="nav-menu"></ul>
+      <div class="nav-actions" id="nav-actions"></div>
+    </div>
+  </header>
+
+  <!-- Preferences Main Content -->
+  <main class="main-content">
+    <div class="container" style="max-width: 860px;">
+
+      <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Desired Roommate Criteria</h1>
+        <p style="color: var(--slate-500);">
+          Specify the habits and requirements you look for in a roommate. These criteria guide our transparent compatibility algorithm.
+        </p>
+      </div>
+
+      <div id="alert-container"></div>
+
+      <form id="preferences-form" novalidate>
+
+        <div class="edit-section">
+          <h3>Target Location & Rent Budget</h3>
+          <p class="edit-section-desc">What budget and locations do you want your future roommate to match?</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="pref_location">Target Neighborhood / Area</label>
+              <input type="text" id="pref_location" class="form-control" placeholder="e.g. Downtown, Cambridge, Lincoln Park">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pref_min_budget">Min Budget ($)</label>
+              <input type="number" id="pref_min_budget" class="form-control" placeholder="e.g. 900" min="0">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pref_max_budget">Max Budget ($)</label>
+              <input type="number" id="pref_max_budget" class="form-control" placeholder="e.g. 1500" min="0">
+            </div>
+          </div>
+        </div>
+
+        <div class="edit-section">
+          <h3>Desired Living Habits & Standards</h3>
+          <p class="edit-section-desc">What lifestyle preferences are essential or preferred in your shared apartment?</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="pref_food">Preferred Food / Cooking Policy</label>
+              <select id="pref_food" class="form-control">
+                <option value="any">Any / No restriction</option>
+                <option value="vegetarian">Vegetarian-friendly kitchen</option>
+                <option value="vegan">Vegan household</option>
+                <option value="non-vegetarian">Non-vegetarian</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pref_smoking">Acceptable Smoking Policy</label>
+              <select id="pref_smoking" class="form-control">
+                <option value="non-smoker">Strict Non-Smoker only</option>
+                <option value="outside-only">Outside balcony / porch only</option>
+                <option value="any">Any smoking status</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pref_study">Preferred Work/Study Rhythm</label>
+              <select id="pref_study" class="form-control">
+                <option value="flexible">Flexible / Any</option>
+                <option value="morning">Daytime working hours</option>
+                <option value="afternoon">Afternoon / Evening shifts</option>
+                <option value="late-night">Night shift / Late study</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="pref_sleeping">Preferred Sleeping Rhythm</label>
+              <select id="pref_sleeping" class="form-control">
+                <option value="flexible">Flexible / Any</option>
+                <option value="early-bird">Early-bird (Values quiet mornings)</option>
+                <option value="night-owl">Night-owl (Quiet late nights)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pref_cleanliness">Cleanliness Expectation</label>
+              <select id="pref_cleanliness" class="form-control">
+                <option value="any">Flexible / Any</option>
+                <option value="very-clean">Very Clean (Strict cleanliness rules)</option>
+                <option value="moderate" selected>Moderate (Normal, neat shared areas)</option>
+                <option value="relaxed">Relaxed / Laid-back</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pref_roommate_count">Household Size</label>
+              <select id="pref_roommate_count" class="form-control">
+                <option value="1">1 roommate only</option>
+                <option value="2">2 roommates</option>
+                <option value="3">3+ roommates</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+          <a href="/dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+          <button type="submit" id="save-preferences-btn" class="btn btn-primary btn-lg">
+            Save Preferences
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/preferences.js"></script>
+</body>
+</html>

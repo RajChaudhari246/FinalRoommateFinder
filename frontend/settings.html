@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Settings - Roommate Finder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="nav-brand">
+        <span class="brand-icon">🏠</span>
+        <span>Roommate Finder</span>
+      </a>
+      <ul class="nav-menu" id="nav-menu"></ul>
+      <div class="nav-actions" id="nav-actions"></div>
+    </div>
+  </header>
+
+  <!-- Settings Content -->
+  <main class="main-content">
+    <div class="container" style="max-width: 760px;">
+
+      <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Account Settings</h1>
+        <p style="color: var(--slate-500);">Manage your security preferences and account details.</p>
+      </div>
+
+      <!-- Section 1: Account Overview -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Account Information</h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--slate-500); text-transform: uppercase;">Name</div>
+            <div style="font-weight: 600; font-size: 1rem; color: var(--slate-900);" id="acc-name">Loading...</div>
+          </div>
+          <div>
+            <div style="font-size: 0.8rem; color: var(--slate-500); text-transform: uppercase;">Email Address</div>
+            <div style="font-weight: 600; font-size: 1rem; color: var(--slate-900);" id="acc-email">Loading...</div>
+          </div>
+          <div>
+            <div style="font-size: 0.8rem; color: var(--slate-500); text-transform: uppercase;">Member Since</div>
+            <div style="font-weight: 600; font-size: 1rem; color: var(--slate-900);" id="acc-date">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Change Password -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="font-size: 1.25rem; margin-bottom: 0.25rem;">Change Password</h3>
+        <p style="color: var(--slate-500); font-size: 0.85rem; margin-bottom: 1.5rem;">
+          Update your password to keep your Roommate Finder account safe.
+        </p>
+
+        <div id="password-alert"></div>
+
+        <form id="change-password-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="current_password">Current Password</label>
+            <input type="password" id="current_password" class="form-control" required autocomplete="current-password">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="new_password">New Password</label>
+              <input type="password" id="new_password" class="form-control" placeholder="At least 6 characters" required autocomplete="new-password">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="confirm_password">Confirm New Password</label>
+              <input type="password" id="confirm_password" class="form-control" placeholder="Re-enter new password" required autocomplete="new-password">
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+            <button type="submit" id="save-password-btn" class="btn btn-primary">
+              Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Section 3: Danger Zone -->
+      <div class="card" style="border-color: #fecaca; background: #fffdfd;">
+        <h3 style="font-size: 1.25rem; color: var(--danger-600); margin-bottom: 0.25rem;">Danger Zone</h3>
+        <p style="color: var(--slate-500); font-size: 0.85rem; margin-bottom: 1.5rem;">
+          Deactivating your account removes your profile from roommate discovery and ends your active session.
+        </p>
+
+        <div id="deactivate-alert"></div>
+
+        <form id="deactivate-form">
+          <div class="form-group">
+            <label class="form-label" for="deactivate_password">Confirm Your Password</label>
+            <input type="password" id="deactivate_password" class="form-control" placeholder="Enter password to confirm deactivation" required>
+          </div>
+
+          <button type="submit" class="btn btn-danger btn-sm">
+            Deactivate My Account
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/settings.js"></script>
+</body>
+</html>

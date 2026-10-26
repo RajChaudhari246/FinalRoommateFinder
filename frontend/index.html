@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roommate Finder - Find Your Perfect Roommate</title>
+  <meta name="description" content="Discover verified roommates who match your accommodation budget, lifestyle, sleeping schedule, and living preferences.">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Landing Hero & Features Custom CSS */
+    .hero-section {
+      padding: 5rem 0 4rem;
+      background: radial-gradient(circle at top right, var(--primary-50), var(--slate-50));
+      border-bottom: var(--border-light);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .hero-content h1 {
+      font-size: 3.25rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+      line-height: 1.15;
+    }
+    .hero-content h1 span {
+      background: linear-gradient(135deg, var(--primary-600), var(--accent-600));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-lead {
+      font-size: 1.2rem;
+      color: var(--slate-600);
+      margin-bottom: 2rem;
+      max-width: 540px;
+    }
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .hero-card-preview {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: var(--border-light);
+      padding: 2rem;
+      box-shadow: var(--shadow-xl);
+      position: relative;
+    }
+    .match-float-badge {
+      position: absolute;
+      top: -15px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      font-weight: 700;
+      padding: 0.4rem 1rem;
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-md);
+      font-size: 0.9rem;
+    }
+    .section {
+      padding: 5rem 0;
+    }
+    .section-title {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 3.5rem;
+    }
+    .section-title h2 {
+      font-size: 2.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .section-title p {
+      color: var(--slate-500);
+      font-size: 1.05rem;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    .step-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: var(--border-light);
+      padding: 2.25rem 1.75rem;
+      text-align: center;
+      position: relative;
+      transition: var(--transition);
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .step-number {
+      width: 3rem;
+      height: 3rem;
+      background: var(--primary-100);
+      color: var(--primary-700);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      margin: 0 auto 1.25rem;
+    }
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: var(--border-light);
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+    }
+    .faq-item h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--slate-900);
+    }
+    .faq-item p {
+      color: var(--slate-600);
+      font-size: 0.95rem;
+    }
+    @media (max-width: 868px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="nav-brand">
+        <span class="brand-icon">🏠</span>
+        <span>Roommate Finder</span>
+      </a>
+      <ul class="nav-menu" id="nav-menu">
+        <!-- Rendered by auth.js -->
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="/find-roommates.html" class="nav-link">Find a Roommate</a></li>
+        <li><a href="#faq" class="nav-link">FAQ</a></li>
+      </ul>
+      <div class="nav-actions" id="nav-actions">
+        <!-- Rendered by auth.js -->
+        <a href="/login.html" class="btn btn-secondary btn-sm">Log In</a>
+        <a href="/register.html" class="btn btn-primary btn-sm">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <h1>Find Your <span>Perfect Roommate</span>.</h1>
+        <p class="hero-lead">
+          Discover people who match your budget, lifestyle, and living preferences. Make finding your next roommate simpler, transparent, and stress-free.
+        </p>
+        <div class="hero-cta-group">
+          <a href="/find-roommates.html" class="btn btn-primary btn-lg" id="btn-find-hero">Find a Roommate</a>
+          <a href="/register.html" class="btn btn-secondary btn-lg" id="btn-register-hero">Create Free Profile</a>
+        </div>
+      </div>
+
+      <div class="hero-card-preview">
+        <div class="match-float-badge">⚡ 94% Match</div>
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+          <div style="width: 3.5rem; height: 3.5rem; border-radius: 50%; background: #e0e7ff; color: #4338ca; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem;">
+            AC
+          </div>
+          <div>
+            <h3 style="font-size: 1.25rem; margin-bottom: 0.15rem;">Alex Chen</h3>
+            <p style="font-size: 0.85rem; color: var(--slate-500);">📍 Brooklyn, New York • 24 yrs</p>
+          </div>
+        </div>
+        <div style="background: var(--primary-50); color: var(--primary-700); padding: 0.4rem 0.75rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem; display: inline-block; margin-bottom: 1rem;">
+          Budget: $1,200 - $1,600 / mo
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+          <span class="badge" style="background: var(--slate-100); color: var(--slate-700);">🥗 Vegetarian</span>
+          <span class="badge" style="background: var(--slate-100); color: var(--slate-700);">🚭 Non-smoker</span>
+          <span class="badge" style="background: var(--slate-100); color: var(--slate-700);">🌅 Early-bird</span>
+          <span class="badge" style="background: var(--slate-100); color: var(--slate-700);">✨ Very-clean</span>
+        </div>
+        <div style="background: var(--slate-50); border-radius: var(--radius-md); padding: 0.75rem 1rem; font-size: 0.85rem; color: var(--slate-600); margin-bottom: 1.25rem;">
+          ✓ Shared target neighborhood in Brooklyn<br>
+          ✓ Budgets overlap by $400/mo<br>
+          ✓ Complementary study & quiet hours
+        </div>
+        <a href="/find-roommates.html" class="btn btn-outline" style="width: 100%;">View Matching Roommates</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <div class="section-title">
+        <h2>How It Works</h2>
+        <p>Three simple steps to finding someone you'll actually enjoy sharing an apartment with.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3 style="margin-bottom: 0.5rem;">Create Your Profile</h3>
+          <p style="color: var(--slate-600); font-size: 0.95rem;">
+            List your budget, city, study habits, diet, and lifestyle standards in your private profile.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3 style="margin-bottom: 0.5rem;">Set Roommate Criteria</h3>
+          <p style="color: var(--slate-600); font-size: 0.95rem;">
+            Specify what you look for in a roommate. Our rule-based engine calculates transparent match scores.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3 style="margin-bottom: 0.5rem;">Connect & Connect</h3>
+          <p style="color: var(--slate-600); font-size: 0.95rem;">
+            Express interest in potential candidates with a friendly note. Accept requests to plan apartment tours.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features & Benefits Section -->
+  <section class="section" id="features" style="background-color: #ffffff; border-top: var(--border-light); border-bottom: var(--border-light);">
+    <div class="container">
+      <div class="section-title">
+        <h2>Built For Compatible Living</h2>
+        <p>No arbitrary matching. We evaluate the core lifestyle factors that make or break shared housing.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="card">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">💰</div>
+          <h3 style="margin-bottom: 0.5rem;">Overlapping Budget Calculations</h3>
+          <p style="color: var(--slate-600); font-size: 0.9rem;">
+            Never waste time negotiating with people outside your price range. See exact overlapping budget spans immediately.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">📊</div>
+          <h3 style="margin-bottom: 0.5rem;">Transparent Compatibility Engine</h3>
+          <p style="color: var(--slate-600); font-size: 0.9rem;">
+            Rule-based percentage scores clearly show why you match: from sleep schedules and diet to cleanliness preferences.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">🔒</div>
+          <h3 style="margin-bottom: 0.5rem;">Safe & Persistent Server Sessions</h3>
+          <p style="color: var(--slate-600); font-size: 0.9rem;">
+            Your passwords are encrypted with bcrypt, sessions are stored securely in MySQL, and private credentials are never exposed.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-title">
+        <h2>Frequently Asked Questions</h2>
+        <p>Everything you need to know about Roommate Finder.</p>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>How is compatibility calculated?</h4>
+          <p>
+            We use a rule-based algorithm that evaluates budget overlap (25%), location proximity (20%), food preferences (10%), smoking habits (10%), work/study schedule (10%), sleep schedule (10%), cleanliness standards (10%), and household size (5%).
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Are my personal characteristics separate from what I want in a roommate?</h4>
+          <p>
+            Yes! For example, you can be a non-smoker who prefers living with non-smokers, or a meat-eater who is happy rooming with vegetarians. Personal profile attributes and desired criteria are saved independently.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>How do I express interest in someone?</h4>
+          <p>
+            Once logged in, click "Express Interest" on any roommate card. You can include a custom note. The recipient will see your request on their Interests page and can accept or decline.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="nav-brand" style="margin-bottom: 1rem;">
+            <span class="brand-icon">🏠</span>
+            <span>Roommate Finder</span>
+          </div>
+          <p style="color: var(--slate-500); font-size: 0.9rem; max-width: 320px;">
+            A reliable, transparent roommate matching platform built with Node.js, Express, MySQL, and vanilla JavaScript.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="/find-roommates.html">Find Roommates</a></li>
+            <li><a href="/register.html">Sign Up</a></li>
+            <li><a href="/login.html">Sign In</a></li>
+            <li><a href="/dashboard.html">Dashboard</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Features</h4>
+          <ul class="footer-links">
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#features">Compatibility Engine</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <ul class="footer-links">
+            <li><a href="/profile.html">My Profile</a></li>
+            <li><a href="/preferences.html">My Criteria</a></li>
+            <li><a href="/interests.html">Interests</a></li>
+            <li><a href="/settings.html">Settings</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Roommate Finder. Built with Node.js, Express, and MySQL.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

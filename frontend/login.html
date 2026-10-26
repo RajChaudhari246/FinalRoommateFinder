@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - Roommate Finder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="nav-brand">
+        <span class="brand-icon">🏠</span>
+        <span>Roommate Finder</span>
+      </a>
+      <ul class="nav-menu" id="nav-menu"></ul>
+      <div class="nav-actions" id="nav-actions">
+        <a href="/register.html" class="btn btn-primary btn-sm">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Auth Content -->
+  <main class="main-content auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>Welcome Back</h1>
+        <p>Log in to view matches, manage interests, and update your profile</p>
+      </div>
+
+      <div id="alert-container"></div>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="name@example.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="password-input-group">
+            <input type="password" id="password" class="form-control" placeholder="Enter your password" required autocomplete="current-password">
+            <button type="button" id="toggle-password" class="password-toggle-btn" aria-label="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Quick Demo Account Helper for evaluation testing -->
+      <div style="margin-top: 1.5rem; padding: 0.85rem; background: var(--slate-50); border: 1px dashed var(--slate-300); border-radius: var(--radius-md); font-size: 0.8rem; color: var(--slate-600);">
+        <strong>Demo Accounts (Password: Password@123):</strong>
+        <div style="margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.2rem;">
+          <span><code>alex.chen@example.com</code> (New York)</span>
+          <span><code>sarah.j@example.com</code> (Boston)</span>
+          <span><code>maya.patel@example.com</code> (San Francisco)</span>
+        </div>
+      </div>
+
+      <div class="auth-footer">
+        Don't have an account yet? <a href="/register.html">Sign up for free</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>

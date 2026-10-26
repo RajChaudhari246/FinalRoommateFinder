@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Roommate Finder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="nav-brand">
+        <span class="brand-icon">🏠</span>
+        <span>Roommate Finder</span>
+      </a>
+      <ul class="nav-menu" id="nav-menu"></ul>
+      <div class="nav-actions" id="nav-actions"></div>
+    </div>
+  </header>
+
+  <!-- Main Profile View -->
+  <main class="main-content">
+    <div class="container">
+
+      <div id="alert-container"></div>
+
+      <!-- Profile Header Card -->
+      <div class="profile-header-card">
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar-large" id="profile-avatar">--</div>
+          <div class="profile-main-meta">
+            <h1 id="profile-name">Loading Profile...</h1>
+            <p id="profile-headline">City & Neighborhood</p>
+            <p id="profile-email" style="font-size: 0.85rem; color: var(--slate-400); margin-top: 0.25rem;"></p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center;">
+          <span id="val-status-badge" class="badge">Checking...</span>
+          <a href="/edit-profile.html" class="btn btn-primary btn-sm">Edit Profile</a>
+        </div>
+      </div>
+
+      <!-- Attributes Grid Section -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Living Standards & Habits</h3>
+        <p style="color: var(--slate-500); font-size: 0.875rem; margin-bottom: 1.25rem;">These personal traits are shared with potential roommates to calculate compatibility.</p>
+
+        <div class="attributes-grid">
+          <div class="attribute-item">
+            <div class="attribute-label">Monthly Budget</div>
+            <div class="attribute-value" id="val-budget">--</div>
+          </div>
+
+          <div class="attribute-item">
+            <div class="attribute-label">College / Workplace</div>
+            <div class="attribute-value" id="val-workplace">--</div>
+          </div>
+
+          <div class="attribute-item">
+            <div class="attribute-label">Dietary Preference</div>
+            <div class="attribute-value" id="val-food">--</div>
+          </div>
+
+          <div class="attribute-item">
+            <div class="attribute-label">Smoking Policy</div>
+            <div class="attribute-value" id="val-smoking">--</div>
+          </div>
+
+          <div class="attribute-item">
+            <div class="attribute-label">Drinking Preference</div>
+            <div class="attribute-value" id="val-drinking">--</div>
+          </div>
+
+          <div class="attribute-item">
+            <div class="attribute-label">Study / Work Schedule</div>
+            <div class="attribute-value" id="val-study">--</div>
+          </div>
+
+          <div class="attribute-item">
+            <div class="attribute-label">Sleep Rhythm</div>
+            <div class="attribute-value" id="val-sleeping">--</div>
+          </div>
+
+          <div class="attribute-item">
+            <div class="attribute-label">Cleanliness Level</div>
+            <div class="attribute-value" id="val-cleanliness">--</div>
+          </div>
+
+          <div class="attribute-item">
+            <div class="attribute-label">Household Size</div>
+            <div class="attribute-value" id="val-roommates">--</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bio / About Me Section -->
+      <div class="card">
+        <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">About Me</h3>
+        <p id="val-about" style="color: var(--slate-700); font-size: 0.95rem; line-height: 1.6; white-space: pre-line;">
+          --
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/profile.js"></script>
+</body>
+</html>
