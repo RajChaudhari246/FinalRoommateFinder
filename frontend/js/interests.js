@@ -58,7 +58,7 @@ async function loadReceivedInterests() {
           <div>
             <h3 style="font-size: 1.2rem; margin-bottom: 0.25rem;">${escapeHtml(item.sender_name)}</h3>
             <p style="font-size: 0.85rem; color: var(--slate-500);">
-              📍 ${escapeHtml(item.city || 'City')} • Budget: $${Math.round(item.min_budget || 0)} - $${Math.round(item.max_budget || 0)}/mo
+              📍 ${escapeHtml(item.city || 'City')} • Budget: ₹${Math.round(item.min_budget || 0)} - ₹${Math.round(item.max_budget || 0)}/mo
             </p>
           </div>
           <span class="badge badge-status ${item.status}">

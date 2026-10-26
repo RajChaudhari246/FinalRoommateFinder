@@ -16,10 +16,10 @@ async function seedDatabase() {
     console.log(`Total users in database: ${userRows[0].count}`);
     console.log(`Total profiles in database: ${profileRows[0].count}`);
     console.log('\nDemo accounts ready:');
-    console.log('  alex.chen@example.com    | Password@123 (New York, Tech, $1200-$1600)');
-    console.log('  sarah.j@example.com      | Password@123 (Boston, Student, $800-$1200)');
-    console.log('  maya.patel@example.com   | Password@123 (San Francisco, Designer, $1500-$2200)');
-    console.log('  david.m@example.com      | Password@123 (Chicago, Medical Resident, $900-$1300)');
+    console.log('  rajesh.patil@example.com | Password@123 (Shirpur, RCPIT Computer Engg, ₹3000-₹4500)');
+    console.log('  pooja.sharma@example.com | Password@123 (Shirpur, RCPCOP Pharmacy, ₹2500-₹4000)');
+    console.log('  aditya.c@example.com     | Password@123 (Shirpur, NMIMS Tech, ₹4000-₹6000)');
+    console.log('  sneha.k@example.com      | Password@123 (Shirpur, RCPIT Electronics, ₹3000-₹4200)');
   } catch (err) {
     console.error('✗ Seeding failed:', err.message);
     process.exit(1);

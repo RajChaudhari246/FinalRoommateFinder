@@ -57,7 +57,7 @@ async function loadProfileCompletion() {
     // Set brief summary
     document.getElementById('profile-summary-city').textContent = profile.city || 'Location not set';
     document.getElementById('profile-summary-budget').textContent = profile.max_budget > 0
-      ? `$${Math.round(profile.min_budget)} - $${Math.round(profile.max_budget)}/mo`
+      ? `₹${Math.round(profile.min_budget)} - ₹${Math.round(profile.max_budget)}/mo`
       : 'Budget not set';
 
   } catch (err) {

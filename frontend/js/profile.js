@@ -31,7 +31,7 @@ async function initViewProfilePage(user) {
 
     // Attributes
     document.getElementById('val-budget').textContent = p.max_budget > 0
-      ? `$${Math.round(p.min_budget)} - $${Math.round(p.max_budget)} / month`
+      ? `₹${Math.round(p.min_budget)} - ₹${Math.round(p.max_budget)} / month`
       : 'Not set';
 
     document.getElementById('val-workplace').textContent = p.college_or_workplace || 'Not specified';

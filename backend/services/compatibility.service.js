@@ -64,34 +64,34 @@ function calculateBudgetCompatibility(minPref, maxPref, minCandidate, maxCandida
       return {
         score: 1.0,
         status: 'positive',
-        reason: `Budgets overlap strongly ($${Math.round(overlapStart)} - $${Math.round(overlapEnd)}).`
+        reason: `Budgets overlap strongly (₹${Math.round(overlapStart)} - ₹${Math.round(overlapEnd)}).`
       };
     } else {
       return {
         score: 0.8,
         status: 'positive',
-        reason: `Budgets partially overlap ($${Math.round(overlapStart)} - $${Math.round(overlapEnd)}).`
+        reason: `Budgets partially overlap (₹${Math.round(overlapStart)} - ₹${Math.round(overlapEnd)}).`
       };
     }
   }
 
   // Distance gap calculation
   const gap = cMin > pMax ? cMin - pMax : pMin - cMax;
-  const avgBudget = (pMax + cMax) / 2 || 1000;
+  const avgBudget = (pMax + cMax) / 2 || 3500;
   const gapPercent = gap / avgBudget;
 
   if (gapPercent <= 0.15) {
     return {
       score: 0.4,
       status: 'neutral',
-      reason: `Budgets are close, with a modest difference of ~$${Math.round(gap)}.`
+      reason: `Budgets are close, with a modest difference of ~₹${Math.round(gap)}.`
     };
   }
 
   return {
     score: 0.1,
     status: 'negative',
-    reason: `Budgets do not align (difference of ~$${Math.round(gap)}).`
+    reason: `Budgets do not align (difference of ~₹${Math.round(gap)}).`
   };
 }
 

@@ -30,7 +30,7 @@ async function loadRoommateDetails() {
     document.getElementById('details-name').textContent = p.full_name;
     document.getElementById('details-headline').textContent = `📍 ${p.city} • ${p.preferred_location} ${p.age ? `• ${p.age} years old` : ''}`;
     document.getElementById('details-work').textContent = p.college_or_workplace || 'Not specified';
-    document.getElementById('details-budget').textContent = `$${Math.round(p.min_budget)} - $${Math.round(p.max_budget)} / month`;
+    document.getElementById('details-budget').textContent = `₹${Math.round(p.min_budget)} - ₹${Math.round(p.max_budget)} / month`;
     document.getElementById('details-food').textContent = p.food_preference || 'Any';
     document.getElementById('details-smoking').textContent = p.smoking_preference || 'Non-smoker';
     document.getElementById('details-drinking').textContent = p.drinking_preference || 'Non-drinker';

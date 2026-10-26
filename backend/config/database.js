@@ -117,14 +117,14 @@ function seedDemoData() {
     db.run('BEGIN TRANSACTION');
     const hash = '$2a$10$ACXIcW3ACVF1sJRCpyvQduxWcqLVEHL1vCC1e5JvKBl.uKvxKnbfm'; // Password@123
     const demoUsers = [
-      [1, 'Alex Chen', 'alex.chen@example.com', hash, 'active'],
-      [2, 'Sarah Jenkins', 'sarah.j@example.com', hash, 'active'],
-      [3, 'Maya Patel', 'maya.patel@example.com', hash, 'active'],
-      [4, 'David Miller', 'david.m@example.com', hash, 'active'],
-      [5, 'Elena Rostova', 'elena.r@example.com', hash, 'active'],
-      [6, 'Marcus Johnson', 'marcus.j@example.com', hash, 'active'],
-      [7, 'Chloe Zhang', 'chloe.z@example.com', hash, 'active'],
-      [8, 'Liam O Connor', 'liam.o@example.com', hash, 'active']
+      [1, 'Rajesh Patil', 'rajesh.patil@example.com', hash, 'active'],
+      [2, 'Pooja Sharma', 'pooja.sharma@example.com', hash, 'active'],
+      [3, 'Aditya Chaudhari', 'aditya.c@example.com', hash, 'active'],
+      [4, 'Sneha Kulkarni', 'sneha.k@example.com', hash, 'active'],
+      [5, 'Rohit Deshmukh', 'rohit.d@example.com', hash, 'active'],
+      [6, 'Neha Marathe', 'neha.m@example.com', hash, 'active'],
+      [7, 'Chetan Ahire', 'chetan.a@example.com', hash, 'active'],
+      [8, 'Priyanka Mali', 'priyanka.m@example.com', hash, 'active']
     ];
 
     const userStmt = db.prepare('INSERT OR IGNORE INTO users (id, full_name, email, password_hash, account_status) VALUES (?, ?, ?, ?, ?)');
@@ -132,14 +132,14 @@ function seedDemoData() {
     userStmt.finalize();
 
     const demoProfiles = [
-      [1, 24, 'Male', 'New York', 'Brooklyn / Manhattan Downtown', 'Tech Corp NY', 1200.0, 1600.0, 'vegetarian', 'non-smoker', 'non-drinker', 'morning', 'early-bird', 'very-clean', 1, 'Software engineer working in FinTech. I keep common areas tidy, love home cooking, and respect quiet study hours.', 1],
-      [2, 22, 'Female', 'Boston', 'Cambridge / Allston', 'Harvard University', 800.0, 1200.0, 'non-vegetarian', 'outside-only', 'occasional', 'late-night', 'night-owl', 'moderate', 2, 'Biochem grad student. Often in the lab during the day. Friendly, easygoing, and love sharing coffee & movie nights on weekends.', 1],
-      [3, 26, 'Female', 'San Francisco', 'Mission District / SOMA', 'Design Studio SF', 1500.0, 2200.0, 'vegan', 'non-smoker', 'occasional', 'afternoon', 'flexible', 'very-clean', 1, 'Product designer passionate about plant care, yoga, and calm aesthetics. Looking for a mindful, tidy roommate.', 1],
-      [4, 28, 'Male', 'Chicago', 'Lincoln Park / Lakeview', 'Northwestern Memorial Hospital', 900.0, 1300.0, 'non-vegetarian', 'non-smoker', 'non-drinker', 'morning', 'early-bird', 'moderate', 1, 'Pediatric resident doctor. Very quiet at home, sleep early, values dependable roommates and shared grocery ordering.', 1],
-      [5, 25, 'Female', 'Austin', 'Downtown / South Congress', 'Austin Data Lab', 1000.0, 1400.0, 'vegetarian', 'non-smoker', 'occasional', 'flexible', 'flexible', 'moderate', 1, 'Data analyst working hybrid. Love live music, cycling, and trying local food trucks. Looking for a neat and friendly roommate.', 1],
-      [6, 27, 'Male', 'New York', 'Astoria / Long Island City', 'Midtown Media Agency', 1300.0, 1800.0, 'any', 'non-smoker', 'occasional', 'afternoon', 'night-owl', 'moderate', 1, 'Digital marketing strategist. Enjoy casual cooking, gaming, and exploring art galleries. Very respectful of boundaries.', 1],
-      [7, 23, 'Female', 'Boston', 'Fenway / Back Bay', 'Boston Architectural College', 850.0, 1250.0, 'vegetarian', 'non-smoker', 'non-drinker', 'morning', 'early-bird', 'very-clean', 1, 'Architecture master student. Neat, organized, and focused on studies. Looking for a quiet, considerate roommate.', 1],
-      [8, 26, 'Male', 'New York', 'Upper East Side / Yorkville', 'Wall Street Advisory', 1400.0, 1900.0, 'non-vegetarian', 'outside-only', 'regular', 'flexible', 'flexible', 'moderate', 2, 'Financial consultant who travels frequently for business. Friendly, respectful, and looking for reliable roommates.', 1]
+      [1, 21, 'Male', 'Shirpur', 'Karwand Naka / RCPIT Campus', 'R. C. Patel Institute of Technology (RCPIT), Shirpur', 3000.0, 4500.0, 'vegetarian', 'non-smoker', 'non-drinker', 'morning', 'early-bird', 'very-clean', 1, 'Final year Computer Engineering student at RCPIT Shirpur. Focused on studies, quiet room, pure veg, and keeps common areas organized.', 1],
+      [2, 20, 'Female', 'Shirpur', 'Nimzari Naka / Subhash Nagar', 'R. C. Patel Institute of Pharmacy (RCPCOP), Shirpur', 2500.0, 4000.0, 'vegetarian', 'non-smoker', 'non-drinker', 'late-night', 'night-owl', 'moderate', 2, 'B.Pharm student at RCPCOP Shirpur. Friendly and studious. Looking for a female roommate for a shared flat near Nimzari Naka.', 1],
+      [3, 22, 'Male', 'Shirpur', 'NMIMS Campus / Mukesh Patel Park', 'NMIMS Mukesh Patel School of Technology, Shirpur', 4000.0, 6000.0, 'any', 'non-smoker', 'non-drinker', 'afternoon', 'flexible', 'very-clean', 1, 'B.Tech IT student at NMIMS Shirpur. Looking for a neat, disciplined flatmate near Mukesh Patel Park area. Non-smoker only.', 1],
+      [4, 21, 'Female', 'Shirpur', 'Karwand Naka / R. C. Patel Area', 'RCPIT Shirpur', 3000.0, 4200.0, 'vegetarian', 'non-smoker', 'non-drinker', 'morning', 'early-bird', 'very-clean', 1, 'Electronics student at RCPIT. Early riser, respectful of personal space and study schedule. Looking for a clean shared room.', 1],
+      [5, 23, 'Male', 'Shirpur', 'Shahada Road / College Corner', 'H. R. Patel Institute, Shirpur', 2500.0, 3800.0, 'non-vegetarian', 'non-smoker', 'occasional', 'late-night', 'night-owl', 'moderate', 1, 'MBA student in Shirpur. Easygoing, loves cricket and fitness, cooperative with sharing room rent and daily expenses.', 1],
+      [6, 20, 'Female', 'Shirpur', 'NMIMS Campus Area', 'NMIMS Shirpur', 4500.0, 6500.0, 'vegetarian', 'non-smoker', 'non-drinker', 'flexible', 'flexible', 'moderate', 1, 'Data Science student at NMIMS. Friendly, fond of listening to music with headphones, seeking a cooperative female roommate.', 1],
+      [7, 22, 'Male', 'Shirpur', 'Karwand Naka / Main Road', 'RCPIT Shirpur', 2800.0, 4000.0, 'vegetarian', 'non-smoker', 'non-drinker', 'morning', 'early-bird', 'very-clean', 1, 'Civil Engineering student. Organized, hygienic, non-smoker. Looking to share an apartment near Karwand Naka.', 1],
+      [8, 21, 'Female', 'Shirpur', 'Nimzari Naka / Market Area', 'RCPCOP Shirpur', 3000.0, 4500.0, 'vegetarian', 'non-smoker', 'non-drinker', 'afternoon', 'flexible', 'moderate', 2, 'Pharmacy student. Looking for a responsible, friendly roommate for shared accommodation with good study environment.', 1]
     ];
 
     const profStmt = db.prepare(`
@@ -154,14 +154,14 @@ function seedDemoData() {
     profStmt.finalize();
 
     const demoPrefs = [
-      [1, 'Brooklyn / Manhattan Downtown', 1100.0, 1700.0, 'vegetarian', 'non-smoker', 'morning', 'early-bird', 'very-clean', 1],
-      [2, 'Cambridge / Allston', 750.0, 1250.0, 'any', 'outside-only', 'flexible', 'night-owl', 'moderate', 2],
-      [3, 'Mission District / SOMA', 1400.0, 2300.0, 'vegan', 'non-smoker', 'flexible', 'flexible', 'very-clean', 1],
-      [4, 'Lincoln Park / Lakeview', 850.0, 1350.0, 'any', 'non-smoker', 'morning', 'early-bird', 'moderate', 1],
-      [5, 'Downtown / South Congress', 950.0, 1450.0, 'vegetarian', 'non-smoker', 'flexible', 'flexible', 'moderate', 1],
-      [6, 'Astoria / Long Island City', 1200.0, 1900.0, 'any', 'non-smoker', 'flexible', 'flexible', 'moderate', 1],
-      [7, 'Fenway / Back Bay', 800.0, 1300.0, 'vegetarian', 'non-smoker', 'morning', 'early-bird', 'very-clean', 1],
-      [8, 'Upper East Side / Yorkville', 1300.0, 2000.0, 'any', 'any', 'flexible', 'flexible', 'moderate', 2]
+      [1, 'Karwand Naka / RCPIT Campus', 2800.0, 4800.0, 'vegetarian', 'non-smoker', 'morning', 'early-bird', 'very-clean', 1],
+      [2, 'Nimzari Naka / Subhash Nagar', 2200.0, 4200.0, 'vegetarian', 'non-smoker', 'flexible', 'night-owl', 'moderate', 2],
+      [3, 'NMIMS Campus / Mukesh Patel Park', 3800.0, 6200.0, 'any', 'non-smoker', 'flexible', 'flexible', 'very-clean', 1],
+      [4, 'Karwand Naka / R. C. Patel Area', 2800.0, 4500.0, 'vegetarian', 'non-smoker', 'morning', 'early-bird', 'very-clean', 1],
+      [5, 'Shahada Road / College Corner', 2200.0, 4000.0, 'any', 'non-smoker', 'flexible', 'flexible', 'moderate', 1],
+      [6, 'NMIMS Campus Area', 4000.0, 6800.0, 'any', 'non-smoker', 'flexible', 'flexible', 'moderate', 1],
+      [7, 'Karwand Naka / Main Road', 2500.0, 4200.0, 'vegetarian', 'non-smoker', 'morning', 'early-bird', 'very-clean', 1],
+      [8, 'Nimzari Naka / Market Area', 2800.0, 4800.0, 'vegetarian', 'non-smoker', 'flexible', 'flexible', 'moderate', 2]
     ];
 
     const prefStmt = db.prepare(`

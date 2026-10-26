@@ -127,7 +127,7 @@ function renderRoommateCard(r) {
       </div>
 
       <div class="budget-chip">
-        💰 $${Math.round(r.min_budget)} - $${Math.round(r.max_budget)} / mo
+        💰 ₹${Math.round(r.min_budget)} - ₹${Math.round(r.max_budget)} / mo
       </div>
 
       <div class="tag-list">
