@@ -4,6 +4,9 @@
   "description": "Full-Stack Roommate Finder Web Application with MySQL, Express, and Vanilla JavaScript",
   "main": "backend/server.js",
   "type": "commonjs",
+  "engines": {
+    "node": ">=18.0.0 <=22.x"
+  },
   "scripts": {
     "start": "node backend/server.js",
     "dev": "node --watch backend/server.js",
