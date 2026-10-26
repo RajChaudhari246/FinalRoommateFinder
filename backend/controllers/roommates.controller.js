@@ -9,6 +9,11 @@ const { calculateCompatibility } = require('../services/compatibility.service');
 async function getRoommates(req, res, next) {
   const currentUserId = req.session ? req.session.userId : null;
   const {
+    gender,
+    section,
+    securityVisitorPolicy,
+    securityCurfew,
+    securityAmenities,
     location,
     minBudget,
     maxBudget,
@@ -47,7 +52,9 @@ async function getRoommates(req, res, next) {
              p.min_budget, p.max_budget, p.food_preference, p.smoking_preference,
              p.drinking_preference, p.study_schedule, p.sleeping_schedule,
              p.cleanliness_preference, p.preferred_roommate_count, p.about_me,
-             p.profile_photo_path, p.is_complete
+             p.profile_photo_path, p.security_curfew, p.security_visitor_policy,
+             p.security_amenities, p.security_emergency_contact, p.security_notes,
+             p.is_complete
       FROM users u
       JOIN profiles p ON u.id = p.user_id
       WHERE u.account_status = 'active'
@@ -60,6 +67,31 @@ async function getRoommates(req, res, next) {
     if (currentUserId) {
       sql += ' AND u.id != ?';
       params.push(currentUserId);
+    }
+
+    // Filter: Gender Section (e.g. Girls Section or Boys Section)
+    const targetGender = gender || (section === 'female' ? 'Female' : section === 'male' ? 'Male' : null);
+    if (targetGender && targetGender !== 'all' && targetGender !== 'any') {
+      sql += ' AND LOWER(p.gender) = LOWER(?)';
+      params.push(targetGender);
+    }
+
+    // Filter: Security Visitor Policy
+    if (securityVisitorPolicy && securityVisitorPolicy !== 'any') {
+      sql += ' AND (p.security_visitor_policy = ? OR p.security_visitor_policy = "open" OR p.security_visitor_policy IS NULL)';
+      params.push(securityVisitorPolicy);
+    }
+
+    // Filter: Security Curfew
+    if (securityCurfew && securityCurfew !== 'any') {
+      sql += ' AND (p.security_curfew = ? OR p.security_curfew = "flexible" OR p.security_curfew IS NULL)';
+      params.push(securityCurfew);
+    }
+
+    // Filter: Security Amenities
+    if (securityAmenities && securityAmenities !== 'any') {
+      sql += ' AND (p.security_amenities = ? OR p.security_amenities IS NULL)';
+      params.push(securityAmenities);
     }
 
     // Filter: Location

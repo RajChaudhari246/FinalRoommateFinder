@@ -114,18 +114,32 @@ async function loadRecommendedRoommates() {
         else badgeClass = 'pill-low';
       }
 
+      const isFemale = (r.gender || '').toLowerCase() === 'female';
+      const isMale = (r.gender || '').toLowerCase() === 'male';
+      const wingBadge = isFemale
+        ? '<span class="wing-badge wing-badge-girls">🌸 Girls Wing</span>'
+        : isMale
+          ? '<span class="wing-badge wing-badge-boys">⚡ Boys Wing</span>'
+          : '<span class="wing-badge wing-badge-all">🌐 Roommate</span>';
+
+      const cardClass = isFemale ? 'card-female' : isMale ? 'card-male' : '';
+
       return `
-        <div class="roommate-card">
-          <div class="roommate-card-header">
-            <div class="roommate-name-meta">
-              <h3>${escapeHtml(r.full_name)}</h3>
-              <p>📍 ${escapeHtml(r.city)} • ${r.age ? `${r.age} yrs` : 'Student / Pro'}</p>
-            </div>
+        <div class="roommate-card ${cardClass}">
+          <div class="roommate-card-topbar">
+            ${wingBadge}
             ${matchScore !== null ? `<span class="compatibility-pill ${badgeClass}">⚡ ${matchScore}% Match</span>` : ''}
           </div>
 
+          <div class="roommate-card-header">
+            <div class="roommate-name-meta">
+              <h3>${escapeHtml(r.full_name)}</h3>
+              <p>📍 ${escapeHtml(r.city)} • ${r.age ? `${r.age} yrs` : 'Member'}</p>
+            </div>
+          </div>
+
           <div class="budget-chip">
-            💰 $${Math.round(r.min_budget)} - $${Math.round(r.max_budget)} / mo
+            💰 ₹${Math.round(r.min_budget)} - ₹${Math.round(r.max_budget)} / month
           </div>
 
           <div class="tag-list">
@@ -135,11 +149,11 @@ async function loadRecommendedRoommates() {
           </div>
 
           <p style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 1.25rem; line-height: 1.5;">
-            ${r.about_me ? escapeHtml(r.about_me.substring(0, 95)) + (r.about_me.length > 95 ? '...' : '') : 'No bio provided yet.'}
+            ${r.about_me ? escapeHtml(r.about_me.substring(0, 95)) + (r.about_me.length > 95 ? '...' : '') : 'Looking for compatible roommates with shared living standards.'}
           </p>
 
           <div class="roommate-actions">
-            <a href="/roommate-details.html?id=${r.user_id}" class="btn btn-secondary btn-sm" style="flex: 1;">View Details</a>
+            <a href="/roommate-details.html?id=${r.user_id}" class="btn btn-secondary btn-sm" style="flex: 1;">View Profile</a>
             <button onclick="expressQuickInterest(${r.user_id}, '${escapeHtml(r.full_name)}')" class="btn btn-primary btn-sm" style="flex: 1;">Connect</button>
           </div>
         </div>

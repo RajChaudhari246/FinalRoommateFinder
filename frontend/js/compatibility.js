@@ -45,6 +45,118 @@ async function loadRoommateDetails() {
     const avatarEl = document.getElementById('details-avatar');
     if (avatarEl) avatarEl.textContent = initials;
 
+    // Wing & Protocol Details
+    const isFemale = (p.gender || '').toLowerCase() === 'female';
+    const isMale = (p.gender || '').toLowerCase() === 'male';
+    const wingBadge = document.getElementById('details-wing-badge');
+    const protoTitle = document.getElementById('details-protocol-title');
+    const protoStatus = document.getElementById('details-protocol-status');
+    const protoDesc = document.getElementById('details-protocol-desc');
+
+    if (isFemale) {
+      if (wingBadge) {
+        wingBadge.textContent = '🌸 Girls Wing • Safe Zone';
+        wingBadge.className = 'wing-badge wing-badge-girls';
+      }
+      if (protoTitle) protoTitle.innerHTML = '🌸 Women\'s Safety & Security Protocol';
+      if (protoStatus) {
+        protoStatus.textContent = 'Girls Safe Space';
+        protoStatus.style.background = '#fce7f3';
+        protoStatus.style.color = '#be123c';
+      }
+      if (protoDesc) protoDesc.textContent = 'Self-reported safety requirements, visitor rules, and building security standards.';
+
+      document.getElementById('lbl-details-visitor').textContent = 'Visitor & Male Guest Policy';
+      document.getElementById('lbl-details-curfew').textContent = 'Hostel / Society Gate Timing';
+      document.getElementById('lbl-details-amenities').textContent = 'Building Security Standards';
+      document.getElementById('lbl-details-emergency').textContent = 'Guardian Verification';
+
+      const visitorMap = {
+        'no-male-guests': '🔒 Strictly No Male Guests (Women-Only Flat)',
+        'female-friends-only': '🔒 Female Friends & Family Only',
+        'pre-informed-daytime': '👥 Pre-informed Day Visitors Allowed',
+        'open': '🔓 Open Guest Policy'
+      };
+      const curfewMap = {
+        'strict-curfew': '⏰ Strict Gate Timing (Back by 9:00 PM)',
+        'moderate-curfew': '⏰ Moderate Timing (Back by 10:30 PM)',
+        'flexible': '⏰ Flexible / Shift Timing (11:00 PM+)',
+        'no-curfew': '⏰ 24/7 Gate Access (No Curfew)'
+      };
+      const amenityMap = {
+        'gated-cctv': '🛡️ 24/7 Guarded Society with CCTV',
+        'secure-lock': '🛡️ Keypad / Biometric Door Lock',
+        'safe-colony': '🛡️ Safe Well-Lit Colony'
+      };
+      const emergencyMap = {
+        'verified-guardian': '📞 Guardian Contact Verified & Shareable',
+        'available-on-request': '📞 Available on Request',
+        'private': '🔒 Keep Private Initially'
+      };
+
+      document.getElementById('details-proto-visitor').textContent = visitorMap[p.security_visitor_policy] || 'Not specified';
+      document.getElementById('details-proto-curfew').textContent = curfewMap[p.security_curfew] || 'Not specified';
+      document.getElementById('details-proto-amenities').textContent = amenityMap[p.security_amenities] || 'Not specified';
+      document.getElementById('details-proto-emergency').textContent = emergencyMap[p.security_emergency_contact] || 'Not specified';
+
+    } else if (isMale) {
+      if (wingBadge) {
+        wingBadge.textContent = '⚡ Boys Wing • Living Space';
+        wingBadge.className = 'wing-badge wing-badge-boys';
+      }
+      if (protoTitle) protoTitle.innerHTML = '⚡ Men\'s Living Harmony & Flat Protocol';
+      if (protoStatus) {
+        protoStatus.textContent = 'Boys Living Wing';
+        protoStatus.style.background = '#e0f2fe';
+        protoStatus.style.color = '#0369a1';
+      }
+      if (protoDesc) protoDesc.textContent = 'Study environment, quiet hours, door locking discipline, and bill splitting commitments.';
+
+      document.getElementById('lbl-details-visitor').textContent = 'Overnight Guests & Parties';
+      document.getElementById('lbl-details-curfew').textContent = 'Quiet Hours & Night Routine';
+      document.getElementById('lbl-details-amenities').textContent = 'Flat Security & Key Custody';
+      document.getElementById('lbl-details-emergency').textContent = 'Chores & UPI Bill Splitting';
+
+      const guestMap = {
+        'no-overnight-guests': '📚 Strict Quiet Study (No Overnight Guests)',
+        'weekend-friends-only': '👥 Weekend Friends Permitted with Notice',
+        'prior-consent': '👥 Consent-Based Guests Allowed',
+        'open': '🔓 Social Living Space'
+      };
+      const quietMap = {
+        'strict-curfew': '⏰ Strict Silence After 10:30 PM (Early Sleep)',
+        'moderate-curfew': '⏰ Moderate (Headphones at Night)',
+        'night-owl': '🎮 Late Night Gaming/Coding Friendly',
+        'flexible': '⏰ Flexible Living Schedule'
+      };
+      const lockMap = {
+        'strict-lock-discipline': '🔑 Door Lock & Key Custody Discipline',
+        'cctv-parking': '🅿️ CCTV & Vehicle / Bike Parking'
+      };
+      const billMap = {
+        'split-bill-discipline': '💳 Strict Cleaning Roster & Prompt UPI Split',
+        'shared-cook': '🍳 Shared Cook / Housekeeping Required',
+        'flexible': 'Casual / As-Needed'
+      };
+
+      document.getElementById('details-proto-visitor').textContent = guestMap[p.security_visitor_policy] || 'Not specified';
+      document.getElementById('details-proto-curfew').textContent = quietMap[p.security_curfew] || 'Not specified';
+      document.getElementById('details-proto-amenities').textContent = lockMap[p.security_amenities] || 'Not specified';
+      document.getElementById('details-proto-emergency').textContent = billMap[p.security_emergency_contact] || 'Not specified';
+
+    } else {
+      if (wingBadge) wingBadge.textContent = '🌐 Community Listing';
+      document.getElementById('details-proto-visitor').textContent = p.security_visitor_policy || 'Not set';
+      document.getElementById('details-proto-curfew').textContent = p.security_curfew || 'Not set';
+      document.getElementById('details-proto-amenities').textContent = p.security_amenities || 'Not set';
+      document.getElementById('details-proto-emergency').textContent = p.security_emergency_contact || 'Not set';
+    }
+
+    if (p.security_notes) {
+      document.getElementById('details-proto-notes').textContent = p.security_notes;
+      document.getElementById('details-notes-wrap').style.display = 'block';
+    }
+
     // Load compatibility breakdown if authenticated
     if (user) {
       await loadDetailedCompatibility();

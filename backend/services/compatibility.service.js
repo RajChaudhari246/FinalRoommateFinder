@@ -275,6 +275,67 @@ function calculateLifestyleCompatibility(prefCount, candCount) {
 }
 
 /**
+ * Compare gender harmony
+ */
+function calculateGenderCompatibility(prefGender, userGender, candGender) {
+  const pGen = (prefGender || 'any').toLowerCase();
+  const cGen = (candGender || '').toLowerCase();
+  const uGen = (userGender || '').toLowerCase();
+
+  if (pGen !== 'any' && pGen !== '') {
+    if (cGen === pGen) {
+      return { score: 1.0, status: 'positive', reason: `Matches your preferred ${candGender} roommate requirement.` };
+    }
+    return { score: 0.1, status: 'negative', reason: `Different gender (${candGender || 'Not specified'}) than your preference (${prefGender}).` };
+  }
+
+  if (uGen && cGen && uGen === cGen) {
+    return { score: 1.0, status: 'positive', reason: `Same gender living environment (${candGender}).` };
+  }
+
+  return { score: 0.8, status: 'neutral', reason: `Gender: ${candGender || 'Any'}.` };
+}
+
+/**
+ * Compare security, visitor and curfew protocols
+ */
+function calculateSecurityCompatibility(prefVisitor, prefCurfew, candVisitor, candCurfew) {
+  const pVis = (prefVisitor || 'any').toLowerCase();
+  const cVis = (candVisitor || 'open').toLowerCase();
+  const pCur = (prefCurfew || 'any').toLowerCase();
+  const cCur = (candCurfew || 'flexible').toLowerCase();
+
+  let score = 0.85;
+  const reasons = [];
+
+  if (pVis !== 'any' && pVis !== '') {
+    if (cVis === pVis) {
+      score = 1.0;
+      reasons.push('Shared visitor and privacy standards');
+    } else if (pVis.includes('no-') && !cVis.includes('no-')) {
+      score = 0.3;
+      reasons.push('Different guest guidelines');
+    }
+  }
+
+  if (cVis === 'no-male-guests' || cVis === 'female-friends-only') {
+    reasons.push('Protected women-only safety protocol');
+  } else if (cVis === 'no-overnight-guests') {
+    reasons.push('Quiet study & non-party environment');
+  }
+
+  if (pCur !== 'any' && pCur === cCur) {
+    reasons.push('Aligned gate and in-time routine');
+  }
+
+  return {
+    score,
+    status: score >= 0.7 ? 'positive' : 'neutral',
+    reason: reasons.length > 0 ? reasons.join(' • ') : 'Compatible living safety standards.'
+  };
+}
+
+/**
  * Main Compatibility Calculator
  * Compares seeker preferences (or profile if preferences are unset) against candidate profile.
  *
@@ -359,6 +420,23 @@ function calculateCompatibility(seekerCriteria, candidateProfile, customWeights 
     { key: 'lifestyle', name: 'Household Size & Lifestyle', weight: weights.lifestyle, ...lifestyleFactor }
   ];
 
+  // Optional gender & section harmony factor
+  if (pref.preferred_gender || candidateProfile.gender) {
+    const genderFactor = calculateGenderCompatibility(pref.preferred_gender, userProf.gender, candidateProfile.gender);
+    factorResults.push({ key: 'gender', name: 'Gender & Wing Harmony', weight: weights.gender || 10, ...genderFactor });
+  }
+
+  // Optional security and living safety protocol factor
+  if (pref.pref_security_visitor_policy || candidateProfile.security_visitor_policy) {
+    const secFactor = calculateSecurityCompatibility(
+      pref.pref_security_visitor_policy,
+      pref.pref_security_curfew,
+      candidateProfile.security_visitor_policy,
+      candidateProfile.security_curfew
+    );
+    factorResults.push({ key: 'security', name: 'Safety & Guest Protocol', weight: weights.security || 10, ...secFactor });
+  }
+
   // Calculate weighted sum
   let totalScore = 0;
   let totalWeight = 0;
@@ -388,5 +466,7 @@ module.exports = {
   calculateStudyCompatibility,
   calculateSleepingCompatibility,
   calculateCleanlinessCompatibility,
-  calculateLifestyleCompatibility
+  calculateLifestyleCompatibility,
+  calculateGenderCompatibility,
+  calculateSecurityCompatibility
 };

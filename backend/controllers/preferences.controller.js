@@ -35,6 +35,7 @@ async function getMyPreferences(req, res, next) {
 async function updateMyPreferences(req, res, next) {
   const userId = req.session.userId;
   const {
+    preferred_gender,
     preferred_location,
     min_budget,
     max_budget,
@@ -43,7 +44,10 @@ async function updateMyPreferences(req, res, next) {
     preferred_study_schedule,
     preferred_sleeping_schedule,
     preferred_cleanliness,
-    preferred_roommate_count
+    preferred_roommate_count,
+    pref_security_visitor_policy,
+    pref_security_curfew,
+    pref_security_amenities
   } = req.body;
 
   try {
@@ -58,6 +62,7 @@ async function updateMyPreferences(req, res, next) {
     if (existingPref && existingPref.length > 0) {
       await pool.query(
         `UPDATE preferences SET
+          preferred_gender = ?,
           preferred_location = ?,
           min_budget = ?,
           max_budget = ?,
@@ -67,9 +72,13 @@ async function updateMyPreferences(req, res, next) {
           preferred_sleeping_schedule = ?,
           preferred_cleanliness = ?,
           preferred_roommate_count = ?,
+          pref_security_visitor_policy = ?,
+          pref_security_curfew = ?,
+          pref_security_amenities = ?,
           updated_at = CURRENT_TIMESTAMP
         WHERE user_id = ?`,
         [
+          preferred_gender || 'any',
           preferred_location ? preferred_location.trim() : null,
           parsedMin,
           parsedMax,
@@ -79,18 +88,23 @@ async function updateMyPreferences(req, res, next) {
           preferred_sleeping_schedule || 'flexible',
           preferred_cleanliness || 'any',
           parsedCount,
+          pref_security_visitor_policy || 'any',
+          pref_security_curfew || 'any',
+          pref_security_amenities || 'any',
           userId
         ]
       );
     } else {
       await pool.query(
         `INSERT INTO preferences (
-          user_id, preferred_location, min_budget, max_budget, preferred_food,
+          user_id, preferred_gender, preferred_location, min_budget, max_budget, preferred_food,
           preferred_smoking_status, preferred_study_schedule, preferred_sleeping_schedule,
-          preferred_cleanliness, preferred_roommate_count
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          preferred_cleanliness, preferred_roommate_count, pref_security_visitor_policy,
+          pref_security_curfew, pref_security_amenities
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           userId,
+          preferred_gender || 'any',
           preferred_location ? preferred_location.trim() : null,
           parsedMin,
           parsedMax,
@@ -99,7 +113,10 @@ async function updateMyPreferences(req, res, next) {
           preferred_study_schedule || 'flexible',
           preferred_sleeping_schedule || 'flexible',
           preferred_cleanliness || 'any',
-          parsedCount
+          parsedCount,
+          pref_security_visitor_policy || 'any',
+          pref_security_curfew || 'any',
+          pref_security_amenities || 'any'
         ]
       );
     }

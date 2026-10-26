@@ -66,25 +66,61 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: var(--transition);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.roommate-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: transparent;
+  transition: background 0.3s ease;
+}
+
+.roommate-card.card-female::before {
+  background: linear-gradient(90deg, #f43f5e, #ec4899);
+}
+
+.roommate-card.card-male::before {
+  background: linear-gradient(90deg, #2563eb, #0ea5e9);
 }
 
 .roommate-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--primary-200);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.12), 0 4px 8px -4px rgba(15, 23, 42, 0.04);
+}
+
+.roommate-card.card-female:hover {
+  border-color: #fbcfe8;
+}
+
+.roommate-card.card-male:hover {
+  border-color: #bfdbfe;
+}
+
+.roommate-card-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
 }
 
 .roommate-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .roommate-name-meta h3 {
   font-size: 1.15rem;
   margin-bottom: 0.2rem;
+  color: var(--slate-900);
 }
 
 .roommate-name-meta p {
@@ -100,6 +136,13 @@
   padding: 0.35rem 0.65rem;
   border-radius: var(--radius-sm);
   display: inline-block;
+  margin-bottom: 0.85rem;
+}
+
+.security-highlights-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
   margin-bottom: 1rem;
 }
 
@@ -108,7 +151,7 @@
   align-items: center;
   gap: 0.35rem;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.825rem;
   padding: 0.35rem 0.75rem;
   border-radius: var(--radius-full);
 }
@@ -121,8 +164,8 @@
 .tag-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
 }
 
 .tag {
@@ -141,6 +184,7 @@
   margin-bottom: 1.25rem;
   font-size: 0.8rem;
   color: var(--slate-600);
+  border: 1px solid var(--slate-100);
 }
 
 .highlights-box ul {

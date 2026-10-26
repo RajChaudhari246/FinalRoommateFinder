@@ -18,14 +18,19 @@ async function renderNavbar() {
 
   if (!navActions) return;
 
+  const currentPath = window.location.pathname;
+  const currentSearch = window.location.search;
+
   if (user) {
     // Authenticated User Navigation
     if (navMenu) {
       navMenu.innerHTML = `
-        <li><a href="/find-roommates.html" class="nav-link" id="nav-find">Find Roommates</a></li>
-        <li><a href="/dashboard.html" class="nav-link" id="nav-dash">Dashboard</a></li>
-        <li><a href="/interests.html" class="nav-link" id="nav-interests">Interests</a></li>
-        <li><a href="/profile.html" class="nav-link" id="nav-profile">My Profile</a></li>
+        <li><a href="/find-roommates.html?section=female" class="nav-link ${currentSearch.includes('female') ? 'active' : ''}" style="color: #be123c; font-weight: 600;" id="nav-girls">🌸 Girls Section</a></li>
+        <li><a href="/find-roommates.html?section=male" class="nav-link ${currentSearch.includes('male') ? 'active' : ''}" style="color: #1d4ed8; font-weight: 600;" id="nav-boys">⚡ Boys Section</a></li>
+        <li><a href="/find-roommates.html" class="nav-link ${currentPath.includes('find-roommates') && !currentSearch ? 'active' : ''}" id="nav-find">All Roommates</a></li>
+        <li><a href="/dashboard.html" class="nav-link ${currentPath.includes('dashboard') ? 'active' : ''}" id="nav-dash">Dashboard</a></li>
+        <li><a href="/interests.html" class="nav-link ${currentPath.includes('interests') ? 'active' : ''}" id="nav-interests">Interests</a></li>
+        <li><a href="/profile.html" class="nav-link ${currentPath.includes('profile') && !currentPath.includes('edit') ? 'active' : ''}" id="nav-profile">My Profile</a></li>
       `;
     }
 
@@ -52,10 +57,11 @@ async function renderNavbar() {
     // Guest User Navigation
     if (navMenu) {
       navMenu.innerHTML = `
+        <li><a href="/find-roommates.html?section=female" class="nav-link ${currentSearch.includes('female') ? 'active' : ''}" style="color: #be123c; font-weight: 600;">🌸 Girls Section</a></li>
+        <li><a href="/find-roommates.html?section=male" class="nav-link ${currentSearch.includes('male') ? 'active' : ''}" style="color: #1d4ed8; font-weight: 600;">⚡ Boys Section</a></li>
+        <li><a href="/find-roommates.html" class="nav-link">Browse All</a></li>
         <li><a href="/index.html#how-it-works" class="nav-link">How It Works</a></li>
-        <li><a href="/index.html#features" class="nav-link">Features</a></li>
-        <li><a href="/find-roommates.html" class="nav-link">Browse Profiles</a></li>
-        <li><a href="/index.html#faq" class="nav-link">FAQ</a></li>
+        <li><a href="/index.html#features" class="nav-link">Safety & Features</a></li>
       `;
     }
 

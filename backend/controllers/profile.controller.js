@@ -50,7 +50,12 @@ async function updateMyProfile(req, res, next) {
     cleanliness_preference,
     preferred_roommate_count,
     about_me,
-    profile_photo_path
+    profile_photo_path,
+    security_curfew,
+    security_visitor_policy,
+    security_amenities,
+    security_emergency_contact,
+    security_notes
   } = req.body;
 
   try {
@@ -86,6 +91,11 @@ async function updateMyProfile(req, res, next) {
           preferred_roommate_count = ?,
           about_me = ?,
           profile_photo_path = ?,
+          security_curfew = ?,
+          security_visitor_policy = ?,
+          security_amenities = ?,
+          security_emergency_contact = ?,
+          security_notes = ?,
           is_complete = ?,
           updated_at = CURRENT_TIMESTAMP
       WHERE user_id = ?
@@ -108,6 +118,11 @@ async function updateMyProfile(req, res, next) {
       parsedCount,
       about_me ? about_me.trim() : null,
       profile_photo_path || null,
+      security_curfew || null,
+      security_visitor_policy || null,
+      security_amenities || null,
+      security_emergency_contact || null,
+      security_notes ? security_notes.trim() : null,
       isComplete,
       userId
     ];
@@ -148,7 +163,9 @@ async function getPublicProfile(req, res, next) {
               p.min_budget, p.max_budget, p.food_preference, p.smoking_preference,
               p.drinking_preference, p.study_schedule, p.sleeping_schedule,
               p.cleanliness_preference, p.preferred_roommate_count, p.about_me,
-              p.profile_photo_path, p.is_complete
+              p.profile_photo_path, p.is_complete,
+              p.security_curfew, p.security_visitor_policy, p.security_amenities,
+              p.security_emergency_contact, p.security_notes
        FROM users u
        JOIN profiles p ON u.id = p.user_id
        WHERE u.id = ? AND u.account_status = 'active'`,

@@ -36,6 +36,26 @@
 
       <form id="preferences-form" novalidate>
 
+        <!-- Section 1: Roommate Wing & Gender Preference -->
+        <div class="edit-section">
+          <h3>Target Roommate Wing & Gender Preference</h3>
+          <p class="edit-section-desc">Select whether you are looking for roommates in the dedicated Girls Wing, Boys Wing, or open community.</p>
+
+          <div class="form-group" style="max-width: 480px;">
+            <label class="form-label" for="preferred_gender">Preferred Roommate Section *</label>
+            <select id="preferred_gender" class="form-control">
+              <option value="any">🌐 Any Gender / Open Community</option>
+              <option value="Female">🌸 Girls Section (Women's Safe Space)</option>
+              <option value="Male">⚡ Boys Section (Men's Living Wing)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section 1B: Dynamic Gender-Specific Security & Living Criteria -->
+        <div id="pref-security-container" class="edit-section" style="display: none; transition: all 0.3s ease;">
+          <!-- Dynamically populated based on preferred gender -->
+        </div>
+
         <div class="edit-section">
           <h3>Target Location & Rent Budget</h3>
           <p class="edit-section-desc">What budget and locations do you want your future roommate to match?</p>

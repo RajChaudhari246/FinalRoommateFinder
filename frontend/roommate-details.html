@@ -39,7 +39,10 @@
         <div class="profile-avatar-wrap">
           <div class="profile-avatar-large" id="details-avatar">--</div>
           <div class="profile-main-meta">
-            <h1 id="details-name">Loading...</h1>
+            <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+              <h1 id="details-name">Loading...</h1>
+              <span id="details-wing-badge" class="wing-badge wing-badge-all">Verified Member</span>
+            </div>
             <p id="details-headline">Location</p>
           </div>
         </div>
@@ -103,6 +106,44 @@
                 <div class="attribute-label">Desired Roommates</div>
                 <div class="attribute-value" id="details-roommates">--</div>
               </div>
+            </div>
+          </div>
+
+          <!-- Safety & Living Protocol Card -->
+          <div class="card" id="details-protocol-card" style="margin-bottom: 1.75rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h3 id="details-protocol-title" style="font-size: 1.25rem;">🛡️ Safety & Living Protocol</h3>
+              <span id="details-protocol-status" class="protocol-badge" style="background: var(--slate-100); color: var(--slate-700);">Living Standards</span>
+            </div>
+            <p id="details-protocol-desc" style="color: var(--slate-500); font-size: 0.85rem; margin-bottom: 1.25rem;">
+              Roommate's safety policies, gate timings, and household security rules.
+            </p>
+
+            <div class="attributes-grid" id="details-protocol-grid">
+              <div class="attribute-item">
+                <div class="attribute-label" id="lbl-details-visitor">Visitor & Guest Policy</div>
+                <div class="attribute-value" id="details-proto-visitor">--</div>
+              </div>
+
+              <div class="attribute-item">
+                <div class="attribute-label" id="lbl-details-curfew">Gate / Curfew Timing</div>
+                <div class="attribute-value" id="details-proto-curfew">--</div>
+              </div>
+
+              <div class="attribute-item">
+                <div class="attribute-label" id="lbl-details-amenities">Building Security Standards</div>
+                <div class="attribute-value" id="details-proto-amenities">--</div>
+              </div>
+
+              <div class="attribute-item">
+                <div class="attribute-label" id="lbl-details-emergency">Verification & Accountability</div>
+                <div class="attribute-value" id="details-proto-emergency">--</div>
+              </div>
+            </div>
+
+            <div id="details-notes-wrap" style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--slate-100); display: none;">
+              <h4 style="font-size: 0.875rem; color: var(--slate-700); margin-bottom: 0.35rem;">Roommate Guidelines & Safety Notes</h4>
+              <p id="details-proto-notes" style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.5;"></p>
             </div>
           </div>
 
