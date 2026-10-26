@@ -7,46 +7,36 @@ const fs = require('fs');
 const path = require('path');
 const mysql = require('mysql2/promise');
 
+const { dbConfig } = require('../backend/config/database');
+
 async function initializeDatabase() {
   console.log('--- Roommate Finder: Database Initialization ---');
 
-  const host = process.env.DB_HOST || 'localhost';
-  const port = parseInt(process.env.DB_PORT, 10) || 3306;
-  const user = process.env.DB_USER || 'root';
-  const password = process.env.DB_PASSWORD || '';
-  const database = process.env.DB_NAME || 'roommate_finder';
-
-  console.log(`Connecting to MySQL server at ${host}:${port} as user '${user}'...`);
+  console.log(`Connecting to MySQL server at ${dbConfig.host}:${dbConfig.port} as user '${dbConfig.user}'...`);
 
   let rootConnection;
   try {
-    // Try connecting directly to target database first (works with dedicated scoped users)
+    // Try connecting directly to target database first (works with dedicated scoped users / cloud DBs)
     try {
       rootConnection = await mysql.createConnection({
-        host,
-        port,
-        user,
-        password,
-        database,
+        ...dbConfig,
         multipleStatements: true
       });
-      console.log(`✓ Successfully connected to MySQL database '${database}'.`);
+      console.log(`✓ Successfully connected to MySQL database '${dbConfig.database}'.`);
     } catch (directErr) {
-      // If database doesn't exist yet, connect to server to create it
+      // If database doesn't exist yet, connect without specifying database to create it
+      const { database, ...serverConfig } = dbConfig;
       rootConnection = await mysql.createConnection({
-        host,
-        port,
-        user,
-        password,
+        ...serverConfig,
         multipleStatements: true
       });
       console.log('✓ Successfully connected to MySQL server.');
 
       await rootConnection.query(
-        `CREATE DATABASE IF NOT EXISTS \`${database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
+        `CREATE DATABASE IF NOT EXISTS \`${dbConfig.database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
       );
-      console.log(`✓ Verified database '${database}' exists.`);
-      await rootConnection.changeUser({ database });
+      console.log(`✓ Verified database '${dbConfig.database}' exists.`);
+      await rootConnection.changeUser({ database: dbConfig.database });
     }
 
     // Step 3: Read schema.sql

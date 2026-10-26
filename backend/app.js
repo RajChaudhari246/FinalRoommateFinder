@@ -22,6 +22,9 @@ const settingsRoutes = require('./routes/settings.routes');
 
 const app = express();
 
+// Enable trust proxy for Render / reverse proxies (required for HTTPS cookies and rate limiting)
+app.set('trust proxy', 1);
+
 // Security Headers with Helmet
 app.use(
   helmet({

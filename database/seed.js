@@ -7,27 +7,19 @@ const fs = require('fs');
 const path = require('path');
 const mysql = require('mysql2/promise');
 
+const { dbConfig } = require('../backend/config/database');
+
 async function seedDatabase() {
   console.log('--- Roommate Finder: Database Seeder ---');
-
-  const host = process.env.DB_HOST || 'localhost';
-  const port = parseInt(process.env.DB_PORT, 10) || 3306;
-  const user = process.env.DB_USER || 'root';
-  const password = process.env.DB_PASSWORD || '';
-  const database = process.env.DB_NAME || 'roommate_finder';
 
   let connection;
   try {
     connection = await mysql.createConnection({
-      host,
-      port,
-      user,
-      password,
-      database,
+      ...dbConfig,
       multipleStatements: true
     });
 
-    console.log(`Connected to database '${database}'. Applying seed data...`);
+    console.log(`Connected to database '${dbConfig.database}'. Applying seed data...`);
 
     const seedPath = path.join(__dirname, 'seed.sql');
     if (!fs.existsSync(seedPath)) {
