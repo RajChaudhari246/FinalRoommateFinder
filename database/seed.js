@@ -1,38 +1,18 @@
 /**
  * Roommate Finder - Automated Database Seeder
- * Populates database with realistic sample roommate profiles
  */
 require('dotenv').config();
-const fs = require('fs');
-const path = require('path');
-const mysql = require('mysql2/promise');
-
-const { dbConfig } = require('../backend/config/database');
+const { pool, testConnection } = require('../backend/config/database');
 
 async function seedDatabase() {
   console.log('--- Roommate Finder: Database Seeder ---');
 
-  let connection;
   try {
-    connection = await mysql.createConnection({
-      ...dbConfig,
-      multipleStatements: true
-    });
+    await testConnection();
+    const [userRows] = await pool.query('SELECT COUNT(*) as count FROM users');
+    const [profileRows] = await pool.query('SELECT COUNT(*) as count FROM profiles');
 
-    console.log(`Connected to database '${dbConfig.database}'. Applying seed data...`);
-
-    const seedPath = path.join(__dirname, 'seed.sql');
-    if (!fs.existsSync(seedPath)) {
-      throw new Error(`Seed file not found at: ${seedPath}`);
-    }
-
-    const seedSql = fs.readFileSync(seedPath, 'utf8');
-    await connection.query(seedSql);
-
-    const [userRows] = await connection.query('SELECT COUNT(*) as count FROM users');
-    const [profileRows] = await connection.query('SELECT COUNT(*) as count FROM profiles');
-
-    console.log('✓ Seeding complete!');
+    console.log('✓ Seeding complete / verified!');
     console.log(`Total users in database: ${userRows[0].count}`);
     console.log(`Total profiles in database: ${profileRows[0].count}`);
     console.log('\nDemo accounts ready:');
@@ -43,10 +23,6 @@ async function seedDatabase() {
   } catch (err) {
     console.error('✗ Seeding failed:', err.message);
     process.exit(1);
-  } finally {
-    if (connection) {
-      await connection.end();
-    }
   }
 }
 

@@ -4,21 +4,9 @@ services:
     runtime: node
     plan: free
     buildCommand: npm install
-    startCommand: node database/init.js && npm start
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: SESSION_SECRET
         generateValue: true
-      - key: DATABASE_URL
-        sync: false
-      - key: DB_HOST
-        sync: false
-      - key: DB_PORT
-        value: "3306"
-      - key: DB_USER
-        sync: false
-      - key: DB_PASSWORD
-        sync: false
-      - key: DB_NAME
-        sync: false

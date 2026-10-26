@@ -53,40 +53,56 @@ async function updateMyPreferences(req, res, next) {
       ? parseFloat(max_budget) : null;
     const parsedCount = preferred_roommate_count ? parseInt(preferred_roommate_count, 10) : 1;
 
-    const upsertQuery = `
-      INSERT INTO preferences (
-        user_id, preferred_location, min_budget, max_budget, preferred_food,
-        preferred_smoking_status, preferred_study_schedule, preferred_sleeping_schedule,
-        preferred_cleanliness, preferred_roommate_count
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      ON DUPLICATE KEY UPDATE
-        preferred_location = VALUES(preferred_location),
-        min_budget = VALUES(min_budget),
-        max_budget = VALUES(max_budget),
-        preferred_food = VALUES(preferred_food),
-        preferred_smoking_status = VALUES(preferred_smoking_status),
-        preferred_study_schedule = VALUES(preferred_study_schedule),
-        preferred_sleeping_schedule = VALUES(preferred_sleeping_schedule),
-        preferred_cleanliness = VALUES(preferred_cleanliness),
-        preferred_roommate_count = VALUES(preferred_roommate_count),
-        updated_at = CURRENT_TIMESTAMP
-    `;
+    const [existingPref] = await pool.query('SELECT id FROM preferences WHERE user_id = ?', [userId]);
 
-    const params = [
-      userId,
-      preferred_location ? preferred_location.trim() : null,
-      parsedMin,
-      parsedMax,
-      preferred_food || 'any',
-      preferred_smoking_status || 'any',
-      preferred_study_schedule || 'flexible',
-      preferred_sleeping_schedule || 'flexible',
-      preferred_cleanliness || 'any',
-      parsedCount
-    ];
-
-    await pool.query(upsertQuery, params);
+    if (existingPref && existingPref.length > 0) {
+      await pool.query(
+        `UPDATE preferences SET
+          preferred_location = ?,
+          min_budget = ?,
+          max_budget = ?,
+          preferred_food = ?,
+          preferred_smoking_status = ?,
+          preferred_study_schedule = ?,
+          preferred_sleeping_schedule = ?,
+          preferred_cleanliness = ?,
+          preferred_roommate_count = ?,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = ?`,
+        [
+          preferred_location ? preferred_location.trim() : null,
+          parsedMin,
+          parsedMax,
+          preferred_food || 'any',
+          preferred_smoking_status || 'any',
+          preferred_study_schedule || 'flexible',
+          preferred_sleeping_schedule || 'flexible',
+          preferred_cleanliness || 'any',
+          parsedCount,
+          userId
+        ]
+      );
+    } else {
+      await pool.query(
+        `INSERT INTO preferences (
+          user_id, preferred_location, min_budget, max_budget, preferred_food,
+          preferred_smoking_status, preferred_study_schedule, preferred_sleeping_schedule,
+          preferred_cleanliness, preferred_roommate_count
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          userId,
+          preferred_location ? preferred_location.trim() : null,
+          parsedMin,
+          parsedMax,
+          preferred_food || 'any',
+          preferred_smoking_status || 'any',
+          preferred_study_schedule || 'flexible',
+          preferred_sleeping_schedule || 'flexible',
+          preferred_cleanliness || 'any',
+          parsedCount
+        ]
+      );
+    }
 
     res.status(200).json({
       success: true,

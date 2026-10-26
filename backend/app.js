@@ -5,7 +5,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
+const SQLiteStore = require('connect-sqlite3')(session);
 const helmet = require('helmet');
 
 const { pool, dbConfig } = require('./config/database');
@@ -46,24 +46,13 @@ app.use(
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
-// Persistent Session Store in MySQL
-const sessionStore = new MySQLStore(
-  {
-    clearExpired: true,
-    checkExpirationInterval: 15 * 60 * 1000, // 15 mins
-    expiration: 24 * 60 * 60 * 1000, // 1 day
-    createDatabaseTable: true,
-    schema: {
-      tableName: 'sessions',
-      columnNames: {
-        session_id: 'session_id',
-        expires: 'expires',
-        data: 'data'
-      }
-    }
-  },
-  pool
-);
+// Persistent Session Store in SQLite
+const sessionStore = new SQLiteStore({
+  db: 'sessions.sqlite',
+  table: 'sessions',
+  dir: path.join(__dirname, '../database'),
+  concurrentDB: true
+});
 
 const isProduction = process.env.NODE_ENV === 'production';
 
