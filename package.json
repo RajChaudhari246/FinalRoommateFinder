@@ -1,7 +1,7 @@
 {
   "name": "roommate-finder",
   "version": "1.0.0",
-  "description": "Full-Stack Roommate Finder Web Application with MySQL, Express, and Vanilla JavaScript",
+  "description": "Full-Stack Roommate Finder Web Application with SQLite, Express, and Vanilla JavaScript",
   "main": "backend/server.js",
   "type": "commonjs",
   "engines": {
@@ -18,7 +18,7 @@
   "keywords": [
     "roommate-finder",
     "express",
-    "mysql",
+    "sqlite",
     "session-auth",
     "matching-algorithm"
   ],
@@ -29,11 +29,10 @@
     "connect-sqlite3": "^0.9.18",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "express-mysql-session": "^3.0.3",
     "express-rate-limit": "^7.4.0",
     "express-session": "^1.18.0",
     "helmet": "^7.1.0",
-    "mysql2": "^3.11.0",
+    "sqlite": "^5.1.1",
     "sqlite3": "5.1.7"
   }
 }

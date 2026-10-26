@@ -1,11 +1,13 @@
 /**
- * Database Layer - Embedded SQLite Engine (with optional MySQL fallback)
- * Provides zero-configuration, file-based database for instant local & cloud deployment.
+ * Database Layer - Embedded SQLite Engine
+ * Provides a zero-configuration, file-based database (acting like an H2 database for Node.js)
+ * with an async/await query/execute wrapper that matches mysql2's [rows, fields] return signature.
  */
 require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
+const { open } = require('sqlite');
 
 const DB_DIR = path.join(__dirname, '../../database');
 if (!fs.existsSync(DB_DIR)) {
@@ -13,108 +15,91 @@ if (!fs.existsSync(DB_DIR)) {
 }
 
 const SQLITE_FILE = process.env.SQLITE_PATH || path.join(DB_DIR, 'roommate.sqlite');
+const SCHEMA_FILE = path.join(DB_DIR, 'schema.sql');
 
-console.log(`[Database] Initializing SQLite embedded database at: ${SQLITE_FILE}`);
-const db = new sqlite3.Database(SQLITE_FILE);
+let dbInstance = null;
+let initPromise = null;
 
-// Enable WAL mode and foreign keys for high concurrency and relational integrity
-db.run('PRAGMA journal_mode = WAL');
-db.run('PRAGMA foreign_keys = ON');
-
-// Automatically initialize schema
-function initSchema() {
-  db.serialize(() => {
-    db.run(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        full_name TEXT NOT NULL,
-        email TEXT NOT NULL UNIQUE,
-        password_hash TEXT NOT NULL,
-        account_status TEXT NOT NULL DEFAULT 'active',
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    db.run(`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`);
-    db.run(`CREATE INDEX IF NOT EXISTS idx_users_status ON users(account_status)`);
-
-    db.run(`
-      CREATE TABLE IF NOT EXISTS profiles (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL UNIQUE,
-        age INTEGER NULL,
-        gender TEXT NULL,
-        city TEXT NOT NULL,
-        preferred_location TEXT NOT NULL,
-        college_or_workplace TEXT NULL,
-        min_budget REAL NOT NULL DEFAULT 0.00,
-        max_budget REAL NOT NULL DEFAULT 0.00,
-        food_preference TEXT NOT NULL DEFAULT 'any',
-        smoking_preference TEXT NOT NULL DEFAULT 'non-smoker',
-        drinking_preference TEXT NOT NULL DEFAULT 'non-drinker',
-        study_schedule TEXT NOT NULL DEFAULT 'flexible',
-        sleeping_schedule TEXT NOT NULL DEFAULT 'flexible',
-        cleanliness_preference TEXT NOT NULL DEFAULT 'moderate',
-        preferred_roommate_count INTEGER NOT NULL DEFAULT 1,
-        about_me TEXT NULL,
-        profile_photo_path TEXT NULL,
-        is_complete INTEGER NOT NULL DEFAULT 0,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-      )
-    `);
-
-    db.run(`CREATE INDEX IF NOT EXISTS idx_profiles_city ON profiles(city)`);
-
-    db.run(`
-      CREATE TABLE IF NOT EXISTS preferences (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL UNIQUE,
-        preferred_location TEXT NULL,
-        min_budget REAL NULL,
-        max_budget REAL NULL,
-        preferred_food TEXT NOT NULL DEFAULT 'any',
-        preferred_smoking_status TEXT NOT NULL DEFAULT 'any',
-        preferred_study_schedule TEXT NOT NULL DEFAULT 'flexible',
-        preferred_sleeping_schedule TEXT NOT NULL DEFAULT 'flexible',
-        preferred_cleanliness TEXT NOT NULL DEFAULT 'any',
-        preferred_roommate_count INTEGER NOT NULL DEFAULT 1,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-      )
-    `);
-
-    db.run(`
-      CREATE TABLE IF NOT EXISTS interests (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        sender_user_id INTEGER NOT NULL,
-        receiver_user_id INTEGER NOT NULL,
-        status TEXT NOT NULL DEFAULT 'pending',
-        message TEXT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (sender_user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY (receiver_user_id) REFERENCES users(id) ON DELETE CASCADE,
-        UNIQUE(sender_user_id, receiver_user_id)
-      )
-    `);
-
-    // Seed sample profiles if empty
-    db.get('SELECT COUNT(*) as count FROM users', [], (err, row) => {
-      if (!err && row && row.count === 0) {
-        console.log('[Database] Empty database detected. Seeding sample profiles...');
-        seedDemoData();
-      }
-    });
+/**
+ * Sanitizes input parameters for SQLite compatibility:
+ * - Converts boolean true/false to integer 1/0
+ * - Converts undefined to null to prevent bind errors
+ */
+function sanitizeParams(params) {
+  if (!params) return [];
+  const list = Array.isArray(params) ? params : [params];
+  return list.map(val => {
+    if (val === true) return 1;
+    if (val === false) return 0;
+    if (val === undefined) return null;
+    return val;
   });
 }
 
-function seedDemoData() {
-  db.serialize(() => {
-    db.run('BEGIN TRANSACTION');
+/**
+ * Translates common MySQL dialect expressions into SQLite compatible SQL:
+ * - Converts `INSERT IGNORE INTO` to `INSERT OR IGNORE INTO`
+ */
+function sanitizeSql(sql) {
+  return sql
+    .replace(/INSERT\s+IGNORE\s+INTO/gi, 'INSERT OR IGNORE INTO')
+    .replace(/BOOLEAN/gi, 'INTEGER')
+    .replace(/TRUE/gi, '1')
+    .replace(/FALSE/gi, '0');
+}
+
+/**
+ * Returns the open SQLite database connection with WAL mode and Foreign Keys enabled.
+ * Automatically runs schema.sql if the database is newly created or empty.
+ */
+async function getDb() {
+  if (dbInstance) {
+    return dbInstance;
+  }
+
+  if (!initPromise) {
+    initPromise = (async () => {
+      const db = await open({
+        filename: SQLITE_FILE,
+        driver: sqlite3.Database
+      });
+
+      // Enable Write-Ahead Logging (WAL) for high concurrency and foreign keys for integrity
+      await db.run('PRAGMA journal_mode = WAL;');
+      await db.run('PRAGMA foreign_keys = ON;');
+
+      // Auto-initialize schema if tables do not exist
+      const tableCheck = await db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
+      if (!tableCheck) {
+        if (fs.existsSync(SCHEMA_FILE)) {
+          const schemaSql = fs.readFileSync(SCHEMA_FILE, 'utf8');
+          await db.exec(schemaSql);
+        }
+      }
+
+      // Check if demo seed is needed
+      try {
+        const userCount = await db.get('SELECT COUNT(*) as count FROM users');
+        if (userCount && userCount.count === 0) {
+          await seedDemoData(db);
+        }
+      } catch (e) {
+        // Ignore table check errors during initialization
+      }
+
+      dbInstance = db;
+      return db;
+    })();
+  }
+
+  return initPromise;
+}
+
+/**
+ * Seed demo profiles if the database is empty
+ */
+async function seedDemoData(db) {
+  try {
     const hash = '$2a$10$ACXIcW3ACVF1sJRCpyvQduxWcqLVEHL1vCC1e5JvKBl.uKvxKnbfm'; // Password@123
     const demoUsers = [
       [1, 'Rajesh Patil', 'rajesh.patil@example.com', hash, 'active'],
@@ -127,9 +112,12 @@ function seedDemoData() {
       [8, 'Priyanka Mali', 'priyanka.m@example.com', hash, 'active']
     ];
 
-    const userStmt = db.prepare('INSERT OR IGNORE INTO users (id, full_name, email, password_hash, account_status) VALUES (?, ?, ?, ?, ?)');
-    demoUsers.forEach(u => userStmt.run(u));
-    userStmt.finalize();
+    for (const u of demoUsers) {
+      await db.run(
+        'INSERT OR IGNORE INTO users (id, full_name, email, password_hash, account_status) VALUES (?, ?, ?, ?, ?)',
+        u
+      );
+    }
 
     const demoProfiles = [
       [1, 21, 'Male', 'Shirpur', 'Karwand Naka / RCPIT Campus', 'R. C. Patel Institute of Technology (RCPIT), Shirpur', 3000.0, 4500.0, 'vegetarian', 'non-smoker', 'non-drinker', 'morning', 'early-bird', 'very-clean', 1, 'Final year Computer Engineering student at RCPIT Shirpur. Focused on studies, quiet room, pure veg, and keeps common areas organized.', 1],
@@ -142,16 +130,16 @@ function seedDemoData() {
       [8, 21, 'Female', 'Shirpur', 'Nimzari Naka / Market Area', 'RCPCOP Shirpur', 3000.0, 4500.0, 'vegetarian', 'non-smoker', 'non-drinker', 'afternoon', 'flexible', 'moderate', 2, 'Pharmacy student. Looking for a responsible, friendly roommate for shared accommodation with good study environment.', 1]
     ];
 
-    const profStmt = db.prepare(`
-      INSERT OR IGNORE INTO profiles (
-        user_id, age, gender, city, preferred_location, college_or_workplace,
-        min_budget, max_budget, food_preference, smoking_preference, drinking_preference,
-        study_schedule, sleeping_schedule, cleanliness_preference, preferred_roommate_count,
-        about_me, is_complete
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-    demoProfiles.forEach(p => profStmt.run(p));
-    profStmt.finalize();
+    for (const p of demoProfiles) {
+      await db.run(`
+        INSERT OR IGNORE INTO profiles (
+          user_id, age, gender, city, preferred_location, college_or_workplace,
+          min_budget, max_budget, food_preference, smoking_preference, drinking_preference,
+          study_schedule, sleeping_schedule, cleanliness_preference, preferred_roommate_count,
+          about_me, is_complete
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, p);
+    }
 
     const demoPrefs = [
       [1, 'Karwand Naka / RCPIT Campus', 2800.0, 4800.0, 'vegetarian', 'non-smoker', 'morning', 'early-bird', 'very-clean', 1],
@@ -164,87 +152,77 @@ function seedDemoData() {
       [8, 'Nimzari Naka / Market Area', 2800.0, 4800.0, 'vegetarian', 'non-smoker', 'flexible', 'flexible', 'moderate', 2]
     ];
 
-    const prefStmt = db.prepare(`
-      INSERT OR IGNORE INTO preferences (
-        user_id, preferred_location, min_budget, max_budget, preferred_food,
-        preferred_smoking_status, preferred_study_schedule, preferred_sleeping_schedule,
-        preferred_cleanliness, preferred_roommate_count
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-    demoPrefs.forEach(p => prefStmt.run(p));
-    prefStmt.finalize();
-
-    db.run('COMMIT', (err) => {
-      if (!err) console.log('[Database] Seed data loaded successfully.');
-    });
-  });
-}
-
-initSchema();
-
-// Normalize parameters for SQLite (e.g. booleans to 1/0, undefined to null)
-function sanitizeParams(params) {
-  if (!params) return [];
-  return (Array.isArray(params) ? params : [params]).map(v => {
-    if (v === true) return 1;
-    if (v === false) return 0;
-    if (v === undefined) return null;
-    return v;
-  });
-}
-
-// Convert MySQL query dialect differences to SQLite
-function sanitizeSql(sql) {
-  let cleaned = sql
-    .replace(/INSERT\s+IGNORE\s+INTO/gi, 'INSERT OR IGNORE INTO')
-    .replace(/BOOLEAN/gi, 'INTEGER')
-    .replace(/TRUE/gi, '1')
-    .replace(/FALSE/gi, '0');
-  return cleaned;
-}
-
-// Promisified query helper matching mysql2/promise signature [rows]
-function executeQuery(sql, params) {
-  return new Promise((resolve, reject) => {
-    const finalSql = sanitizeSql(sql);
-    const finalParams = sanitizeParams(params);
-    const trimmed = finalSql.trim().toUpperCase();
-
-    if (trimmed.startsWith('SELECT') || trimmed.startsWith('PRAGMA') || trimmed.startsWith('SHOW')) {
-      db.all(finalSql, finalParams, (err, rows) => {
-        if (err) return reject(err);
-        resolve([rows || [], []]);
-      });
-    } else {
-      db.run(finalSql, finalParams, function(err) {
-        if (err) return reject(err);
-        resolve([{ insertId: this.lastID, affectedRows: this.changes }, []]);
-      });
+    for (const pr of demoPrefs) {
+      await db.run(`
+        INSERT OR IGNORE INTO preferences (
+          user_id, preferred_location, min_budget, max_budget, preferred_food,
+          preferred_smoking_status, preferred_study_schedule, preferred_sleeping_schedule,
+          preferred_cleanliness, preferred_roommate_count
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, pr);
     }
-  });
+  } catch (err) {
+    console.error('[Database Seed Warning]:', err.message);
+  }
 }
 
-// Pool interface compatible with mysql2/promise
+/**
+ * Async query/execute helper that mimics mysql2's [rows, fields] return structure.
+ * - For SELECT, PRAGMA, EXPLAIN queries: returns [rows, []]
+ * - For INSERT, UPDATE, DELETE queries: returns [{ insertId, affectedRows, changedRows }, []]
+ */
+async function executeQuery(sql, params) {
+  const db = await getDb();
+  const cleanedSql = sanitizeSql(sql);
+  const cleanedParams = sanitizeParams(params);
+  const trimmed = cleanedSql.trim().toUpperCase();
+
+  if (trimmed.startsWith('SELECT') || trimmed.startsWith('PRAGMA') || trimmed.startsWith('EXPLAIN')) {
+    const rows = await db.all(cleanedSql, cleanedParams);
+    return [rows || [], []];
+  } else {
+    const result = await db.run(cleanedSql, cleanedParams);
+    const resultPacket = {
+      insertId: result.lastID,
+      affectedRows: result.changes,
+      changedRows: result.changes
+    };
+    return [resultPacket, []];
+  }
+}
+
+/**
+ * Pool object providing identical interface to mysql2/promise pool
+ */
 const pool = {
   query: executeQuery,
+  execute: executeQuery,
   getConnection: async () => {
     return {
       query: executeQuery,
+      execute: executeQuery,
       beginTransaction: () => executeQuery('BEGIN TRANSACTION'),
       commit: () => executeQuery('COMMIT'),
       rollback: () => executeQuery('ROLLBACK'),
       release: () => {}
     };
   },
-  end: () => {
-    return new Promise(resolve => db.close(resolve));
+  end: async () => {
+    if (dbInstance) {
+      await dbInstance.close();
+      dbInstance = null;
+      initPromise = null;
+    }
   }
 };
 
+/**
+ * Tests database connectivity
+ */
 async function testConnection() {
   try {
     await pool.query('SELECT 1');
-    console.log('[Database] Connected to SQLite database.');
+    console.log(`[Database] SQLite connected successfully (${SQLITE_FILE})`);
     return true;
   } catch (err) {
     console.error('[Database Error] Failed to connect to SQLite:', err.message);
@@ -255,9 +233,11 @@ async function testConnection() {
 module.exports = {
   pool,
   testConnection,
+  getDb,
+  SQLITE_FILE,
   dbConfig: {
     database: 'roommate.sqlite',
-    host: 'embedded',
-    port: 0
+    type: 'sqlite',
+    dialect: 'sqlite3'
   }
 };

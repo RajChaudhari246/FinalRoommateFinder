@@ -46,12 +46,13 @@ app.use(
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
-// Persistent Session Store in SQLite
+// Persistent Session Store in SQLite (connect-sqlite3)
 const sessionStore = new SQLiteStore({
   db: 'sessions.sqlite',
   table: 'sessions',
   dir: path.join(__dirname, '../database'),
-  concurrentDB: true
+  concurrentDb: true,
+  createDirIfNotExists: true
 });
 
 const isProduction = process.env.NODE_ENV === 'production';
