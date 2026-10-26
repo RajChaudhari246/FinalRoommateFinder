@@ -17,9 +17,9 @@ async function startServer() {
   // Verify Database Connection
   const isConnected = await testConnection();
   if (!isConnected) {
-    console.warn('\n[Warning] Could not establish connection to MySQL.');
-    console.warn('The application is starting, but database queries will fail until MySQL credentials in .env are configured.');
-    console.warn('Run "npm run db:init" once your credentials are ready.\n');
+    console.warn('\n[Warning] Could not establish connection to SQLite database.');
+    console.warn('The application is starting, but database queries may fail.');
+    console.warn('Run "npm run db:init" to initialize your database.\n');
   } else {
     console.log('[Database] Ready to process requests.');
   }
@@ -40,9 +40,9 @@ async function startServer() {
       console.log('HTTP server closed.');
       try {
         await pool.end();
-        console.log('MySQL connection pool closed.');
+        console.log('SQLite database connection closed.');
       } catch (err) {
-        console.error('Error closing MySQL pool:', err.message);
+        console.error('Error closing SQLite database:', err.message);
       }
       process.exit(0);
     });
