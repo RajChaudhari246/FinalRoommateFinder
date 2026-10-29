@@ -34,7 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
       showAlert('Login successful! Redirecting...', 'success');
 
       const urlParams = new URLSearchParams(window.location.search);
-      const redirect = urlParams.get('redirect') || '/dashboard.html';
+      const defaultRedirect = (res.user && res.user.role === 'admin') ? '/admin.html' : '/dashboard.html';
+      const redirect = urlParams.get('redirect') || defaultRedirect;
 
       setTimeout(() => {
         window.location.href = redirect;

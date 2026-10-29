@@ -11,6 +11,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const firstName = user.full_name.split(' ')[0];
   document.getElementById('user-greeting').textContent = `Welcome back, ${firstName}!`;
 
+  // Display Admin Banner if user has admin privileges
+  if (user.role === 'admin') {
+    const adminBanner = document.getElementById('admin-dashboard-banner');
+    if (adminBanner) adminBanner.style.display = 'block';
+  }
+
   // Load Dashboard Data
   await loadProfileCompletion();
   await loadInterestCounts();

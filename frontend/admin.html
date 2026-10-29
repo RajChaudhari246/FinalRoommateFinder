@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Operations Center - Roommate Finder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/roommates.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="nav-brand">
+        <span class="brand-icon">🏠</span>
+        <span>Roommate Finder</span>
+      </a>
+      <ul class="nav-menu" id="nav-menu"></ul>
+      <div class="nav-actions" id="nav-actions"></div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Alert Notification Container -->
+      <div id="alert-container"></div>
+
+      <!-- Admin Profile Hero Banner -->
+      <section class="admin-hero">
+        <div class="admin-hero-content">
+          <div class="admin-profile-badge-row">
+            <div class="admin-avatar-ring" id="hero-admin-avatar">AD</div>
+            <div class="admin-hero-title">
+              <h1>
+                <span id="hero-admin-name">Administrator</span>
+                <span class="badge" style="background: rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 0.8rem; border: 1px solid rgba(255, 255, 255, 0.3);">
+                  🛡️ System Admin
+                </span>
+              </h1>
+              <p id="hero-admin-email">admin@roommatefinder.com</p>
+              <div class="admin-quick-pills">
+                <span class="admin-pill active-pulse">
+                  <span class="admin-pill-dot"></span>
+                  Active Superadmin Session
+                </span>
+                <span class="admin-pill">👥 Full User Oversight</span>
+                <span class="admin-pill">🆕 Real-time User Tracking</span>
+                <span class="admin-pill">🛡️ Wing Safety Protocols</span>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.65rem; align-items: flex-end;">
+            <a href="/dashboard.html" class="btn btn-secondary btn-sm" style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.25);">
+              ← Switch to User View
+            </a>
+            <button id="btn-refresh-data" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #4f46e5, #6366f1);">
+              🔄 Refresh Analytics
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Demo Testing / Admin Notice -->
+      <div style="background: #eef2ff; border: 1px solid #c7d2fe; border-radius: var(--radius-md); padding: 0.85rem 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <span style="font-size: 1.25rem;">💡</span>
+          <span style="font-size: 0.875rem; color: #3730a3;">
+            <strong>Admin Access Active:</strong> You can see all newly registered users, manage user accounts, change roles, and inspect roommate preferences.
+          </span>
+        </div>
+        <div style="font-size: 0.8rem; color: #4338ca; background: #ffffff; padding: 0.25rem 0.65rem; border-radius: var(--radius-full); border: 1px solid #c7d2fe;">
+          Master Admin: <strong>admin@roommatefinder.com</strong> / <strong>chaudhariraj248@gmail.com</strong>
+        </div>
+      </div>
+
+      <!-- KPI Metrics Grid -->
+      <section class="admin-kpi-grid">
+        <!-- Metric 1: Total Users -->
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-icon indigo">👥</div>
+          <div>
+            <div class="admin-kpi-value" id="kpi-total-users">--</div>
+            <div class="admin-kpi-label">Total Registered Users</div>
+            <div class="admin-kpi-subtitle" id="kpi-users-sub">Loading...</div>
+          </div>
+        </div>
+
+        <!-- Metric 2: New Users (Focus of Request) -->
+        <div class="admin-kpi-card" style="border: 2px solid #a7f3d0; background: linear-gradient(135deg, #ffffff 70%, #ecfdf5 100%);">
+          <div class="admin-kpi-icon emerald">🆕</div>
+          <div>
+            <div class="admin-kpi-value" style="color: #059669;" id="kpi-new-users">--</div>
+            <div class="admin-kpi-label" style="color: #065f46; font-weight: 700;">New Users This Week</div>
+            <div class="admin-kpi-subtitle" id="kpi-new-today">Added today: --</div>
+          </div>
+        </div>
+
+        <!-- Metric 3: Living Wings Distribution -->
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-icon rose">🏠</div>
+          <div>
+            <div class="admin-kpi-value" id="kpi-wings-ratio">-- / --</div>
+            <div class="admin-kpi-label">Wings (Girls 🌸 / Boys ⚡)</div>
+            <div class="admin-kpi-subtitle" id="kpi-profiles-rate">Completion rate: --%</div>
+          </div>
+        </div>
+
+        <!-- Metric 4: Connection Requests -->
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-icon amber">🤝</div>
+          <div>
+            <div class="admin-kpi-value" id="kpi-total-interests">--</div>
+            <div class="admin-kpi-label">Roommate Connections</div>
+            <div class="admin-kpi-subtitle" id="kpi-matches-accepted">Accepted matches: --</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabs Navigation -->
+      <div class="admin-tabs-nav">
+        <button class="admin-tab-btn active" data-tab="tab-new-users">
+          <span>🆕 New Users Stream</span>
+          <span class="admin-tab-badge" id="badge-tab-new-count">0</span>
+        </button>
+        <button class="admin-tab-btn" data-tab="tab-all-users">
+          <span>👥 All Users Directory</span>
+          <span class="admin-tab-badge" id="badge-tab-all-count">0</span>
+        </button>
+        <button class="admin-tab-btn" data-tab="tab-activity">
+          <span>⚡ Live Platform Activity</span>
+        </button>
+        <button class="admin-tab-btn" data-tab="tab-admin-profile">
+          <span>🛡️ Admin Profile & Privileges</span>
+        </button>
+      </div>
+
+      <!-- ============================================================== -->
+      <!-- TAB 1: 🆕 NEW USERS STREAM                                     -->
+      <!-- ============================================================== -->
+      <section id="tab-new-users" class="admin-tab-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="font-size: 1.35rem; color: var(--slate-900);">Recently Added Members</h2>
+            <p style="color: var(--slate-500); font-size: 0.875rem;">Real-time feed showing users who recently joined the Roommate Finder community.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button class="btn btn-secondary btn-sm new-users-timeframe-btn active" data-tf="week">This Week</button>
+            <button class="btn btn-secondary btn-sm new-users-timeframe-btn" data-tf="today">Today</button>
+            <button class="btn btn-secondary btn-sm new-users-timeframe-btn" data-tf="month">This Month</button>
+            <button class="btn btn-secondary btn-sm new-users-timeframe-btn" data-tf="all">All Recent</button>
+          </div>
+        </div>
+
+        <!-- New Users Cards Grid -->
+        <div id="new-users-container" class="new-users-grid">
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-state-icon">⏳</div>
+            <p>Loading newly registered members...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- TAB 2: 👥 ALL USERS DIRECTORY                                  -->
+      <!-- ============================================================== -->
+      <section id="tab-all-users" class="admin-tab-content" style="display: none;">
+        <!-- Filters Toolbar -->
+        <div class="admin-toolbar">
+          <div class="admin-search-wrap">
+            <span class="admin-search-icon">🔍</span>
+            <input type="text" id="admin-search-input" class="admin-search-input" placeholder="Search by name, email, city, or college...">
+          </div>
+
+          <div class="admin-filters-row">
+            <select id="filter-timeframe" class="admin-filter-select" title="Filter by registration time">
+              <option value="all">All Registration Dates</option>
+              <option value="today">🆕 Added Today</option>
+              <option value="week">🔥 Added This Week</option>
+              <option value="month">📅 Added This Month</option>
+            </select>
+
+            <select id="filter-status" class="admin-filter-select" title="Filter by account status">
+              <option value="all">All Statuses</option>
+              <option value="active">Active Only</option>
+              <option value="suspended">Suspended Only</option>
+            </select>
+
+            <select id="filter-role" class="admin-filter-select" title="Filter by role">
+              <option value="all">All Roles</option>
+              <option value="user">Regular Users</option>
+              <option value="admin">Administrators</option>
+            </select>
+
+            <select id="filter-gender" class="admin-filter-select" title="Filter by living wing">
+              <option value="all">All Wings</option>
+              <option value="Female">🌸 Girls Wing</option>
+              <option value="Male">⚡ Boys Wing</option>
+            </select>
+
+            <select id="sort-select" class="admin-filter-select" title="Sort order">
+              <option value="newest">Sort: Newest Added First</option>
+              <option value="oldest">Sort: Oldest First</option>
+              <option value="name_asc">Sort: Name (A - Z)</option>
+              <option value="name_desc">Sort: Name (Z - A)</option>
+            </select>
+
+            <button id="btn-reset-filters" class="btn btn-secondary btn-sm" title="Clear all filters">Reset</button>
+          </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>User / Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Living Wing</th>
+                <th>College / Location</th>
+                <th>Profile</th>
+                <th>Joined Date</th>
+                <th>Interests Activity</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-table-body">
+              <tr>
+                <td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--slate-400);">
+                  Loading member directory...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- TAB 3: ⚡ LIVE PLATFORM ACTIVITY                               -->
+      <!-- ============================================================== -->
+      <section id="tab-activity" class="admin-tab-content" style="display: none;">
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <h3 style="font-size: 1.25rem;">Real-time Activity Audit Feed</h3>
+              <p style="color: var(--slate-500); font-size: 0.875rem;">Chronological log of new account signups and roommate connection requests.</p>
+            </div>
+            <button id="btn-refresh-activity" class="btn btn-secondary btn-sm">Refresh Feed</button>
+          </div>
+
+          <div id="activity-stream-container" class="activity-stream">
+            <div class="empty-state">
+              <div class="empty-state-icon">⏳</div>
+              <p>Loading activity stream...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- TAB 4: 🛡️ ADMIN PROFILE & PRIVILEGES                           -->
+      <!-- ============================================================== -->
+      <section id="tab-admin-profile" class="admin-tab-content" style="display: none;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+          <!-- Left: Admin Profile Dossier -->
+          <div class="card">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--slate-100);">
+              <div class="admin-avatar-ring" style="width: 3.75rem; height: 3.75rem; font-size: 1.4rem;" id="tab-admin-avatar">AD</div>
+              <div>
+                <h3 id="tab-admin-name" style="font-size: 1.25rem; margin-bottom: 0.2rem;">System Administrator</h3>
+                <p id="tab-admin-email" style="color: var(--slate-500); font-size: 0.875rem;">admin@roommatefinder.com</p>
+                <span class="badge" style="background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe; margin-top: 0.35rem;">
+                  🛡️ Administrator Account
+                </span>
+              </div>
+            </div>
+
+            <div class="attributes-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1.5rem;">
+              <div class="attribute-item">
+                <div class="attribute-label">User ID</div>
+                <div class="attribute-value" id="tab-admin-id">--</div>
+              </div>
+              <div class="attribute-item">
+                <div class="attribute-label">Account Status</div>
+                <div class="attribute-value" id="tab-admin-status">Active</div>
+              </div>
+              <div class="attribute-item">
+                <div class="attribute-label">HQ Location</div>
+                <div class="attribute-value" id="tab-admin-location">Shirpur</div>
+              </div>
+              <div class="attribute-item">
+                <div class="attribute-label">Registered Since</div>
+                <div class="attribute-value" id="tab-admin-created">--</div>
+              </div>
+            </div>
+
+            <div style="background: var(--slate-50); border-radius: var(--radius-md); padding: 1rem; border: 1px solid var(--slate-200);">
+              <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 0.5rem;">Admin Responsibilities</h4>
+              <p style="font-size: 0.825rem; color: var(--slate-600); line-height: 1.5;">
+                As an Administrator, you have full authority to inspect user profiles, verify gender-specific living wings, suspend fraudulent or violating accounts, and review roommate connection requests.
+              </p>
+            </div>
+            
+            <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem;">
+              <a href="/profile.html" class="btn btn-secondary btn-sm">View Public Profile</a>
+              <a href="/edit-profile.html" class="btn btn-primary btn-sm">Edit Admin Details</a>
+            </div>
+          </div>
+
+          <!-- Right: Privileges & Security Matrix -->
+          <div class="card">
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Privilege Matrix & Authority</h3>
+            <p style="color: var(--slate-500); font-size: 0.85rem; margin-bottom: 1.25rem;">Authorized permissions granted to your administrator credentials.</p>
+
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;" id="admin-privileges-list">
+              <!-- Rendered dynamically -->
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================================================================ -->
+  <!-- USER INSPECTION DETAIL MODAL                                     -->
+  <!-- ================================================================ -->
+  <div class="modal-backdrop" id="user-detail-modal">
+    <div class="modal-content" style="max-width: 680px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div id="modal-user-avatar" class="user-identity-avatar" style="width: 3rem; height: 3rem; font-size: 1.1rem;">--</div>
+          <div>
+            <h3 id="modal-user-name" style="font-size: 1.25rem; margin-bottom: 0.15rem;">User Name</h3>
+            <p id="modal-user-email" style="color: var(--slate-500); font-size: 0.85rem;">email@example.com</p>
+          </div>
+        </div>
+        <button class="modal-close" id="modal-close-btn">&times;</button>
+      </div>
+
+      <!-- Modal Tabs -->
+      <div class="detail-modal-tabs">
+        <button class="detail-modal-tab active" data-modaltab="mtab-overview">Overview & Lifestyle</button>
+        <button class="detail-modal-tab" data-modaltab="mtab-security">Living Wing & Safety</button>
+        <button class="detail-modal-tab" data-modaltab="mtab-interests">Interests & History</button>
+      </div>
+
+      <!-- Modal Content Tab 1: Overview -->
+      <div id="mtab-overview" class="modal-subtab">
+        <div class="attributes-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 1.25rem;">
+          <div class="attribute-item">
+            <div class="attribute-label">City & Neighborhood</div>
+            <div class="attribute-value" id="modal-loc">--</div>
+          </div>
+          <div class="attribute-item">
+            <div class="attribute-label">College / Workplace</div>
+            <div class="attribute-value" id="modal-college">--</div>
+          </div>
+          <div class="attribute-item">
+            <div class="attribute-label">Monthly Budget</div>
+            <div class="attribute-value" id="modal-budget">--</div>
+          </div>
+          <div class="attribute-item">
+            <div class="attribute-label">Gender & Age</div>
+            <div class="attribute-value" id="modal-gender">--</div>
+          </div>
+          <div class="attribute-item">
+            <div class="attribute-label">Dietary Habit</div>
+            <div class="attribute-value" id="modal-food">--</div>
+          </div>
+          <div class="attribute-item">
+            <div class="attribute-label">Smoking Policy</div>
+            <div class="attribute-value" id="modal-smoking">--</div>
+          </div>
+          <div class="attribute-item">
+            <div class="attribute-label">Study Schedule</div>
+            <div class="attribute-value" id="modal-study">--</div>
+          </div>
+          <div class="attribute-item">
+            <div class="attribute-label">Sleeping Routine</div>
+            <div class="attribute-value" id="modal-sleep">--</div>
+          </div>
+        </div>
+
+        <div style="background: var(--slate-50); border-radius: var(--radius-md); padding: 1rem; border: 1px solid var(--slate-200); margin-bottom: 1.25rem;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 0.35rem;">Bio / About Me</h4>
+          <p id="modal-bio" style="font-size: 0.85rem; color: var(--slate-600); line-height: 1.5;">--</p>
+        </div>
+      </div>
+
+      <!-- Modal Content Tab 2: Security & Wing Protocol -->
+      <div id="mtab-security" class="modal-subtab" style="display: none;">
+        <div class="attributes-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1.25rem;">
+          <div class="attribute-item">
+            <div class="attribute-label">Visitor / Guest Policy</div>
+            <div class="attribute-value" id="modal-sec-visitor">--</div>
+          </div>
+          <div class="attribute-item">
+            <div class="attribute-label">Gate / Curfew Timing</div>
+            <div class="attribute-value" id="modal-sec-curfew">--</div>
+          </div>
+          <div class="attribute-item">
+            <div class="attribute-label">Building Security</div>
+            <div class="attribute-value" id="modal-sec-amenities">--</div>
+          </div>
+          <div class="attribute-item">
+            <div class="attribute-label">Emergency Verification</div>
+            <div class="attribute-value" id="modal-sec-emergency">--</div>
+          </div>
+        </div>
+
+        <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.25rem;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; color: #9f1239; margin-bottom: 0.35rem;">Safety & Community Notes</h4>
+          <p id="modal-sec-notes" style="font-size: 0.85rem; color: #881337; line-height: 1.5;">--</p>
+        </div>
+      </div>
+
+      <!-- Modal Content Tab 3: Interests History -->
+      <div id="mtab-interests" class="modal-subtab" style="display: none;">
+        <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem;">Sent Requests (<span id="modal-sent-count">0</span>)</h4>
+        <div id="modal-sent-list" style="margin-bottom: 1.25rem; font-size: 0.85rem;"></div>
+
+        <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem;">Received Requests (<span id="modal-received-count">0</span>)</h4>
+        <div id="modal-received-list" style="font-size: 0.85rem;"></div>
+      </div>
+
+      <!-- Modal Footer Quick Actions -->
+      <div style="border-top: 1px solid var(--slate-200); padding-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <div style="display: flex; gap: 0.5rem;" id="modal-actions-container">
+          <!-- Dynamic action buttons for user -->
+        </div>
+        <button class="btn btn-secondary btn-sm" id="modal-close-bottom-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

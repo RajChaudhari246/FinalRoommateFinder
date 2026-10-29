@@ -64,6 +64,7 @@ async function register(req, res, next) {
       req.session.userId = userId;
       req.session.userEmail = normalizedEmail;
       req.session.userName = trimmedName;
+      req.session.userRole = 'user';
 
       res.status(201).json({
         success: true,
@@ -72,6 +73,7 @@ async function register(req, res, next) {
           id: userId,
           full_name: trimmedName,
           email: normalizedEmail,
+          role: 'user',
           is_complete: false
         }
       });
@@ -91,7 +93,7 @@ async function login(req, res, next) {
 
   try {
     const [users] = await pool.query(
-      `SELECT u.id, u.full_name, u.email, u.password_hash, u.account_status,
+      `SELECT u.id, u.full_name, u.email, u.password_hash, u.account_status, u.role,
               p.is_complete, p.city, p.min_budget, p.max_budget
        FROM users u
        LEFT JOIN profiles p ON u.id = p.user_id
@@ -132,6 +134,7 @@ async function login(req, res, next) {
       req.session.userId = user.id;
       req.session.userEmail = user.email;
       req.session.userName = user.full_name;
+      req.session.userRole = user.role || 'user';
 
       res.status(200).json({
         success: true,
@@ -141,6 +144,7 @@ async function login(req, res, next) {
           full_name: user.full_name,
           email: user.email,
           city: user.city,
+          role: user.role || 'user',
           is_complete: Boolean(user.is_complete)
         }
       });
@@ -179,7 +183,7 @@ async function me(req, res, next) {
 
   try {
     const [rows] = await pool.query(
-      `SELECT u.id, u.full_name, u.email, u.created_at,
+      `SELECT u.id, u.full_name, u.email, u.role, u.created_at,
               p.is_complete, p.city, p.preferred_location, p.min_budget, p.max_budget,
               p.food_preference, p.smoking_preference, p.study_schedule, p.sleeping_schedule,
               p.cleanliness_preference, p.preferred_roommate_count, p.about_me
@@ -199,6 +203,7 @@ async function me(req, res, next) {
     }
 
     const userData = rows[0];
+    req.session.userRole = userData.role || 'user';
 
     res.status(200).json({
       success: true,
@@ -207,6 +212,7 @@ async function me(req, res, next) {
         id: userData.id,
         full_name: userData.full_name,
         email: userData.email,
+        role: userData.role || 'user',
         created_at: userData.created_at,
         is_complete: Boolean(userData.is_complete),
         profile: {

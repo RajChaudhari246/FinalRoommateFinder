@@ -58,6 +58,19 @@ async function initViewProfilePage(user) {
       }
     }
 
+    // Admin role badge & callout
+    const isAdmin = (p.role === 'admin') || (user && user.role === 'admin');
+    if (isAdmin) {
+      const roleBadge = document.getElementById('val-role-badge');
+      if (roleBadge) roleBadge.style.display = 'inline-flex';
+
+      const adminBtn = document.getElementById('btn-admin-portal-profile');
+      if (adminBtn) adminBtn.style.display = 'inline-flex';
+
+      const adminCallout = document.getElementById('admin-privilege-callout');
+      if (adminCallout) adminCallout.style.display = 'block';
+    }
+
     // Gender Wing & Protocol Details
     const wingBadge = document.getElementById('profile-wing-badge');
     const cardTitle = document.getElementById('protocol-card-title');

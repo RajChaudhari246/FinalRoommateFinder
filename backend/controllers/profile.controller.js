@@ -9,7 +9,7 @@ async function getMyProfile(req, res, next) {
 
   try {
     const [rows] = await pool.query(
-      `SELECT p.*, u.full_name, u.email
+      `SELECT p.*, u.full_name, u.email, u.role, u.account_status, u.created_at
        FROM profiles p
        JOIN users u ON p.user_id = u.id
        WHERE p.user_id = ?`,

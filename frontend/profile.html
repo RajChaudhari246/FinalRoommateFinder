@@ -37,9 +37,30 @@
             <p id="profile-email" style="font-size: 0.85rem; color: var(--slate-400); margin-top: 0.25rem;"></p>
           </div>
         </div>
-        <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <span id="val-role-badge" class="badge" style="display: none; background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; font-weight: 700;">🛡️ System Administrator</span>
           <span id="val-status-badge" class="badge">Checking...</span>
+          <a href="/admin.html" id="btn-admin-portal-profile" class="btn btn-sm" style="display: none; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #ffffff; border: none; font-weight: 700;">🛡️ Admin Portal</a>
           <a href="/edit-profile.html" class="btn btn-primary btn-sm">Edit Profile</a>
+        </div>
+      </div>
+
+      <!-- Admin Capabilities Callout (Visible only to Admins) -->
+      <div id="admin-privilege-callout" class="card" style="display: none; background: linear-gradient(135deg, #0f172a, #1e1b4b); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+              <span style="font-size: 1.5rem;">🛡️</span>
+              <h3 style="color: #ffffff; font-size: 1.25rem; margin: 0;">System Administrator Profile</h3>
+              <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #a7f3d0; border: 1px solid rgba(16, 185, 129, 0.4);">Verified Superadmin</span>
+            </div>
+            <p style="color: #c7d2fe; font-size: 0.875rem;">
+              You hold master administrative privileges. You can monitor newly added users in real time, oversee roommate wings, review safety protocols, and manage accounts.
+            </p>
+          </div>
+          <a href="/admin.html" class="btn btn-primary" style="background: linear-gradient(135deg, #4f46e5, #6366f1); border: none; font-weight: 700;">
+            Open Admin Operations Center →
+          </a>
         </div>
       </div>
 

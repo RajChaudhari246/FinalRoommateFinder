@@ -13,7 +13,7 @@ async function viewDatabase() {
   try {
     // 1. Users
     console.log('📌 USERS TABLE:');
-    const [users] = await pool.query('SELECT id, full_name, email, account_status, created_at FROM users');
+    const [users] = await pool.query('SELECT id, full_name, email, role, account_status, created_at FROM users');
     console.table(users);
 
     // 2. Profiles

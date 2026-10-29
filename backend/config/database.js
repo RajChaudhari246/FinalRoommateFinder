@@ -91,6 +91,59 @@ async function ensureSecurityColumns(db) {
 }
 
 /**
+ * Ensures role column exists in users table and creates/promotes admin accounts
+ */
+async function ensureRoleColumnAndAdmin(db) {
+  try {
+    const userCols = await db.all('PRAGMA table_info(users)');
+    if (userCols && userCols.length > 0) {
+      const existingUserCols = new Set(userCols.map(r => r.name));
+      if (!existingUserCols.has('role')) {
+        await db.run("ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'user'");
+        await db.run("CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)");
+      }
+    }
+
+    // Set developer Raj Chaudhari to admin if present
+    await db.run("UPDATE users SET role = 'admin' WHERE email = 'chaudhariraj248@gmail.com'");
+
+    // Ensure dedicated system admin exists: admin@roommatefinder.com
+    const adminCheck = await db.get("SELECT id FROM users WHERE email = 'admin@roommatefinder.com'");
+    if (!adminCheck) {
+      const hash = '$2a$10$ACXIcW3ACVF1sJRCpyvQduxWcqLVEHL1vCC1e5JvKBl.uKvxKnbfm'; // Password@123
+      const res = await db.run(
+        "INSERT INTO users (full_name, email, password_hash, account_status, role) VALUES (?, ?, ?, 'active', 'admin')",
+        ['System Administrator', 'admin@roommatefinder.com', hash]
+      );
+      const adminId = res.lastID;
+
+      await db.run(`
+        INSERT OR IGNORE INTO profiles (
+          user_id, age, gender, city, preferred_location, college_or_workplace,
+          min_budget, max_budget, food_preference, smoking_preference, drinking_preference,
+          study_schedule, sleeping_schedule, cleanliness_preference, preferred_roommate_count,
+          about_me, security_curfew, security_visitor_policy, security_amenities,
+          security_emergency_contact, security_notes, is_complete
+        ) VALUES (?, 28, 'Male', 'Shirpur', 'Campus Central / Admin HQ', 'Roommate Finder Operations', 3000.0, 5000.0, 'any', 'non-smoker', 'non-drinker', 'flexible', 'flexible', 'very-clean', 1, 'System Administrator Profile. Responsible for user verification, listings moderation, safety compliance, and community management.', 'flexible', 'verified-guardian', 'gated-cctv', 'admin@roommatefinder.com', 'Platform Master Admin Account', 1)
+      `, [adminId]);
+
+      await db.run(`
+        INSERT OR IGNORE INTO preferences (
+          user_id, preferred_gender, preferred_location, min_budget, max_budget, preferred_food,
+          preferred_smoking_status, preferred_study_schedule, preferred_sleeping_schedule,
+          preferred_cleanliness, preferred_roommate_count, pref_security_visitor_policy,
+          pref_security_curfew, pref_security_amenities
+        ) VALUES (?, 'any', 'Shirpur', 3000.0, 5000.0, 'any', 'non-smoker', 'flexible', 'flexible', 'very-clean', 1, 'any', 'flexible', 'gated-cctv')
+      `, [adminId]);
+    } else {
+      await db.run("UPDATE users SET role = 'admin' WHERE email = 'admin@roommatefinder.com'");
+    }
+  } catch (err) {
+    console.error('[Database Role Column Warning]:', err.message);
+  }
+}
+
+/**
  * Backfills demo security protocols if they are currently null
  */
 async function backfillDemoSecurity(db) {
@@ -175,6 +228,9 @@ async function getDb() {
 
       // Ensure security columns exist
       await ensureSecurityColumns(db);
+
+      // Ensure user role column and admin account exist
+      await ensureRoleColumnAndAdmin(db);
 
       // Check if demo seed is needed
       try {

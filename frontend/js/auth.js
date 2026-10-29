@@ -22,6 +22,8 @@ async function renderNavbar() {
   const currentSearch = window.location.search;
 
   if (user) {
+    const isAdmin = user.role === 'admin';
+
     // Authenticated User Navigation
     if (navMenu) {
       navMenu.innerHTML = `
@@ -31,11 +33,17 @@ async function renderNavbar() {
         <li><a href="/dashboard.html" class="nav-link ${currentPath.includes('dashboard') ? 'active' : ''}" id="nav-dash">Dashboard</a></li>
         <li><a href="/interests.html" class="nav-link ${currentPath.includes('interests') ? 'active' : ''}" id="nav-interests">Interests</a></li>
         <li><a href="/profile.html" class="nav-link ${currentPath.includes('profile') && !currentPath.includes('edit') ? 'active' : ''}" id="nav-profile">My Profile</a></li>
+        ${isAdmin ? `<li><a href="/admin.html" class="nav-link ${currentPath.includes('admin') ? 'active' : ''}" style="color: #6366f1; font-weight: 700;" id="nav-admin">🛡️ Admin Portal</a></li>` : ''}
       `;
     }
 
     navActions.innerHTML = `
       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        ${isAdmin ? `
+          <a href="/admin.html" class="btn btn-sm" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #ffffff; border: none; font-size: 0.8rem; padding: 0.35rem 0.75rem; font-weight: 700; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);" title="Go to Admin Operations Center">
+            🛡️ Admin
+          </a>
+        ` : ''}
         <a href="/profile.html" style="font-weight: 600; font-size: 0.9rem; color: var(--slate-700);">
           ${user.full_name.split(' ')[0]}
         </a>
@@ -81,9 +89,24 @@ async function requireAuthPage() {
   return user;
 }
 
+async function requireAdminPage() {
+  const user = await checkAuthState();
+  if (!user) {
+    window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+    return null;
+  }
+  if (user.role !== 'admin') {
+    alert('Access restricted: System Administrator credentials are required to view the Admin Portal.');
+    window.location.href = '/dashboard.html';
+    return null;
+  }
+  return user;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderNavbar();
 });
 
 window.checkAuthState = checkAuthState;
 window.requireAuthPage = requireAuthPage;
+window.requireAdminPage = requireAdminPage;

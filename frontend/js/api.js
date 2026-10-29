@@ -93,6 +93,21 @@ const api = {
     getAccount: () => request('/settings/account'),
     changePassword: (data) => request('/settings/password', { method: 'PUT', body: data }),
     deactivate: (data) => request('/settings/deactivate', { method: 'POST', body: data })
+  },
+  admin: {
+    getMetrics: () => request('/admin/metrics'),
+    getUsers: (params = {}) => {
+      const query = new URLSearchParams(
+        Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== '')
+      ).toString();
+      return request(`/admin/users${query ? `?${query}` : ''}`);
+    },
+    getUserDetails: (id) => request(`/admin/users/${id}`),
+    updateUserStatus: (id, status) => request(`/admin/users/${id}/status`, { method: 'PATCH', body: { status } }),
+    updateUserRole: (id, role) => request(`/admin/users/${id}/role`, { method: 'PATCH', body: { role } }),
+    deleteUser: (id) => request(`/admin/users/${id}`, { method: 'DELETE' }),
+    getActivity: () => request('/admin/activity'),
+    getProfile: () => request('/admin/profile')
   }
 };
 

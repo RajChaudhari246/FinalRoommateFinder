@@ -19,6 +19,7 @@ const preferencesRoutes = require('./routes/preferences.routes');
 const roommatesRoutes = require('./routes/roommates.routes');
 const interestsRoutes = require('./routes/interests.routes');
 const settingsRoutes = require('./routes/settings.routes');
+const adminRoutes = require('./routes/admin.routes');
 
 const app = express();
 
@@ -85,6 +86,7 @@ app.use('/api/preferences', preferencesRoutes);
 app.use('/api/roommates', roommatesRoutes);
 app.use('/api/interests', interestsRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Static Frontend Asset Serving
 const frontendDir = path.join(__dirname, '../frontend');
@@ -101,7 +103,8 @@ const pages = [
   'find-roommates',
   'roommate-details',
   'interests',
-  'settings'
+  'settings',
+  'admin'
 ];
 
 pages.forEach((page) => {
