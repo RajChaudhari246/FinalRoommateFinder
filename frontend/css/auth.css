@@ -170,3 +170,75 @@
   color: #ffffff;
   border-color: var(--brand-teal);
 }
+
+/* Gender Wing Selection Cards on Registration */
+.gender-selection-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.gender-card {
+  display: block;
+  cursor: pointer;
+  border: 1.5px solid #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 0.85rem 0.75rem;
+  background: #f8fafc;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.gender-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gender-card-content {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.gender-badge-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.gender-card-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.gender-card-text strong {
+  font-size: 0.85rem;
+  color: var(--brand-navy);
+  font-family: var(--font-heading);
+}
+
+.gender-card-text span {
+  font-size: 0.725rem;
+  color: var(--slate-500);
+  margin-top: 2px;
+}
+
+.gender-card:hover {
+  border-color: var(--brand-teal);
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.gender-card.selected#gender-card-male {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.gender-card.selected#gender-card-female {
+  border-color: #ec4899;
+  background: #fdf2f8;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15);
+}
+

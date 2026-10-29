@@ -136,6 +136,11 @@ async function updateMyProfile(req, res, next) {
       });
     }
 
+    // Update session userGender if gender was updated
+    if (gender && req.session) {
+      req.session.userGender = gender;
+    }
+
     res.status(200).json({
       success: true,
       message: 'Profile updated successfully.',
@@ -148,11 +153,21 @@ async function updateMyProfile(req, res, next) {
 
 async function getPublicProfile(req, res, next) {
   const targetUserId = parseInt(req.params.id, 10);
+  const currentUserId = req.session ? req.session.userId : null;
+  const isAdmin = req.session ? req.session.userRole === 'admin' : false;
 
   if (isNaN(targetUserId)) {
     return res.status(400).json({
       success: false,
       message: 'Invalid profile user ID.'
+    });
+  }
+
+  // Require authentication to view detailed profiles
+  if (!currentUserId && !isAdmin) {
+    return res.status(401).json({
+      success: false,
+      message: 'Authentication Required: Please log in to view complete roommate profile details.'
     });
   }
 
@@ -177,6 +192,34 @@ async function getPublicProfile(req, res, next) {
         success: false,
         message: 'Profile not found or is unavailable.'
       });
+    }
+
+    // Access control: prevent cross-gender profile access
+    if (!isAdmin && currentUserId) {
+      let requesterGender = req.session ? req.session.userGender : null;
+      if (!requesterGender) {
+        const [reqProf] = await pool.query('SELECT gender FROM profiles WHERE user_id = ?', [currentUserId]);
+        requesterGender = reqProf[0]?.gender || null;
+        if (requesterGender && req.session) req.session.userGender = requesterGender;
+      }
+
+      const targetGender = (rows[0].gender || '').toLowerCase();
+      const reqGenderLower = (requesterGender || '').toLowerCase();
+
+      if (reqGenderLower && targetGender) {
+        if (reqGenderLower === 'male' && targetGender === 'female') {
+          return res.status(403).json({
+            success: false,
+            message: 'Access Denied: The Girls Safe Wing is strictly protected for verified female members. Male accounts cannot view female profiles.'
+          });
+        }
+        if (reqGenderLower === 'female' && targetGender === 'male') {
+          return res.status(403).json({
+            success: false,
+            message: 'Access Denied: The Boys Living Wing is reserved for male members. Female accounts cannot view male profiles.'
+          });
+        }
+      }
     }
 
     res.status(200).json({

@@ -28,8 +28,11 @@ async function getRoommates(req, res, next) {
   } = req.query;
 
   try {
-    // 1. Fetch current user's preferences and profile for compatibility comparison
+    // 1. Fetch current user's preferences, profile, and gender for isolation
     let userContext = null;
+    let userGender = req.session ? req.session.userGender : null;
+    const isAdmin = req.session ? req.session.userRole === 'admin' : false;
+
     if (currentUserId) {
       const [userProfRows] = await pool.query(
         'SELECT * FROM profiles WHERE user_id = ?',
@@ -43,6 +46,61 @@ async function getRoommates(req, res, next) {
         profile: userProfRows[0] || null,
         preferences: userPrefRows[0] || null
       };
+
+      if (!userGender && userProfRows[0]?.gender) {
+        userGender = userProfRows[0].gender;
+        if (req.session) req.session.userGender = userGender;
+      }
+    }
+
+    const reqGenderLower = (gender || (section === 'female' ? 'female' : section === 'male' ? 'male' : null) || '').toLowerCase();
+    const isReqGirls = reqGenderLower === 'female' || reqGenderLower === 'girls';
+    const isReqBoys = reqGenderLower === 'male' || reqGenderLower === 'boys';
+
+    // Access Control Enforcement:
+    // If user is unauthenticated, protected wings require sign-in
+    if (!currentUserId && !isAdmin) {
+      if (isReqGirls) {
+        return res.status(401).json({
+          success: false,
+          message: 'Authentication Required: The Girls Safe Wing is strictly protected for verified female members. Please sign in or register to access.'
+        });
+      }
+      if (isReqBoys) {
+        return res.status(401).json({
+          success: false,
+          message: 'Authentication Required: Please sign in or register to access the Boys Living Wing.'
+        });
+      }
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication Required: Please log in or register to browse verified roommate profiles in your dedicated living wing.'
+      });
+    }
+
+    // Authenticated non-admin user wing isolation
+    if (userGender && !isAdmin) {
+      const userGenderLower = userGender.toLowerCase();
+
+      // Male user restrictions
+      if (userGenderLower === 'male') {
+        if (isReqGirls) {
+          return res.status(403).json({
+            success: false,
+            message: 'Access Denied: The Girls Safe Wing is strictly reserved for verified female members. Male accounts cannot access this section.'
+          });
+        }
+      }
+
+      // Female user restrictions
+      if (userGenderLower === 'female') {
+        if (isReqBoys) {
+          return res.status(403).json({
+            success: false,
+            message: 'Access Denied: The Boys Living Wing is reserved for male members. Female accounts cannot access this section.'
+          });
+        }
+      }
     }
 
     // 2. Build parameterized query for candidates
@@ -69,11 +127,18 @@ async function getRoommates(req, res, next) {
       params.push(currentUserId);
     }
 
-    // Filter: Gender Section (e.g. Girls Section or Boys Section)
-    const targetGender = gender || (section === 'female' ? 'Female' : section === 'male' ? 'Male' : null);
-    if (targetGender && targetGender !== 'all' && targetGender !== 'any') {
+    // Filter: Gender Section
+    // For non-admin users, ALWAYS enforce their wing strictly
+    if (!isAdmin && userGender) {
+      const enforceGender = userGender.toLowerCase() === 'female' ? 'Female' : 'Male';
       sql += ' AND LOWER(p.gender) = LOWER(?)';
-      params.push(targetGender);
+      params.push(enforceGender);
+    } else {
+      const targetGender = gender || (section === 'female' ? 'Female' : section === 'male' ? 'Male' : null);
+      if (targetGender && targetGender !== 'all' && targetGender !== 'any') {
+        sql += ' AND LOWER(p.gender) = LOWER(?)';
+        params.push(targetGender);
+      }
     }
 
     // Filter: Security Visitor Policy

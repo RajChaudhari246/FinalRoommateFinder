@@ -55,6 +55,38 @@
         </div>
 
         <div class="form-group">
+          <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Select Your Living Wing &amp; Gender *</span>
+            <span style="font-size: 0.75rem; color: var(--brand-teal-dark); font-weight: 700;">Protected Wings</span>
+          </label>
+          <div class="gender-selection-cards">
+            <label class="gender-card selected" id="gender-card-male">
+              <input type="radio" name="gender" value="Male" checked>
+              <div class="gender-card-content">
+                <span class="gender-badge-icon">⚡</span>
+                <div class="gender-card-text">
+                  <strong>Boys Living Wing</strong>
+                  <span>Male students &amp; bachelors</span>
+                </div>
+              </div>
+            </label>
+            <label class="gender-card" id="gender-card-female">
+              <input type="radio" name="gender" value="Female">
+              <div class="gender-card-content">
+                <span class="gender-badge-icon">🌸</span>
+                <div class="gender-card-text">
+                  <strong>Girls Safe Wing</strong>
+                  <span>Women's verified safe zone</span>
+                </div>
+              </div>
+            </label>
+          </div>
+          <div style="font-size: 0.785rem; color: var(--slate-500); margin-top: 0.4rem; line-height: 1.4;">
+            🔒 <em>Safety rule:</em> You will only be permitted to access and match within your verified gender wing.
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="form-label" for="password">Password</label>
           <div class="password-input-group">
             <input type="password" id="password" class="form-control" placeholder="At least 6 characters" required autocomplete="new-password">

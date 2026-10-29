@@ -258,6 +258,19 @@
   border: 1px solid var(--boys-border);
 }
 
+.section-tab-btn.tab-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: var(--slate-100);
+  color: var(--slate-400);
+  border: 1px dashed var(--slate-300);
+}
+
+.section-tab-btn.tab-locked:hover {
+  background: var(--slate-200);
+  color: var(--slate-600);
+}
+
 /* Quick Search Header Bar */
 .quick-search-bar {
   display: flex;

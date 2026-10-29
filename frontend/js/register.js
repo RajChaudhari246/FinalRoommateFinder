@@ -17,6 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleBtn.textContent = isPassword ? '🙈' : '👁️';
   });
 
+  // Gender Radio Card Click Visuals
+  const genderCards = document.querySelectorAll('.gender-card');
+  genderCards.forEach(card => {
+    card.addEventListener('click', () => {
+      genderCards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    });
+  });
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     clearAlert();
@@ -26,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const password = passwordInput.value;
     const confirmPassword = confirmInput.value;
     const terms = document.getElementById('terms').checked;
+    const genderInput = document.querySelector('input[name="gender"]:checked');
+    const gender = genderInput ? genderInput.value : 'Male';
 
     // Client Validation
     if (fullName.length < 2) {
@@ -56,7 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
         full_name: fullName,
         email,
         password,
-        confirm_password: confirmPassword
+        confirm_password: confirmPassword,
+        gender
       });
 
       showAlert('Account created successfully! Redirecting to setup profile...', 'success');

@@ -42,8 +42,10 @@ INSERT INTO preferences (user_id, preferred_location, min_budget, max_budget, pr
 (8, 'Nimzari Naka / Market Area', 2800.00, 4800.00, 'vegetarian', 'non-smoker', 'flexible', 'flexible', 'moderate', 2)
 ON DUPLICATE KEY UPDATE min_budget = VALUES(min_budget), max_budget = VALUES(max_budget);
 
--- Sample initial interests for demonstration
+-- Sample initial same-wing interests for demonstration (strict gender safety compliance)
 INSERT INTO interests (sender_user_id, receiver_user_id, status, message) VALUES
-(2, 7, 'pending', 'Hi Chloe! I saw we both study in Boston and have similar schedules. Would love to connect!'),
-(6, 1, 'accepted', 'Hey Alex, your Brooklyn location and budget match mine closely. Let me know if you are still looking.')
+(1, 3, 'pending', 'Hey Aditya! I saw you study at NMIMS and prefer disciplined non-smoker flatmates. Would love to discuss sharing a 2BHK near campus!'),
+(5, 7, 'accepted', 'Hi Chetan, our monthly rent budget and location preferences align nicely. Let us coordinate a visit to the Karwand Naka flat!'),
+(2, 4, 'accepted', 'Hi Sneha! I noticed our study schedules and Girls Wing safety standards match closely. Looking forward to rooming together!'),
+(6, 8, 'pending', 'Hello Priyanka, I saw your profile in the Girls Safe Wing. Our budget and gate curfew preferences align well. Would love to connect!')
 ON DUPLICATE KEY UPDATE status = VALUES(status);

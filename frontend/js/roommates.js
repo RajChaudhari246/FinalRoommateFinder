@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // 2. Parse URL params (e.g. ?section=female or ?location=Karwand)
+  // 2. Parse URL params and enforce gender wing isolation for authenticated member
   const urlParams = new URLSearchParams(window.location.search);
   const sectionParam = urlParams.get('section') || (urlParams.get('gender') ? urlParams.get('gender').toLowerCase() : null);
   const locParam = urlParams.get('location');
@@ -38,12 +38,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   const minBParam = urlParams.get('minBudget');
   const maxBParam = urlParams.get('maxBudget');
 
-  if (sectionParam === 'female' || sectionParam === 'girls') {
-    currentSection = 'female';
-  } else if (sectionParam === 'male' || sectionParam === 'boys') {
+  const userGender = currentUser ? (currentUser.gender || '').toLowerCase() : null;
+  const isAdmin = currentUser && currentUser.role === 'admin';
+
+  if (!isAdmin && userGender === 'male') {
     currentSection = 'male';
+    if (sectionParam === 'female' || sectionParam === 'girls') {
+      setTimeout(() => showWingRestrictedNotice('female'), 300);
+    }
+  } else if (!isAdmin && userGender === 'female') {
+    currentSection = 'female';
+    if (sectionParam === 'male' || sectionParam === 'boys') {
+      setTimeout(() => showWingRestrictedNotice('male'), 300);
+    }
   } else {
-    currentSection = 'all';
+    if (sectionParam === 'female' || sectionParam === 'girls') {
+      currentSection = 'female';
+    } else if (sectionParam === 'male' || sectionParam === 'boys') {
+      currentSection = 'male';
+    } else {
+      currentSection = 'all';
+    }
   }
 
   if (locParam) {
@@ -184,6 +199,18 @@ function setupEventListeners() {
 }
 
 function switchSection(section) {
+  const isAdmin = currentUser && currentUser.role === 'admin';
+  const userGender = currentUser ? (currentUser.gender || '').toLowerCase() : null;
+
+  if (!isAdmin && userGender === 'male' && (section === 'female' || section === 'girls')) {
+    showWingRestrictedNotice('female');
+    return;
+  }
+  if (!isAdmin && userGender === 'female' && (section === 'male' || section === 'boys')) {
+    showWingRestrictedNotice('male');
+    return;
+  }
+
   currentSection = section;
   currentPage = 1;
 
@@ -213,10 +240,47 @@ function updateSectionUI(section) {
   const sidebarTitle = document.getElementById('filter-sidebar-title');
   const sidebarSub = document.getElementById('filter-sidebar-subtitle');
   const dynamicFilterBox = document.getElementById('dynamic-security-filters');
+  const heroArrSelect = document.getElementById('hero-search-arrangement');
+
+  const isAdmin = currentUser && currentUser.role === 'admin';
+  const userGender = currentUser ? (currentUser.gender || '').toLowerCase() : null;
 
   tabAll?.classList.remove('active-all');
-  tabGirls?.classList.remove('active-girls');
-  tabBoys?.classList.remove('active-boys');
+  tabGirls?.classList.remove('active-girls', 'tab-locked');
+  tabBoys?.classList.remove('active-boys', 'tab-locked');
+
+  // Enforce Wing Locking based on logged in gender
+  if (!isAdmin && userGender === 'male') {
+    if (tabGirls) {
+      tabGirls.innerHTML = '🔒 Girls Wing <span style="font-size: 0.72rem; opacity: 0.85;">(Women Only)</span>';
+      tabGirls.classList.add('tab-locked');
+      tabGirls.title = 'Girls Safe Wing is strictly reserved for verified female members.';
+    }
+    if (tabAll) {
+      tabAll.innerHTML = '⚡ Boys Wing Roommates';
+    }
+    if (heroArrSelect) {
+      const gOpt = heroArrSelect.querySelector('option[value="female"]');
+      if (gOpt) { gOpt.disabled = true; gOpt.textContent = '🔒 Girls Safe Wing (Women Only)'; }
+      const aOpt = heroArrSelect.querySelector('option[value="all"]');
+      if (aOpt) { aOpt.textContent = '⚡ All Boys Roommates'; }
+    }
+  } else if (!isAdmin && userGender === 'female') {
+    if (tabBoys) {
+      tabBoys.innerHTML = '🔒 Boys Wing <span style="font-size: 0.72rem; opacity: 0.85;">(Men Only)</span>';
+      tabBoys.classList.add('tab-locked');
+      tabBoys.title = 'Boys Living Wing is reserved for male members.';
+    }
+    if (tabAll) {
+      tabAll.innerHTML = '🌸 Girls Safe Wing Roommates';
+    }
+    if (heroArrSelect) {
+      const bOpt = heroArrSelect.querySelector('option[value="male"]');
+      if (bOpt) { bOpt.disabled = true; bOpt.textContent = '🔒 Boys Living Wing (Men Only)'; }
+      const aOpt = heroArrSelect.querySelector('option[value="all"]');
+      if (aOpt) { aOpt.textContent = '🌸 All Girls Roommates'; }
+    }
+  }
 
   if (section === 'female') {
     tabGirls?.classList.add('active-girls');
@@ -697,6 +761,50 @@ async function loadRoommates(shouldScroll = false) {
     }
 
   } catch (err) {
+    if (err.status === 403) {
+      const targetWing = currentSection === 'female' ? "Girls Safe Wing" : "Boys Living Wing";
+      const userGender = currentUser ? (currentUser.gender || '').toLowerCase() : null;
+      const myWing = userGender === 'female' ? 'female' : 'male';
+      const myWingLabel = userGender === 'female' ? '🌸 Girls Safe Wing' : '⚡ Boys Living Wing';
+
+      container.innerHTML = `
+        <div class="empty-state" style="grid-column: 1 / -1; background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: var(--radius-xl); padding: 3rem 2rem; text-align: center;">
+          <div style="font-size: 3.5rem; margin-bottom: 1rem;">🔒</div>
+          <h3 style="color: #9f1239; font-size: 1.4rem; font-weight: 800; margin-bottom: 0.75rem;">Access Restricted: ${targetWing}</h3>
+          <p style="color: #881337; max-width: 580px; margin: 0 auto 1.5rem; line-height: 1.6; font-size: 0.95rem;">
+            ${escapeHtml(err.message || 'This living wing is strictly protected. Cross-gender browsing is not permitted to uphold safety, privacy, and living harmony.')}
+          </p>
+          <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+            <button type="button" onclick="switchSection('${myWing}')" class="btn btn-primary">
+              Switch to ${myWingLabel}
+            </button>
+          </div>
+        </div>
+      `;
+      if (paginationEl) paginationEl.innerHTML = '';
+      if (countEl) countEl.innerHTML = `<span style="color: #e11d48; font-weight: 700;">Access Restricted to this Living Wing</span>`;
+      return;
+    }
+
+    if (err.status === 401) {
+      container.innerHTML = `
+        <div class="empty-state" style="grid-column: 1 / -1; background: #f8fafc; border: 1.5px solid var(--slate-200); border-radius: var(--radius-xl); padding: 3rem 2rem; text-align: center;">
+          <div style="font-size: 3.5rem; margin-bottom: 1rem;">🛡️</div>
+          <h3 style="color: var(--brand-navy); font-size: 1.4rem; font-weight: 800; margin-bottom: 0.75rem;">Authentication Required</h3>
+          <p style="color: var(--slate-600); max-width: 540px; margin: 0 auto 1.5rem; line-height: 1.6; font-size: 0.95rem;">
+            Please log in or register to browse verified roommate profiles in this protected wing.
+          </p>
+          <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+            <a href="/login.html?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}" class="btn btn-primary">Sign In</a>
+            <a href="/register.html" class="btn btn-secondary">Create Account</a>
+          </div>
+        </div>
+      `;
+      if (paginationEl) paginationEl.innerHTML = '';
+      if (countEl) countEl.innerHTML = `<span>Sign in required</span>`;
+      return;
+    }
+
     container.innerHTML = `
       <div class="alert alert-danger" style="grid-column: 1 / -1; justify-content: space-between;">
         <span>Failed to load roommate profiles: ${escapeHtml(err.message)}</span>
@@ -1121,6 +1229,37 @@ function setupMobileFilterDrawer() {
   });
 }
 
+function showWingRestrictedNotice(attemptedWing) {
+  const isTargetGirls = attemptedWing === 'female' || attemptedWing === 'girls';
+  const targetLabel = isTargetGirls ? "Girls Safe Wing" : "Boys Living Wing";
+  const userGender = currentUser ? (currentUser.gender || '').toLowerCase() : null;
+  const myWing = userGender === 'female' ? 'female' : 'male';
+  const myWingLabel = userGender === 'female' ? 'Girls Safe Wing' : 'Boys Living Wing';
+
+  const banner = document.getElementById('section-notice-banner');
+  if (banner) {
+    banner.innerHTML = `
+      <div class="card" style="background: #fff1f2; border: 1.5px solid #fecdd3; margin-bottom: 1.5rem; padding: 1.25rem 1.5rem; border-radius: var(--radius-xl);">
+        <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
+          <span style="font-size: 1.75rem;">🔒</span>
+          <div style="flex: 1;">
+            <h3 style="color: #9f1239; font-size: 1.1rem; margin-bottom: 0.35rem; font-weight: 800;">Protected Living Wing Policy</h3>
+            <p style="color: #881337; font-size: 0.9rem; margin-bottom: 0.75rem; line-height: 1.5;">
+              The <strong>${targetLabel}</strong> is strictly restricted to verified ${isTargetGirls ? 'female' : 'male'} members.
+              Your account is registered in the <strong>${myWingLabel}</strong>. Cross-gender browsing is not permitted to ensure personal privacy and safety.
+            </p>
+            <button type="button" onclick="switchSection('${myWing}')" class="btn btn-primary btn-sm">
+              Take me to ${myWingLabel}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  showToast(`Access Restricted: ${targetLabel} is reserved for ${isTargetGirls ? 'female' : 'male'} members.`, 'warning');
+}
+
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)
@@ -1140,3 +1279,4 @@ window.setPresetMessage = setPresetMessage;
 window.goToPage = goToPage;
 window.handleGenderSelectChange = handleGenderSelectChange;
 window.showToast = showToast;
+window.showWingRestrictedNotice = showWingRestrictedNotice;

@@ -157,6 +157,32 @@ async function loadRoommateDetails() {
       document.getElementById('details-notes-wrap').style.display = 'block';
     }
 
+    // Check if interest already sent or if it's self
+    const expressBtn = document.getElementById('express-interest-trigger');
+    if (user && expressBtn) {
+      if (user.id === candidateId) {
+        expressBtn.disabled = true;
+        expressBtn.style.opacity = '0.65';
+        expressBtn.innerHTML = '<span>Your Profile</span>';
+      } else {
+        try {
+          const sentRes = await window.api.interests.getSent();
+          const existing = (sentRes.interests || []).find(i => i.receiver_user_id === candidateId);
+          if (existing) {
+            if (existing.status === 'accepted') {
+              expressBtn.outerHTML = `<a href="/interests.html" class="btn btn-teal btn-lg"><span>Connected 🤝</span></a>`;
+            } else {
+              expressBtn.disabled = true;
+              expressBtn.style.opacity = '0.75';
+              expressBtn.innerHTML = '<span>Request Sent ✓</span>';
+            }
+          }
+        } catch (e) {
+          console.warn('Could not check sent interests:', e);
+        }
+      }
+    }
+
     // Load compatibility breakdown if authenticated
     if (user) {
       await loadDetailedCompatibility();
@@ -169,7 +195,56 @@ async function loadRoommateDetails() {
     }
 
   } catch (err) {
-    showAlert('Error loading profile: ' + err.message);
+    const mainContainer = document.querySelector('.main-content .container');
+    if (!mainContainer) return;
+
+    if (err.status === 403) {
+      const userGender = user ? (user.gender || '').toLowerCase() : null;
+      const myWing = userGender === 'female' ? 'Girls Safe Wing' : 'Boys Living Wing';
+      const myWingSection = userGender === 'female' ? 'female' : 'male';
+
+      mainContainer.innerHTML = `
+        <div style="max-width: 640px; margin: 3rem auto; text-align: center; background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: var(--radius-2xl); padding: 3rem 2rem; box-shadow: 0 10px 25px rgba(225, 29, 72, 0.08);">
+          <div style="font-size: 3.5rem; margin-bottom: 1rem;">🔒</div>
+          <h2 style="color: #9f1239; font-size: 1.6rem; font-weight: 800; margin-bottom: 0.75rem;">Living Wing Access Restricted</h2>
+          <p style="color: #881337; font-size: 1rem; line-height: 1.6; margin-bottom: 1.75rem;">
+            ${escapeHtml(err.message || 'Cross-gender profile access is strictly restricted to maintain verified safe living environments and member privacy.')}
+          </p>
+          <div style="display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap;">
+            <a href="/find-roommates.html?section=${myWingSection}" class="btn btn-primary btn-md">
+              Browse My Living Wing (${myWing})
+            </a>
+            <a href="/find-roommates.html" class="btn btn-secondary btn-md">
+              Return to Discovery
+            </a>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    if (err.status === 401) {
+      mainContainer.innerHTML = `
+        <div style="max-width: 600px; margin: 3rem auto; text-align: center; background: #ffffff; border: 1.5px solid var(--slate-200); border-radius: var(--radius-2xl); padding: 3rem 2rem; box-shadow: var(--shadow-md);">
+          <div style="font-size: 3.5rem; margin-bottom: 1rem;">🛡️</div>
+          <h2 style="color: var(--brand-navy); font-size: 1.6rem; font-weight: 800; margin-bottom: 0.75rem;">Sign In to View Roommate Profile</h2>
+          <p style="color: var(--slate-600); font-size: 1rem; line-height: 1.6; margin-bottom: 1.75rem;">
+            Roommate profiles are verified and protected within designated living wings. Please sign in or register to connect with members.
+          </p>
+          <div style="display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap;">
+            <a href="/login.html?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}" class="btn btn-primary btn-md">
+              Sign In
+            </a>
+            <a href="/register.html" class="btn btn-secondary btn-md">
+              Create Free Account
+            </a>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    showAlert('Error loading profile: ' + (err.message || 'Roommate profile not found.'));
   }
 }
 

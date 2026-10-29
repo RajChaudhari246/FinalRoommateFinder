@@ -17,11 +17,88 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (adminBanner) adminBanner.style.display = 'block';
   }
 
+  // Enforce Wing isolation UI on dashboard
+  renderLivingWingsSection(user);
+
   // Load Dashboard Data
   await loadProfileCompletion();
   await loadInterestCounts();
   await loadRecommendedRoommates();
 });
+
+function renderLivingWingsSection(user) {
+  const isAdmin = user && user.role === 'admin';
+  const userGender = (user && user.gender ? user.gender : '').toLowerCase();
+
+  const girlsCard = document.getElementById('portal-card-girls');
+  const boysCard = document.getElementById('portal-card-boys');
+  const girlsBadge = document.getElementById('portal-badge-girls');
+  const boysBadge = document.getElementById('portal-badge-boys');
+  const girlsBtnWrap = document.getElementById('portal-btn-girls-wrap');
+  const boysBtnWrap = document.getElementById('portal-btn-boys-wrap');
+
+  if (isAdmin) {
+    if (girlsBadge) girlsBadge.innerHTML = '<span class="wing-badge wing-badge-girls">Safe Space 🛡️</span>';
+    if (boysBadge) boysBadge.innerHTML = '<span class="wing-badge wing-badge-boys">Living Wing ⚡</span>';
+    return;
+  }
+
+  if (userGender === 'male') {
+    if (boysBadge) {
+      boysBadge.innerHTML = '<span class="wing-badge wing-badge-boys" style="font-weight: 700;">⚡ Your Verified Wing</span>';
+    }
+    if (boysBtnWrap) {
+      boysBtnWrap.innerHTML = `
+        <a href="/find-roommates.html?section=male" class="btn btn-primary" style="background: linear-gradient(135deg, #2563eb, #0284c7); border: none; align-self: flex-start; font-weight: 700;">
+          Browse Male Roommates →
+        </a>
+      `;
+    }
+
+    if (girlsCard) {
+      girlsCard.style.background = '#f8fafc';
+      girlsCard.style.borderColor = '#e2e8f0';
+      girlsCard.style.opacity = '0.85';
+    }
+    if (girlsBadge) {
+      girlsBadge.innerHTML = '<span class="wing-badge" style="background: #f1f5f9; color: #64748b; border: 1px dashed #cbd5e1;">🔒 Women-Only (Restricted)</span>';
+    }
+    if (girlsBtnWrap) {
+      girlsBtnWrap.innerHTML = `
+        <button type="button" class="btn btn-secondary" disabled style="opacity: 0.65; cursor: not-allowed; align-self: flex-start; background: #e2e8f0; border-color: #cbd5e1; color: #64748b;" title="Girls Wing is strictly reserved for female members.">
+          🔒 Restricted (Female Members Only)
+        </button>
+      `;
+    }
+  } else if (userGender === 'female') {
+    if (girlsBadge) {
+      girlsBadge.innerHTML = '<span class="wing-badge wing-badge-girls" style="font-weight: 700;">🌸 Your Verified Wing</span>';
+    }
+    if (girlsBtnWrap) {
+      girlsBtnWrap.innerHTML = `
+        <a href="/find-roommates.html?section=female" class="btn btn-primary" style="background: linear-gradient(135deg, #e11d48, #ec4899); border: none; align-self: flex-start; font-weight: 700;">
+          Browse Female Roommates →
+        </a>
+      `;
+    }
+
+    if (boysCard) {
+      boysCard.style.background = '#f8fafc';
+      boysCard.style.borderColor = '#e2e8f0';
+      boysCard.style.opacity = '0.85';
+    }
+    if (boysBadge) {
+      boysBadge.innerHTML = '<span class="wing-badge" style="background: #f1f5f9; color: #64748b; border: 1px dashed #cbd5e1;">🔒 Men-Only (Restricted)</span>';
+    }
+    if (boysBtnWrap) {
+      boysBtnWrap.innerHTML = `
+        <button type="button" class="btn btn-secondary" disabled style="opacity: 0.65; cursor: not-allowed; align-self: flex-start; background: #e2e8f0; border-color: #cbd5e1; color: #64748b;" title="Boys Wing is reserved for male members.">
+          🔒 Restricted (Male Members Only)
+        </button>
+      `;
+    }
+  }
+}
 
 async function loadProfileCompletion() {
   try {
@@ -96,8 +173,16 @@ async function loadRecommendedRoommates() {
   if (!container) return;
 
   try {
-    const res = await window.api.roommates.search({ limit: 3 });
+    const [res, sentRes] = await Promise.all([
+      window.api.roommates.search({ limit: 3 }),
+      window.api.interests.getSent().catch(() => ({ interests: [] }))
+    ]);
+
     const roommates = res.roommates || [];
+    const sentMap = {};
+    (sentRes.interests || []).forEach(i => {
+      sentMap[i.receiver_user_id] = i.status;
+    });
 
     if (roommates.length === 0) {
       container.innerHTML = `
@@ -129,6 +214,16 @@ async function loadRecommendedRoommates() {
           : '<span class="wing-badge wing-badge-all">🌐 Roommate</span>';
 
       const cardClass = isFemale ? 'card-female' : isMale ? 'card-male' : '';
+      const existingStatus = sentMap[r.user_id];
+
+      let connectBtn = '';
+      if (existingStatus === 'accepted') {
+        connectBtn = `<a href="/interests.html" class="btn btn-teal btn-sm" style="flex: 1;">Connected 🤝</a>`;
+      } else if (existingStatus === 'pending') {
+        connectBtn = `<button type="button" class="btn btn-secondary btn-sm" disabled style="flex: 1; opacity: 0.75;">Sent ✓</button>`;
+      } else {
+        connectBtn = `<button id="btn-quick-interest-${r.user_id}" onclick="expressQuickInterest(${r.user_id}, '${escapeHtml(r.full_name)}')" class="btn btn-primary btn-sm" style="flex: 1;">Connect</button>`;
+      }
 
       return `
         <div class="roommate-card ${cardClass}">
@@ -160,7 +255,7 @@ async function loadRecommendedRoommates() {
 
           <div class="roommate-actions">
             <a href="/roommate-details.html?id=${r.user_id}" class="btn btn-secondary btn-sm" style="flex: 1;">View Profile</a>
-            <button onclick="expressQuickInterest(${r.user_id}, '${escapeHtml(r.full_name)}')" class="btn btn-primary btn-sm" style="flex: 1;">Connect</button>
+            ${connectBtn}
           </div>
         </div>
       `;
@@ -172,11 +267,24 @@ async function loadRecommendedRoommates() {
 }
 
 async function expressQuickInterest(userId, name) {
+  const btn = document.getElementById(`btn-quick-interest-${userId}`);
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+  }
+
   try {
-    await window.api.interests.send({ receiver_user_id: userId, message: 'Hi, I saw your profile and would love to connect!' });
-    alert(`Interest sent to ${name}!`);
+    await window.api.interests.send({ receiver_user_id: userId, message: 'Hi, I saw your profile and would love to connect about finding an apartment together!' });
+    if (btn) {
+      btn.outerHTML = `<button type="button" class="btn btn-secondary btn-sm" disabled style="flex: 1; opacity: 0.75;">Sent ✓</button>`;
+    }
+    alert(`Interest request sent to ${name}!`);
     await loadInterestCounts();
   } catch (err) {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Connect';
+    }
     alert(err.message || 'Could not send interest.');
   }
 }

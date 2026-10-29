@@ -6,9 +6,20 @@ const bcrypt = require('bcryptjs');
 const { pool } = require('../config/database');
 
 async function register(req, res, next) {
-  const { full_name, email, password } = req.body;
+  const { full_name, email, password, gender } = req.body;
   const normalizedEmail = email.toLowerCase().trim();
   const trimmedName = full_name.trim();
+
+  // Normalize gender wing (Female for Girls Wing, Male for Boys Wing)
+  let normalizedGender = 'Male';
+  if (gender) {
+    const gLower = String(gender).toLowerCase().trim();
+    if (gLower === 'female' || gLower === 'girls') {
+      normalizedGender = 'Female';
+    } else {
+      normalizedGender = 'Male';
+    }
+  }
 
   let connection;
   try {
@@ -41,17 +52,17 @@ async function register(req, res, next) {
 
     const userId = userResult.insertId;
 
-    // Create default profile record
+    // Create default profile record with assigned gender
     await connection.query(
-      `INSERT INTO profiles (user_id, city, preferred_location, min_budget, max_budget, is_complete)
-       VALUES (?, 'Not Specified', 'Not Specified', 0.00, 0.00, FALSE)`,
-      [userId]
+      `INSERT INTO profiles (user_id, gender, city, preferred_location, min_budget, max_budget, is_complete)
+       VALUES (?, ?, 'Shirpur', 'Not Specified', 0.00, 0.00, FALSE)`,
+      [userId, normalizedGender]
     );
 
-    // Create default preferences record
+    // Create default preferences record with matching preferred gender wing
     await connection.query(
-      'INSERT INTO preferences (user_id) VALUES (?)',
-      [userId]
+      'INSERT INTO preferences (user_id, preferred_gender) VALUES (?, ?)',
+      [userId, normalizedGender]
     );
 
     await connection.commit();
@@ -65,6 +76,7 @@ async function register(req, res, next) {
       req.session.userEmail = normalizedEmail;
       req.session.userName = trimmedName;
       req.session.userRole = 'user';
+      req.session.userGender = normalizedGender;
 
       res.status(201).json({
         success: true,
@@ -74,6 +86,7 @@ async function register(req, res, next) {
           full_name: trimmedName,
           email: normalizedEmail,
           role: 'user',
+          gender: normalizedGender,
           is_complete: false
         }
       });
@@ -94,7 +107,7 @@ async function login(req, res, next) {
   try {
     const [users] = await pool.query(
       `SELECT u.id, u.full_name, u.email, u.password_hash, u.account_status, u.role,
-              p.is_complete, p.city, p.min_budget, p.max_budget
+              p.gender, p.is_complete, p.city, p.min_budget, p.max_budget
        FROM users u
        LEFT JOIN profiles p ON u.id = p.user_id
        WHERE u.email = ?`,
@@ -135,6 +148,7 @@ async function login(req, res, next) {
       req.session.userEmail = user.email;
       req.session.userName = user.full_name;
       req.session.userRole = user.role || 'user';
+      req.session.userGender = user.gender || null;
 
       res.status(200).json({
         success: true,
@@ -145,6 +159,7 @@ async function login(req, res, next) {
           email: user.email,
           city: user.city,
           role: user.role || 'user',
+          gender: user.gender || null,
           is_complete: Boolean(user.is_complete)
         }
       });
@@ -184,7 +199,7 @@ async function me(req, res, next) {
   try {
     const [rows] = await pool.query(
       `SELECT u.id, u.full_name, u.email, u.role, u.created_at,
-              p.is_complete, p.city, p.preferred_location, p.min_budget, p.max_budget,
+              p.gender, p.is_complete, p.city, p.preferred_location, p.min_budget, p.max_budget,
               p.food_preference, p.smoking_preference, p.study_schedule, p.sleeping_schedule,
               p.cleanliness_preference, p.preferred_roommate_count, p.about_me
        FROM users u
@@ -204,6 +219,7 @@ async function me(req, res, next) {
 
     const userData = rows[0];
     req.session.userRole = userData.role || 'user';
+    req.session.userGender = userData.gender || null;
 
     res.status(200).json({
       success: true,
@@ -213,9 +229,11 @@ async function me(req, res, next) {
         full_name: userData.full_name,
         email: userData.email,
         role: userData.role || 'user',
+        gender: userData.gender || null,
         created_at: userData.created_at,
         is_complete: Boolean(userData.is_complete),
         profile: {
+          gender: userData.gender || null,
           city: userData.city,
           preferred_location: userData.preferred_location,
           min_budget: userData.min_budget,

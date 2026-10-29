@@ -121,10 +121,10 @@
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;" id="wings-portal-container">
           <!-- Girls Section Portal -->
-          <div style="background: linear-gradient(135deg, #fff1f2, #fdf2f8); border: 1px solid #fecdd3; border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.08); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 1rem; right: 1rem;">
+          <div id="portal-card-girls" style="background: linear-gradient(135deg, #fff1f2, #fdf2f8); border: 1px solid #fecdd3; border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.08); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 1rem; right: 1rem;" id="portal-badge-girls">
               <span class="wing-badge wing-badge-girls">Safe Space 🛡️</span>
             </div>
             <div>
@@ -139,14 +139,16 @@
                 <span class="sec-chip safe-alert">🛡️ 24/7 Gated CCTV</span>
               </div>
             </div>
-            <a href="/find-roommates.html?section=female" class="btn btn-primary" style="background: linear-gradient(135deg, #e11d48, #ec4899); border: none; align-self: flex-start;">
-              Browse Girls Section →
-            </a>
+            <div id="portal-btn-girls-wrap">
+              <a href="/find-roommates.html?section=female" class="btn btn-primary" style="background: linear-gradient(135deg, #e11d48, #ec4899); border: none; align-self: flex-start;">
+                Browse Girls Section →
+              </a>
+            </div>
           </div>
 
           <!-- Boys Section Portal -->
-          <div style="background: linear-gradient(135deg, #eff6ff, #f0fdf4); border: 1px solid #bfdbfe; border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 1rem; right: 1rem;">
+          <div id="portal-card-boys" style="background: linear-gradient(135deg, #eff6ff, #f0fdf4); border: 1px solid #bfdbfe; border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 1rem; right: 1rem;" id="portal-badge-boys">
               <span class="wing-badge wing-badge-boys">Living Wing ⚡</span>
             </div>
             <div>
@@ -161,9 +163,11 @@
                 <span class="sec-chip harmony-alert">💳 Prompt UPI Split</span>
               </div>
             </div>
-            <a href="/find-roommates.html?section=male" class="btn btn-primary" style="background: linear-gradient(135deg, #2563eb, #0284c7); border: none; align-self: flex-start;">
-              Browse Boys Section →
-            </a>
+            <div id="portal-btn-boys-wrap">
+              <a href="/find-roommates.html?section=male" class="btn btn-primary" style="background: linear-gradient(135deg, #2563eb, #0284c7); border: none; align-self: flex-start;">
+                Browse Boys Section →
+              </a>
+            </div>
           </div>
         </div>
       </section>

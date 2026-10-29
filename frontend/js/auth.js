@@ -45,10 +45,22 @@ async function renderNavbar() {
       : 'U';
     const firstName = user.full_name ? user.full_name.split(' ')[0] : 'Account';
 
+    const userGender = (user.gender || '').toLowerCase();
+    let wingNavLink = '';
+    if (isAdmin) {
+      wingNavLink = `<li><a href="/find-roommates.html?section=female" class="nav-link" id="nav-girls" style="color: #be123c;">🌸 Girls Wing</a></li>
+                     <li><a href="/find-roommates.html?section=male" class="nav-link" id="nav-boys" style="color: #1d4ed8;">⚡ Boys Wing</a></li>`;
+    } else if (userGender === 'male') {
+      wingNavLink = `<li><a href="/find-roommates.html?section=male" class="nav-link ${currentSearch.includes('section=male') ? 'active' : ''}" id="nav-my-wing" style="color: #1d4ed8; font-weight: 700;">⚡ Boys Wing</a></li>`;
+    } else if (userGender === 'female') {
+      wingNavLink = `<li><a href="/find-roommates.html?section=female" class="nav-link ${currentSearch.includes('section=female') ? 'active' : ''}" id="nav-my-wing" style="color: #be123c; font-weight: 700;">🌸 Girls Wing</a></li>`;
+    }
+
     // Desktop Menu
     if (navMenu) {
       navMenu.innerHTML = `
         <li><a href="/find-roommates.html" class="nav-link ${currentPath.includes('find-roommates') && !currentSearch ? 'active' : ''}" id="nav-find">Find Roommates</a></li>
+        ${wingNavLink}
         <li><a href="/find-roommates.html?view=rooms" class="nav-link ${currentSearch.includes('rooms') ? 'active' : ''}" id="nav-rooms">Explore Rooms</a></li>
         <li><a href="/index.html#how-it-works" class="nav-link" id="nav-how">How It Works</a></li>
         <li><a href="/index.html#about-us" class="nav-link" id="nav-about">About Us</a></li>
@@ -170,12 +182,30 @@ function setupMobileDrawer(user) {
   const currentPath = window.location.pathname;
 
   if (user) {
+    const userGender = (user.gender || '').toLowerCase();
+    const isAdmin = user.role === 'admin';
+
+    let wingsDrawerMenu = '';
+    if (isAdmin) {
+      wingsDrawerMenu = `
+        <li><a href="/find-roommates.html?section=female" style="color: var(--girls-primary);">🌸 Girls Safe Wing</a></li>
+        <li><a href="/find-roommates.html?section=male" style="color: var(--boys-primary);">⚡ Boys Living Wing</a></li>
+      `;
+    } else if (userGender === 'male') {
+      wingsDrawerMenu = `
+        <li><a href="/find-roommates.html?section=male" style="color: var(--boys-primary); font-weight: 700;">⚡ Boys Living Wing (My Wing)</a></li>
+      `;
+    } else if (userGender === 'female') {
+      wingsDrawerMenu = `
+        <li><a href="/find-roommates.html?section=female" style="color: var(--girls-primary); font-weight: 700;">🌸 Girls Safe Wing (My Wing)</a></li>
+      `;
+    }
+
     if (drawerLinks) {
       drawerLinks.innerHTML = `
         <li><a href="/find-roommates.html" class="${currentPath.includes('find-roommates') ? 'active' : ''}">🔍 Find Roommates</a></li>
+        ${wingsDrawerMenu}
         <li><a href="/find-roommates.html?view=rooms">🏠 Explore Rooms</a></li>
-        <li><a href="/find-roommates.html?section=female" style="color: var(--girls-primary);">🌸 Girls Safe Wing</a></li>
-        <li><a href="/find-roommates.html?section=male" style="color: var(--boys-primary);">⚡ Boys Living Wing</a></li>
         <li><a href="/dashboard.html" class="${currentPath.includes('dashboard') ? 'active' : ''}">📊 Dashboard</a></li>
         <li><a href="/interests.html" class="${currentPath.includes('interests') ? 'active' : ''}">🤝 Interests</a></li>
         <li><a href="/profile.html" class="${currentPath.includes('profile') ? 'active' : ''}">👤 My Profile</a></li>

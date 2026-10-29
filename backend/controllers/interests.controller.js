@@ -39,6 +39,19 @@ async function expressInterest(req, res, next) {
       });
     }
 
+    // Gender wing protection: Verify sender and receiver genders match
+    const [senderProf] = await pool.query('SELECT gender FROM profiles WHERE user_id = ?', [senderId]);
+    const [receiverProf] = await pool.query('SELECT gender FROM profiles WHERE user_id = ?', [receiverId]);
+    const sGender = (senderProf[0]?.gender || '').toLowerCase();
+    const rGender = (receiverProf[0]?.gender || '').toLowerCase();
+
+    if (sGender && rGender && sGender !== rGender) {
+      return res.status(403).json({
+        success: false,
+        message: 'Connection requests between different gender wings are not permitted under platform safe housing policies.'
+      });
+    }
+
     // Check existing active or pending interest
     const [existing] = await pool.query(
       'SELECT id, status FROM interests WHERE sender_user_id = ? AND receiver_user_id = ?',

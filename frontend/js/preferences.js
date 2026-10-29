@@ -136,13 +136,38 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderSecurityCriteria(e.target.value);
   });
 
+  const userGender = (user.gender || '').toLowerCase();
+  const isAdmin = user.role === 'admin';
+
+  if (!isAdmin && userGender === 'male') {
+    genderPrefSelect.value = 'Male';
+    Array.from(genderPrefSelect.options).forEach(opt => {
+      if (opt.value !== 'Male') {
+        opt.disabled = true;
+      } else {
+        opt.textContent = '⚡ Boys Section (Men\'s Living Wing) — Locked to Verified Gender';
+      }
+    });
+    renderSecurityCriteria('Male');
+  } else if (!isAdmin && userGender === 'female') {
+    genderPrefSelect.value = 'Female';
+    Array.from(genderPrefSelect.options).forEach(opt => {
+      if (opt.value !== 'Female') {
+        opt.disabled = true;
+      } else {
+        opt.textContent = '🌸 Girls Section (Women\'s Safe Space) — Locked to Verified Gender';
+      }
+    });
+    renderSecurityCriteria('Female');
+  }
+
   // Load existing preferences
   try {
     const res = await window.api.preferences.getMe();
     const pref = res.preferences || {};
     currentPrefs = pref;
 
-    if (pref.preferred_gender) {
+    if (isAdmin && pref.preferred_gender) {
       genderPrefSelect.value = pref.preferred_gender;
       renderSecurityCriteria(pref.preferred_gender);
     }
@@ -155,6 +180,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (pref.preferred_sleeping_schedule) document.getElementById('pref_sleeping').value = pref.preferred_sleeping_schedule;
     if (pref.preferred_cleanliness) document.getElementById('pref_cleanliness').value = pref.preferred_cleanliness;
     if (pref.preferred_roommate_count) document.getElementById('pref_roommate_count').value = pref.preferred_roommate_count;
+
+    // Load security fields if already set
+    if (pref.pref_security_visitor_policy && document.getElementById('pref_security_visitor_policy')) {
+      document.getElementById('pref_security_visitor_policy').value = pref.pref_security_visitor_policy;
+    }
+    if (pref.pref_security_curfew && document.getElementById('pref_security_curfew')) {
+      document.getElementById('pref_security_curfew').value = pref.pref_security_curfew;
+    }
+    if (pref.pref_security_amenities && document.getElementById('pref_security_amenities')) {
+      document.getElementById('pref_security_amenities').value = pref.pref_security_amenities;
+    }
 
   } catch (err) {
     console.error('Failed to load preferences:', err);

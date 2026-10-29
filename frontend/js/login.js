@@ -47,3 +47,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+function fillCredentials(email, password) {
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  if (emailInput && passwordInput) {
+    emailInput.value = email;
+    passwordInput.value = password;
+    emailInput.focus();
+
+    // Subtle feedback animation
+    emailInput.style.boxShadow = '0 0 0 3px rgba(11, 168, 154, 0.25)';
+    passwordInput.style.boxShadow = '0 0 0 3px rgba(11, 168, 154, 0.25)';
+    setTimeout(() => {
+      emailInput.style.boxShadow = '';
+      passwordInput.style.boxShadow = '';
+    }, 1200);
+  }
+}
+
+window.fillCredentials = fillCredentials;

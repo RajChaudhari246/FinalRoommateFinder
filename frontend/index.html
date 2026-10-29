@@ -431,7 +431,7 @@
       </div>
 
       <!-- Live Preview Roommate Card -->
-      <div class="hero-preview-wrapper">
+      <div class="hero-preview-wrapper" id="hero-preview-container">
         <div class="hero-preview-badge-float">⚡ 96% Match</div>
 
         <article class="roommate-card card-female" style="box-shadow: var(--shadow-xl);">
@@ -489,8 +489,8 @@
             </p>
 
             <div class="roommate-actions">
-              <a href="/find-roommates.html" class="btn btn-sm btn-card-profile">View Profile</a>
-              <a href="/find-roommates.html" class="btn btn-primary btn-sm btn-card-interest">Express Interest</a>
+              <a href="/roommate-details.html?id=1" class="btn btn-sm btn-card-profile">View Profile</a>
+              <a href="/roommate-details.html?id=1" class="btn btn-primary btn-sm btn-card-interest">Express Interest</a>
             </div>
           </div>
         </article>
@@ -508,12 +508,12 @@
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
         <!-- Girls Wing Card -->
-        <div class="card" style="border-top: 4px solid var(--girls-primary); padding: 2.25rem;">
+        <div class="card" id="home-card-girls" style="border-top: 4px solid var(--girls-primary); padding: 2.25rem;">
           <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
             <span style="font-size: 2rem;">🌸</span>
             <div>
               <h3 style="color: var(--girls-dark); font-size: 1.35rem; margin-bottom: 0.2rem;">Girls Safe Wing</h3>
-              <span class="badge wing-badge-girls">Women's Verified Zone</span>
+              <span class="badge wing-badge-girls" id="home-badge-girls">Women's Verified Zone</span>
             </div>
           </div>
           <p style="color: var(--slate-600); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
@@ -524,18 +524,20 @@
             <li>✓ Transparent hostel &amp; society gate curfew hours</li>
             <li>✓ Guardian contact verified and accountable</li>
           </ul>
-          <a href="/find-roommates.html?section=female" class="btn btn-outline" style="width: 100%; border-color: var(--girls-border); color: var(--girls-dark);">
-            Explore Girls Wing →
-          </a>
+          <div id="home-girls-cta-wrap">
+            <a href="/find-roommates.html?section=female" class="btn btn-outline" style="width: 100%; border-color: var(--girls-border); color: var(--girls-dark);">
+              Explore Girls Wing →
+            </a>
+          </div>
         </div>
 
         <!-- Boys Wing Card -->
-        <div class="card" style="border-top: 4px solid var(--boys-primary); padding: 2.25rem;">
+        <div class="card" id="home-card-boys" style="border-top: 4px solid var(--boys-primary); padding: 2.25rem;">
           <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
             <span style="font-size: 2rem;">⚡</span>
             <div>
               <h3 style="color: var(--boys-dark); font-size: 1.35rem; margin-bottom: 0.2rem;">Boys Living Wing</h3>
-              <span class="badge wing-badge-boys">Student &amp; Bachelor Zone</span>
+              <span class="badge wing-badge-boys" id="home-badge-boys">Student &amp; Bachelor Zone</span>
             </div>
           </div>
           <p style="color: var(--slate-600); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
@@ -546,9 +548,11 @@
             <li>✓ Safe colony with two-wheeler parking &amp; CCTV</li>
             <li>✓ Prompt UPI expense splitting and cleanliness rosters</li>
           </ul>
-          <a href="/find-roommates.html?section=male" class="btn btn-outline" style="width: 100%; border-color: var(--boys-border); color: var(--boys-dark);">
-            Explore Boys Wing →
-          </a>
+          <div id="home-boys-cta-wrap">
+            <a href="/find-roommates.html?section=male" class="btn btn-outline" style="width: 100%; border-color: var(--boys-border); color: var(--boys-dark);">
+              Explore Boys Wing →
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -717,6 +721,141 @@
   <script src="/js/auth.js"></script>
   <script>
     let selectedHeroWing = 'all';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await window.checkAuthState();
+      if (!user || user.role === 'admin') return;
+
+      const userGender = (user.gender || '').toLowerCase();
+      if (userGender === 'male') {
+        selectedHeroWing = 'male';
+        setHeroWing('male');
+
+        const gTab = document.getElementById('hero-tab-girls');
+        if (gTab) {
+          gTab.disabled = true;
+          gTab.style.opacity = '0.5';
+          gTab.style.cursor = 'not-allowed';
+          gTab.title = 'Girls Safe Wing is reserved for female members.';
+        }
+        const allTab = document.getElementById('hero-tab-all');
+        if (allTab) {
+          allTab.textContent = '⚡ Boys Living Wing';
+          allTab.onclick = () => setHeroWing('male');
+        }
+
+        // Adapt bottom wings cards
+        const homeGirlsWrap = document.getElementById('home-girls-cta-wrap');
+        if (homeGirlsWrap) {
+          homeGirlsWrap.innerHTML = `
+            <button type="button" class="btn btn-secondary" disabled style="width: 100%; opacity: 0.65; cursor: not-allowed; background: #e2e8f0; color: #64748b;">
+              🔒 Women-Only (Restricted)
+            </button>
+          `;
+        }
+        const homeBoysWrap = document.getElementById('home-boys-cta-wrap');
+        if (homeBoysWrap) {
+          homeBoysWrap.innerHTML = `
+            <a href="/find-roommates.html?section=male" class="btn btn-primary" style="width: 100%; font-weight: 700;">
+              Explore My Living Wing →
+            </a>
+          `;
+        }
+
+        // Adapt hero preview card to a male candidate (Rajesh Patil, User 2)
+        const previewContainer = document.getElementById('hero-preview-container');
+        if (previewContainer) {
+          previewContainer.innerHTML = `
+            <div class="hero-preview-badge-float">⚡ 94% Match</div>
+            <article class="roommate-card card-male" style="box-shadow: var(--shadow-xl);">
+              <div class="roommate-card-accent"></div>
+              <div class="card-header-visual">
+                <div class="avatar-meta-group">
+                  <div class="roommate-avatar avatar-male">
+                    RP
+                    <span class="avatar-verified-dot">✓</span>
+                  </div>
+                  <div class="roommate-name-block">
+                    <h3>Rajesh Patil</h3>
+                    <span class="roommate-college-text">
+                      🏫 RCPIT Shirpur • 21 yrs
+                    </span>
+                  </div>
+                </div>
+                <div class="card-badges-column">
+                  <span class="wing-badge wing-badge-boys">⚡ Boys Wing</span>
+                  <span class="compatibility-pill pill-high">⚡ 94% Match</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="roommate-location">
+                  <span>📍</span>
+                  <span>Karwand Naka • Shirpur</span>
+                </div>
+                <div class="rent-share-box">
+                  <div>
+                    <div class="rent-share-amount">₹2,000 – ₹3,500</div>
+                    <div class="rent-share-period">estimated monthly rent share</div>
+                  </div>
+                  <span class="rent-zero-brokerage">Zero Brokerage</span>
+                </div>
+                <div class="security-highlights-container">
+                  <span class="sec-chip harmony-alert">📚 Quiet Study Only</span>
+                  <span class="sec-chip harmony-alert">⏰ Silence: 10:30 PM</span>
+                  <span class="sec-chip harmony-alert">🔑 Door Lock Discipline</span>
+                </div>
+                <div class="vibe-tag-list">
+                  <span class="vibe-tag">🥗 Vegetarian</span>
+                  <span class="vibe-tag">🚭 Non-smoker</span>
+                  <span class="vibe-tag">⏰ Early-bird</span>
+                  <span class="vibe-tag">🧹 Very Clean</span>
+                </div>
+                <p class="roommate-bio-text">
+                  Computer Engineering student at RCPIT. Focused on academics, maintains clean shared areas and prompt bill splits.
+                </p>
+                <div class="roommate-actions">
+                  <a href="/roommate-details.html?id=2" class="btn btn-sm btn-card-profile">View Profile</a>
+                  <a href="/roommate-details.html?id=2" class="btn btn-primary btn-sm btn-card-interest">Express Interest</a>
+                </div>
+              </div>
+            </article>
+          `;
+        }
+      } else if (userGender === 'female') {
+        selectedHeroWing = 'female';
+        setHeroWing('female');
+
+        const bTab = document.getElementById('hero-tab-boys');
+        if (bTab) {
+          bTab.disabled = true;
+          bTab.style.opacity = '0.5';
+          bTab.style.cursor = 'not-allowed';
+          bTab.title = 'Boys Living Wing is reserved for male members.';
+        }
+        const allTab = document.getElementById('hero-tab-all');
+        if (allTab) {
+          allTab.textContent = '🌸 Girls Safe Wing';
+          allTab.onclick = () => setHeroWing('female');
+        }
+
+        const homeBoysWrap = document.getElementById('home-boys-cta-wrap');
+        if (homeBoysWrap) {
+          homeBoysWrap.innerHTML = `
+            <button type="button" class="btn btn-secondary" disabled style="width: 100%; opacity: 0.65; cursor: not-allowed; background: #e2e8f0; color: #64748b;">
+              🔒 Men-Only (Restricted)
+            </button>
+          `;
+        }
+        const homeGirlsWrap = document.getElementById('home-girls-cta-wrap');
+        if (homeGirlsWrap) {
+          homeGirlsWrap.innerHTML = `
+            <a href="/find-roommates.html?section=female" class="btn btn-primary" style="width: 100%; font-weight: 700; background: linear-gradient(135deg, #e11d48, #ec4899); border: none;">
+              Explore My Safe Wing →
+            </a>
+          `;
+        }
+      }
+    });
 
     function setHeroWing(wing) {
       selectedHeroWing = wing;
