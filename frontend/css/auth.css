@@ -1,36 +1,60 @@
-/* Auth Form Specific Styling */
+/* =====================================================================
+   AUTH PAGES STYLES — LOGIN & REGISTRATION
+   Clean, trustworthy, focused proptech design
+   ===================================================================== */
 
 .auth-wrapper {
-  min-height: calc(100vh - 4.5rem - 180px);
+  min-height: calc(100vh - 4.5rem - 120px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2.5rem 1rem;
+  padding: 3rem 1.5rem;
+  background: radial-gradient(circle at top, rgba(37, 99, 235, 0.05), transparent 70%);
 }
 
 .auth-card {
   background: #ffffff;
   border-radius: var(--radius-lg);
   border: var(--border-light);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
   width: 100%;
-  max-width: 460px;
-  padding: 2.5rem 2rem;
+  max-width: 480px;
+  padding: 2.5rem 2.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-700), var(--accent-600));
+}
+
+.auth-brand-badge {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
 }
 
 .auth-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .auth-header h1 {
-  font-size: 1.65rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+  color: var(--slate-900);
 }
 
 .auth-header p {
   color: var(--slate-500);
-  font-size: 0.95rem;
+  font-size: 0.925rem;
 }
 
 .password-input-group {
@@ -46,10 +70,13 @@
   border: none;
   color: var(--slate-400);
   cursor: pointer;
-  padding: 0.25rem;
-  font-size: 0.9rem;
+  padding: 0.35rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xs);
+  transition: var(--transition-fast);
 }
 
 .password-toggle-btn:hover {
@@ -61,33 +88,71 @@
   text-align: center;
   font-size: 0.9rem;
   color: var(--slate-500);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--slate-150, #edf2f7);
 }
 
 .auth-footer a {
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--primary-600);
 }
 
 .password-requirements {
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
+  margin-top: 0.4rem;
+  font-size: 0.785rem;
   color: var(--slate-500);
 }
 
-.password-requirements ul {
-  margin-left: 1.25rem;
-  margin-top: 0.25rem;
+/* Quick Demo Account Selector Box */
+.demo-accounts-box {
+  margin-top: 1.5rem;
+  padding: 1rem 1.15rem;
+  background: var(--slate-50);
+  border: 1px dashed var(--slate-300);
+  border-radius: var(--radius-md);
+  font-size: 0.825rem;
+  color: var(--slate-600);
 }
 
-.loading-spinner {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #ffffff;
-  animation: spin 0.8s linear infinite;
+.demo-accounts-header {
+  font-weight: 700;
+  color: var(--slate-800);
+  margin-bottom: 0.65rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.demo-account-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.4rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-align: left;
+}
+
+.demo-account-chip:hover {
+  background: var(--primary-50);
+  border-color: var(--primary-200);
+}
+
+.demo-account-chip span.label {
+  font-weight: 600;
+  color: var(--slate-800);
+}
+
+.demo-account-chip span.fill-btn {
+  font-size: 0.725rem;
+  font-weight: 700;
+  color: var(--primary-600);
+  background: var(--slate-100);
+  padding: 2px 6px;
+  border-radius: 4px;
 }

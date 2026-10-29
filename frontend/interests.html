@@ -3,41 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roommate Interests - Roommate Finder</title>
+  <title>Connection Interests | ROOMMATEFINDER</title>
+  <meta name="description" content="Manage your incoming and outgoing roommate connection requests on ROOMMATEFINDER.">
   <link rel="stylesheet" href="/css/style.css">
   <style>
     .tab-bar {
       display: flex;
-      gap: 1rem;
-      border-bottom: 2px solid var(--slate-200);
+      gap: 0.5rem;
+      background: #ffffff;
+      padding: 0.35rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--slate-200);
       margin-bottom: 2rem;
+      max-width: 420px;
     }
     .tab-btn {
+      flex: 1;
       background: none;
       border: none;
       font-family: var(--font-heading);
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--slate-500);
-      padding: 0.75rem 0.5rem;
+      font-size: 0.925rem;
+      font-weight: 700;
+      color: var(--slate-600);
+      padding: 0.65rem 1.25rem;
+      border-radius: var(--radius-full);
       cursor: pointer;
-      position: relative;
+      transition: var(--transition-fast);
+      text-align: center;
     }
     .tab-btn:hover {
       color: var(--slate-900);
+      background: var(--slate-100);
     }
     .tab-btn.active {
-      color: var(--primary-600);
-    }
-    .tab-btn.active::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background-color: var(--primary-600);
-      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--slate-900), var(--primary-900));
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
     }
   </style>
 </head>
@@ -47,8 +48,13 @@
   <header class="navbar">
     <div class="nav-container">
       <a href="/index.html" class="nav-brand">
-        <span class="brand-icon">🏠</span>
-        <span>Roommate Finder</span>
+        <div class="brand-icon-wrap">
+          <img src="/assets/logo.svg" alt="RoommateFinder" width="36" height="36">
+        </div>
+        <div class="brand-text-group">
+          <span class="brand-name">ROOMMATE<span>FINDER</span></span>
+          <span class="brand-tagline-badge">Verified Discovery</span>
+        </div>
       </a>
       <ul class="nav-menu" id="nav-menu"></ul>
       <div class="nav-actions" id="nav-actions"></div>
@@ -57,11 +63,11 @@
 
   <!-- Interests Content -->
   <main class="main-content">
-    <div class="container" style="max-width: 900px;">
+    <div class="container" style="max-width: 920px;">
 
-      <div style="margin-bottom: 1.5rem;">
-        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Connection Requests</h1>
-        <p style="color: var(--slate-500);">Review incoming interest requests or manage requests you've sent to other roommates.</p>
+      <div style="margin-bottom: 1.75rem;">
+        <h1 style="font-size: 2rem; margin-bottom: 0.35rem;">Connection Requests</h1>
+        <p style="color: var(--slate-500);">Review incoming interest requests or manage requests you've sent to potential roommates.</p>
       </div>
 
       <div id="alert-container"></div>
@@ -79,6 +85,19 @@
 
     </div>
   </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding-top: 0;">
+        <div>&copy; 2026 ROOMMATEFINDER. All rights reserved.</div>
+        <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+          <a href="/find-roommates.html" style="color: var(--slate-400);">Discovery</a>
+          <a href="/dashboard.html" style="color: var(--slate-400);">Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>

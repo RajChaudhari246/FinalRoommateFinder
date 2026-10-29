@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roommate Profile - Roommate Finder</title>
+  <title>Roommate Profile Details | ROOMMATEFINDER</title>
+  <meta name="description" content="View verified roommate profile details, budget requirements, lifestyle habits, and safety protocol alignment on ROOMMATEFINDER.">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/profile.css">
   <link rel="stylesheet" href="/css/roommates.css">
@@ -14,8 +15,13 @@
   <header class="navbar">
     <div class="nav-container">
       <a href="/index.html" class="nav-brand">
-        <span class="brand-icon">🏠</span>
-        <span>Roommate Finder</span>
+        <div class="brand-icon-wrap">
+          <img src="/assets/logo.svg" alt="RoommateFinder" width="36" height="36">
+        </div>
+        <div class="brand-text-group">
+          <span class="brand-name">ROOMMATE<span>FINDER</span></span>
+          <span class="brand-tagline-badge">Verified Discovery</span>
+        </div>
       </a>
       <ul class="nav-menu" id="nav-menu"></ul>
       <div class="nav-actions" id="nav-actions"></div>
@@ -27,8 +33,8 @@
     <div class="container">
 
       <div style="margin-bottom: 1.5rem;">
-        <a href="/find-roommates.html" style="font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
-          ← Back to Roommate Discovery
+        <a href="/find-roommates.html" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+          ← Back to Discovery
         </a>
       </div>
 
@@ -43,32 +49,35 @@
               <h1 id="details-name">Loading...</h1>
               <span id="details-wing-badge" class="wing-badge wing-badge-all">Verified Member</span>
             </div>
-            <p id="details-headline">Location</p>
+            <p id="details-headline" style="margin-top: 0.25rem;">Location</p>
           </div>
         </div>
         <div>
-          <button type="button" id="express-interest-trigger" class="btn btn-primary btn-lg">
-            Express Interest
+          <button type="button" id="express-interest-trigger" class="btn btn-primary btn-lg" style="gap: 0.5rem;">
+            <span>🤝 Express Interest</span>
           </button>
         </div>
       </div>
 
       <div class="profile-grid-layout">
 
-        <!-- Left Column: Living Standards & About Me -->
+        <!-- Left Column: Living Standards & Protocol -->
         <div>
           <div class="card" style="margin-bottom: 1.75rem;">
-            <h3 style="font-size: 1.25rem; margin-bottom: 0.25rem;">Living Standards & Habits</h3>
-            <p style="color: var(--slate-500); font-size: 0.85rem; margin-bottom: 1.25rem;">Self-reported lifestyle characteristics.</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+              <h3 style="font-size: 1.25rem;">Living Standards &amp; Habits</h3>
+              <span class="badge badge-verified">✓ Verified Habits</span>
+            </div>
+            <p style="color: var(--slate-500); font-size: 0.85rem; margin-bottom: 1.25rem;">Self-reported lifestyle characteristics for compatible living.</p>
 
             <div class="attributes-grid">
               <div class="attribute-item">
-                <div class="attribute-label">Budget Range</div>
-                <div class="attribute-value" id="details-budget">--</div>
+                <div class="attribute-label">Estimated Rent Share</div>
+                <div class="attribute-value" id="details-budget" style="color: var(--primary-700);">--</div>
               </div>
 
               <div class="attribute-item">
-                <div class="attribute-label">Work / College</div>
+                <div class="attribute-label">College / Workplace</div>
                 <div class="attribute-value" id="details-work">--</div>
               </div>
 
@@ -83,7 +92,7 @@
               </div>
 
               <div class="attribute-item">
-                <div class="attribute-label">Drinking Habit</div>
+                <div class="attribute-label">Drinking Preference</div>
                 <div class="attribute-value" id="details-drinking">--</div>
               </div>
 
@@ -103,7 +112,7 @@
               </div>
 
               <div class="attribute-item">
-                <div class="attribute-label">Desired Roommates</div>
+                <div class="attribute-label">Desired Flatmates</div>
                 <div class="attribute-value" id="details-roommates">--</div>
               </div>
             </div>
@@ -112,7 +121,7 @@
           <!-- Safety & Living Protocol Card -->
           <div class="card" id="details-protocol-card" style="margin-bottom: 1.75rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 0.5rem;">
-              <h3 id="details-protocol-title" style="font-size: 1.25rem;">🛡️ Safety & Living Protocol</h3>
+              <h3 id="details-protocol-title" style="font-size: 1.25rem;">🛡️ Safety &amp; Living Protocol</h3>
               <span id="details-protocol-status" class="protocol-badge" style="background: var(--slate-100); color: var(--slate-700);">Living Standards</span>
             </div>
             <p id="details-protocol-desc" style="color: var(--slate-500); font-size: 0.85rem; margin-bottom: 1.25rem;">
@@ -121,7 +130,7 @@
 
             <div class="attributes-grid" id="details-protocol-grid">
               <div class="attribute-item">
-                <div class="attribute-label" id="lbl-details-visitor">Visitor & Guest Policy</div>
+                <div class="attribute-label" id="lbl-details-visitor">Visitor &amp; Guest Policy</div>
                 <div class="attribute-value" id="details-proto-visitor">--</div>
               </div>
 
@@ -136,13 +145,13 @@
               </div>
 
               <div class="attribute-item">
-                <div class="attribute-label" id="lbl-details-emergency">Verification & Accountability</div>
+                <div class="attribute-label" id="lbl-details-emergency">Verification &amp; Accountability</div>
                 <div class="attribute-value" id="details-proto-emergency">--</div>
               </div>
             </div>
 
-            <div id="details-notes-wrap" style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--slate-100); display: none;">
-              <h4 style="font-size: 0.875rem; color: var(--slate-700); margin-bottom: 0.35rem;">Roommate Guidelines & Safety Notes</h4>
+            <div id="details-notes-wrap" style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--slate-150, #edf2f7); display: none;">
+              <h4 style="font-size: 0.875rem; color: var(--slate-700); margin-bottom: 0.35rem;">Roommate Guidelines &amp; Safety Notes</h4>
               <p id="details-proto-notes" style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.5;"></p>
             </div>
           </div>
@@ -159,7 +168,7 @@
         <div>
           <div class="card" id="compatibility-box">
             <div style="text-align: center; padding: 2rem;">
-              <span class="loading-spinner" style="border-color: var(--primary-600); border-top-color: transparent;"></span>
+              <span class="loading-spinner dark"></span>
               <p style="margin-top: 1rem; color: var(--slate-500); font-size: 0.9rem;">Calculating compatibility score...</p>
             </div>
           </div>
@@ -174,11 +183,14 @@
   <div class="modal-backdrop" id="interest-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 style="font-size: 1.25rem;">Connect with <span id="modal-target-name">Roommate</span></h3>
+        <div>
+          <h3 style="font-size: 1.25rem; font-weight: 700;">Connect with <span id="modal-target-name">Roommate</span></h3>
+          <p style="font-size: 0.85rem; color: var(--slate-500); margin-top: 2px;">Mutual interest notification via RoommateFinder</p>
+        </div>
         <button type="button" class="modal-close" id="close-interest-modal">&times;</button>
       </div>
-      <p style="color: var(--slate-500); font-size: 0.9rem; margin-bottom: 1.25rem;">
-        Include a friendly note letting them know what you like about their profile or which neighborhoods you're searching in.
+      <p style="color: var(--slate-600); font-size: 0.9rem; margin-bottom: 1.25rem; background: var(--primary-50); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--primary-200);">
+        💡 Include a friendly note letting them know what you like about their profile or which neighborhoods you're searching in.
       </p>
       <form id="send-interest-form">
         <div class="form-group">
@@ -192,6 +204,20 @@
       </form>
     </div>
   </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding-top: 0;">
+        <div>&copy; 2026 ROOMMATEFINDER. All rights reserved.</div>
+        <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+          <a href="/find-roommates.html" style="color: var(--slate-400);">Discovery</a>
+          <a href="/find-roommates.html?section=female" style="color: var(--slate-400);">Girls Wing</a>
+          <a href="/find-roommates.html?section=male" style="color: var(--slate-400);">Boys Wing</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>

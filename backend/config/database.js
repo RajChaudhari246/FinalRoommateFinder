@@ -363,7 +363,7 @@ const pool = {
       beginTransaction: () => executeQuery('BEGIN TRANSACTION'),
       commit: () => executeQuery('COMMIT'),
       rollback: () => executeQuery('ROLLBACK'),
-      release: () => {}
+      release: () => { }
     };
   },
   end: async () => {

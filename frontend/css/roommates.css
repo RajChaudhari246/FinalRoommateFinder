@@ -1,27 +1,334 @@
-/* Find Roommates & Details Styles */
+/* =====================================================================
+   ROOMMATE DISCOVERY & LISTING CARDS STYLES
+   Inspired by JoinMyFlat PropTech UX: Clean, Visual, Functional
+   ===================================================================== */
 
+/* Discovery Page Layout */
+.discovery-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Page Header & Quick Search */
+.discovery-header-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: var(--border-light);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.discovery-header-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.05), transparent 70%);
+  pointer-events: none;
+}
+
+.discovery-title-wrap h1 {
+  font-size: 2rem;
+  color: var(--slate-900);
+  margin-bottom: 0.35rem;
+}
+
+.discovery-title-wrap p {
+  color: var(--slate-500);
+  font-size: 0.95rem;
+}
+
+/* Quick Search Header Bar */
+.quick-search-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.quick-search-input-wrap {
+  flex: 1;
+  min-width: 260px;
+  position: relative;
+}
+
+.quick-search-input-wrap input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.6rem;
+  font-size: 0.95rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--slate-300);
+  background: var(--slate-50);
+  transition: var(--transition-fast);
+}
+
+.quick-search-input-wrap input:focus {
+  background: #ffffff;
+  border-color: var(--primary-600);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  outline: none;
+}
+
+.quick-search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--slate-400);
+  pointer-events: none;
+}
+
+/* Locality Quick Pills */
+.locality-pills-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.locality-pills-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--slate-400);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.locality-pill {
+  background: var(--slate-100);
+  border: 1px solid var(--slate-200);
+  color: var(--slate-700);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.locality-pill:hover, .locality-pill.active {
+  background: var(--primary-50);
+  border-color: var(--primary-200);
+  color: var(--primary-700);
+}
+
+/* Results Toolbar */
+.discovery-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  border: var(--border-light);
+  box-shadow: var(--shadow-xs);
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.results-count-badge {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--slate-900);
+}
+
+.results-count-badge span {
+  color: var(--primary-600);
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sort-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--slate-500);
+}
+
+.sort-select {
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--slate-300);
+  font-size: 0.85rem;
+  background: #ffffff;
+  color: var(--slate-700);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: var(--primary-600);
+}
+
+/* View Mode Toggles */
+.view-mode-toggle {
+  display: flex;
+  background: var(--slate-100);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  border: 1px solid var(--slate-200);
+}
+
+.view-btn {
+  background: transparent;
+  border: none;
+  padding: 0.35rem 0.55rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  color: var(--slate-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.view-btn:hover {
+  color: var(--slate-800);
+}
+
+.view-btn.active {
+  background: #ffffff;
+  color: var(--primary-600);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+/* Mobile Filter Trigger Button */
+.mobile-filter-trigger {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  background: #ffffff;
+  border: 1px solid var(--slate-300);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  cursor: pointer;
+}
+
+.mobile-filter-trigger:hover {
+  background: var(--slate-50);
+}
+
+.filter-active-count {
+  background: var(--primary-600);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+
+/* Active Filter Chips Bar */
+.active-filters-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  border: var(--border-light);
+  font-size: 0.85rem;
+}
+
+.active-filters-label {
+  color: var(--slate-400);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.filter-chip-removable {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--slate-100);
+  border: 1px solid var(--slate-200);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  color: var(--slate-700);
+  font-size: 0.785rem;
+  font-weight: 600;
+}
+
+.filter-chip-removable button {
+  background: none;
+  border: none;
+  color: var(--slate-400);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+.filter-chip-removable button:hover {
+  color: var(--danger-600);
+}
+
+.clear-all-filters-btn {
+  background: none;
+  border: none;
+  color: var(--primary-600);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-left: auto;
+  text-decoration: underline;
+}
+
+/* Main Grid Layout */
 .discovery-layout {
   display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 2rem;
+  grid-template-columns: 290px 1fr;
+  gap: 1.75rem;
   align-items: start;
 }
 
-@media (max-width: 960px) {
-  .discovery-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Filter Sidebar */
+/* =====================================================================
+   FILTER SIDEBAR
+   ===================================================================== */
 .filter-card {
   background: #ffffff;
   border-radius: var(--radius-lg);
   border: var(--border-light);
   padding: 1.5rem;
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-card);
   position: sticky;
   top: 5.5rem;
+  max-height: calc(100vh - 7rem);
+  overflow-y: auto;
+}
+
+.filter-card::-webkit-scrollbar {
+  width: 5px;
+}
+
+.filter-card::-webkit-scrollbar-thumb {
+  background: var(--slate-300);
+  border-radius: 4px;
 }
 
 .filter-header {
@@ -34,26 +341,53 @@
 }
 
 .filter-header h3 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--slate-900);
 }
 
 .btn-link-reset {
   background: none;
   border: none;
-  color: var(--primary-600);
-  font-size: 0.85rem;
+  color: var(--slate-500);
+  font-size: 0.825rem;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-xs);
+  transition: var(--transition-fast);
 }
 
 .btn-link-reset:hover {
-  text-decoration: underline;
+  color: var(--danger-600);
+  background: var(--danger-50);
 }
 
-/* Roommate Cards Grid */
+/* Filter Sections */
+.filter-section-group {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--slate-100);
+}
+
+.filter-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--slate-400);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* =====================================================================
+   ROOMMATE PROFILE CARDS (JoinMyFlat Inspired)
+   ===================================================================== */
 .roommates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
 }
 
@@ -61,183 +395,449 @@
   background: #ffffff;
   border-radius: var(--radius-lg);
   border: var(--border-light);
-  box-shadow: var(--shadow-sm);
-  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: var(--transition);
   position: relative;
   overflow: hidden;
 }
 
-.roommate-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: transparent;
-  transition: background 0.3s ease;
+.roommate-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--slate-300);
 }
 
-.roommate-card.card-female::before {
+/* Top Accent Bar */
+.roommate-card-accent {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--slate-300), var(--slate-400));
+}
+
+.card-female .roommate-card-accent {
   background: linear-gradient(90deg, #f43f5e, #ec4899);
 }
 
-.roommate-card.card-male::before {
+.card-male .roommate-card-accent {
   background: linear-gradient(90deg, #2563eb, #0ea5e9);
 }
 
-.roommate-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.12), 0 4px 8px -4px rgba(15, 23, 42, 0.04);
-}
-
-.roommate-card.card-female:hover {
-  border-color: #fbcfe8;
-}
-
-.roommate-card.card-male:hover {
-  border-color: #bfdbfe;
-}
-
-.roommate-card-topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.85rem;
-}
-
-.roommate-card-header {
+/* Card Visual Header with Avatar & Top Badges */
+.card-header-visual {
+  padding: 1.25rem 1.25rem 0.75rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
-}
-
-.roommate-name-meta h3 {
-  font-size: 1.15rem;
-  margin-bottom: 0.2rem;
-  color: var(--slate-900);
-}
-
-.roommate-name-meta p {
-  font-size: 0.85rem;
-  color: var(--slate-500);
-}
-
-.budget-chip {
-  background: var(--primary-50);
-  color: var(--primary-700);
-  font-size: 0.85rem;
-  font-weight: 700;
-  padding: 0.35rem 0.65rem;
-  border-radius: var(--radius-sm);
-  display: inline-block;
-  margin-bottom: 0.85rem;
-}
-
-.security-highlights-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 1rem;
-}
-
-.compatibility-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-weight: 700;
-  font-size: 0.825rem;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-full);
-}
-
-.pill-high { background: #d1fae5; color: #065f46; }
-.pill-med { background: #e0e7ff; color: #3730a3; }
-.pill-low { background: #fef3c7; color: #92400e; }
-.pill-none { background: var(--slate-100); color: var(--slate-600); }
-
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-bottom: 1rem;
-}
-
-.tag {
-  background: var(--slate-100);
-  color: var(--slate-700);
-  font-size: 0.775rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: var(--radius-sm);
-  text-transform: capitalize;
-}
-
-.highlights-box {
-  background: var(--slate-50);
-  border-radius: var(--radius-md);
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.25rem;
-  font-size: 0.8rem;
-  color: var(--slate-600);
-  border: 1px solid var(--slate-100);
-}
-
-.highlights-box ul {
-  padding-left: 1.1rem;
-  margin-top: 0.25rem;
-}
-
-.highlights-box li {
-  margin-bottom: 0.2rem;
-}
-
-.roommate-actions {
-  display: flex;
   gap: 0.75rem;
-  margin-top: auto;
 }
 
-/* Compatibility Details Box */
-.factors-breakdown {
-  margin-top: 1.5rem;
-}
-
-.factor-item {
+.avatar-meta-group {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.85rem;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid var(--slate-100);
 }
 
-.factor-indicator {
-  width: 1.25rem;
-  height: 1.25rem;
+.roommate-avatar {
+  width: 3.25rem;
+  height: 3.25rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: #ffffff;
   flex-shrink: 0;
-  margin-top: 0.15rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+  position: relative;
 }
 
-.factor-indicator.positive { background: #d1fae5; color: #065f46; }
-.factor-indicator.neutral { background: #fef3c7; color: #92400e; }
-.factor-indicator.negative { background: #fee2e2; color: #991b1b; }
-
-.factor-text h4 {
-  font-size: 0.9rem;
-  color: var(--slate-800);
-  margin-bottom: 0.15rem;
+.avatar-female {
+  background: linear-gradient(135deg, #f43f5e, #be185d);
 }
 
-.factor-text p {
-  font-size: 0.85rem;
+.avatar-male {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.avatar-default {
+  background: linear-gradient(135deg, var(--slate-700), var(--slate-900));
+}
+
+.avatar-verified-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 1rem;
+  height: 1rem;
+  background: #10b981;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 0.55rem;
+}
+
+.roommate-name-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.roommate-name-block h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  line-height: 1.2;
+}
+
+.roommate-college-text {
+  font-size: 0.825rem;
   color: var(--slate-500);
+  margin-top: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Card Top Badges */
+.card-badges-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+}
+
+/* Compatibility Pill */
+.compatibility-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 700;
+  font-size: 0.775rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-full);
+  letter-spacing: -0.01em;
+}
+
+.pill-high {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.pill-med {
+  background: var(--primary-50);
+  color: var(--primary-700);
+  border: 1px solid var(--primary-200);
+}
+
+.pill-low {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.pill-none {
+  background: var(--slate-100);
+  color: var(--slate-600);
+  border: 1px solid var(--slate-200);
+}
+
+/* Card Body Content */
+.card-body {
+  padding: 0 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Location Text */
+.roommate-location {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--slate-600);
+  margin-bottom: 0.85rem;
+  font-weight: 500;
+}
+
+/* Rent Price Banner Box */
+.rent-share-box {
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.rent-share-amount {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--slate-900);
+}
+
+.rent-share-period {
+  font-size: 0.775rem;
+  font-weight: 500;
+  color: var(--slate-500);
+}
+
+.rent-zero-brokerage {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #ecfdf5;
+  color: #047857;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid #a7f3d0;
+}
+
+/* Lifestyle Vibe Pills */
+.vibe-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+
+.vibe-tag {
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  color: var(--slate-700);
+  font-size: 0.775rem;
+  font-weight: 500;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  text-transform: capitalize;
+}
+
+/* Security Highlights Container */
+.security-highlights-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+/* Compatibility Highlights Excerpt */
+.highlights-box {
+  background: var(--slate-50);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1rem;
+  font-size: 0.785rem;
+  color: var(--slate-600);
+  border: 1px solid var(--slate-150, #edf2f7);
+}
+
+.highlights-box-header {
+  font-weight: 700;
+  color: var(--slate-700);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.highlights-box ul {
+  padding-left: 1.1rem;
+  margin: 0;
+}
+
+.highlights-box li {
+  margin-bottom: 0.15rem;
+  line-height: 1.4;
+}
+
+/* Bio Excerpt */
+.roommate-bio-text {
+  font-size: 0.85rem;
+  color: var(--slate-600);
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Actions Row at Bottom of Card */
+.roommate-actions {
+  display: flex;
+  gap: 0.65rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.btn-card-profile {
+  flex: 1;
+  background: #ffffff;
+  border-color: var(--slate-300);
+  color: var(--slate-700);
+}
+
+.btn-card-profile:hover {
+  background: var(--slate-50);
+  border-color: var(--slate-400);
+  color: var(--slate-900);
+}
+
+.btn-card-interest {
+  flex: 1.35;
+}
+
+/* List View Variant */
+.view-list .roommates-grid {
+  grid-template-columns: 1fr;
+}
+
+.view-list .roommate-card {
+  flex-direction: row;
+  align-items: center;
+  padding: 1.25rem;
+}
+
+.view-list .roommate-card-accent {
+  width: 5px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.view-list .card-header-visual {
+  padding: 0;
+  flex: 0 0 280px;
+}
+
+.view-list .card-body {
+  padding: 0 1.5rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.view-list .roommate-actions {
+  margin-top: 0;
+  padding-top: 0;
+  flex-direction: column;
+  flex: 0 0 160px;
+}
+
+/* =====================================================================
+   SKELETON LOADERS
+   ===================================================================== */
+.skeleton-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: var(--border-light);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-xs);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-avatar {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+}
+
+.skeleton-line {
+  height: 1rem;
+  width: 100%;
+}
+
+.skeleton-line.sm { height: 0.75rem; width: 60%; }
+.skeleton-line.md { height: 1.5rem; width: 80%; }
+.skeleton-line.badge { height: 1.5rem; width: 90px; border-radius: 9999px; }
+
+/* Responsive Adjustments */
+@media (max-width: 960px) {
+  .discovery-layout {
+    grid-template-columns: 1fr;
+  }
+  .filter-card {
+    display: none; /* Controlled by mobile filter drawer */
+  }
+  .mobile-filter-trigger {
+    display: inline-flex;
+  }
+  .view-list .roommate-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .view-list .card-body {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem 0;
+  }
+  .view-list .roommate-actions {
+    flex-direction: row;
+    flex: auto;
+  }
+}
+
+/* Mobile Filter Drawer Sheet */
+.mobile-filter-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1050;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.mobile-filter-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-filter-sheet {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 340px;
+  max-width: 88vw;
+  background: #ffffff;
+  z-index: 1051;
+  transform: translateX(-100%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  box-shadow: 10px 0 25px rgba(15, 23, 42, 0.15);
+}
+
+.mobile-filter-backdrop.open .mobile-filter-sheet {
+  transform: translateX(0);
 }

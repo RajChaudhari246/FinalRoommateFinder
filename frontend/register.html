@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Your Account - Roommate Finder</title>
+  <title>Create Your Account | ROOMMATEFINDER</title>
+  <meta name="description" content="Join RoommateFinder to find verified roommates based on shared living standards, budget, and safety protocols across India.">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/auth.css">
 </head>
@@ -13,8 +14,13 @@
   <header class="navbar">
     <div class="nav-container">
       <a href="/index.html" class="nav-brand">
-        <span class="brand-icon">🏠</span>
-        <span>Roommate Finder</span>
+        <div class="brand-icon-wrap">
+          <img src="/assets/logo.svg" alt="RoommateFinder" width="36" height="36">
+        </div>
+        <div class="brand-text-group">
+          <span class="brand-name">ROOMMATE<span>FINDER</span></span>
+          <span class="brand-tagline-badge">Verified Discovery</span>
+        </div>
       </a>
       <ul class="nav-menu" id="nav-menu"></ul>
       <div class="nav-actions" id="nav-actions">
@@ -26,9 +32,13 @@
   <!-- Auth Content -->
   <main class="main-content auth-wrapper">
     <div class="auth-card">
+      <div class="auth-brand-badge">
+        <img src="/assets/logo.svg" alt="RoommateFinder" width="48" height="48">
+      </div>
+
       <div class="auth-header">
-        <h1>Create Account</h1>
-        <p>Join Roommate Finder to discover compatible housemates</p>
+        <h1>Create Free Account</h1>
+        <p>Join ROOMMATEFINDER to discover compatible roommates and shared living spaces.</p>
       </div>
 
       <div id="alert-container"></div>
@@ -36,7 +46,7 @@
       <form id="register-form" novalidate>
         <div class="form-group">
           <label class="form-label" for="full_name">Full Name</label>
-          <input type="text" id="full_name" class="form-control" placeholder="Alex Morgan" required autocomplete="name">
+          <input type="text" id="full_name" class="form-control" placeholder="e.g. Alex Morgan" required autocomplete="name">
         </div>
 
         <div class="form-group">
@@ -61,13 +71,13 @@
         </div>
 
         <div class="form-group" style="margin-top: 1rem;">
-          <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--slate-600); cursor: pointer;">
+          <label style="display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.85rem; color: var(--slate-600); cursor: pointer;">
             <input type="checkbox" id="terms" required style="margin-top: 0.2rem;">
-            <span>I agree to Roommate Finder's community guidelines and respectful roommate policy.</span>
+            <span>I agree to ROOMMATEFINDER's respectful community guidelines and verified safety standards.</span>
           </label>
         </div>
 
-        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.75rem; font-weight: 700;">
           Create Account
         </button>
       </form>

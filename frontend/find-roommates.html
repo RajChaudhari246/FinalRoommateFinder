@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Find Roommates - Roommate Finder</title>
+  <title>Discover Roommates | ROOMMATEFINDER</title>
+  <meta name="description" content="Discover verified roommates in India who match your accommodation budget, lifestyle habits, and safety protocols. Zero brokerage, genuine matches.">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/roommates.css">
 </head>
@@ -13,24 +14,29 @@
   <header class="navbar">
     <div class="nav-container">
       <a href="/index.html" class="nav-brand">
-        <span class="brand-icon">🏠</span>
-        <span>Roommate Finder</span>
+        <div class="brand-icon-wrap">
+          <img src="/assets/logo.svg" alt="RoommateFinder" width="36" height="36">
+        </div>
+        <div class="brand-text-group">
+          <span class="brand-name">ROOMMATE<span>FINDER</span></span>
+          <span class="brand-tagline-badge">Verified Discovery</span>
+        </div>
       </a>
       <ul class="nav-menu" id="nav-menu"></ul>
       <div class="nav-actions" id="nav-actions"></div>
     </div>
   </header>
 
-  <!-- Discovery Layout -->
+  <!-- Discovery Main Page -->
   <main class="main-content">
-    <div class="container">
+    <div class="container discovery-container">
 
-      <!-- Section Switcher Header -->
-      <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.75rem;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <h1 style="font-size: 2rem; margin-bottom: 0.35rem;" id="page-heading">Discover Roommates</h1>
-            <p id="results-count" style="font-size: 0.95rem; color: var(--slate-500);">Searching compatible profiles...</p>
+      <!-- Header & Search Box Card -->
+      <section class="discovery-header-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.25rem;">
+          <div class="discovery-title-wrap">
+            <h1 id="page-heading">Discover Roommates</h1>
+            <p>Find people who match your lifestyle, preferences, and budget.</p>
           </div>
 
           <!-- Section Switcher Tabs -->
@@ -39,118 +45,201 @@
               🌐 All Roommates
             </button>
             <button type="button" class="section-tab-btn" id="tab-girls" onclick="switchSection('female')">
-              🌸 Girls Section <span style="font-size: 0.725rem; opacity: 0.85;">(Safe Zone)</span>
+              🌸 Girls Wing <span style="font-size: 0.725rem; opacity: 0.85;">(Safe Zone)</span>
             </button>
             <button type="button" class="section-tab-btn" id="tab-boys" onclick="switchSection('male')">
-              ⚡ Boys Section <span style="font-size: 0.725rem; opacity: 0.85;">(Living Wing)</span>
+              ⚡ Boys Wing <span style="font-size: 0.725rem; opacity: 0.85;">(Living Space)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Search Bar -->
+        <div class="quick-search-bar">
+          <div class="quick-search-input-wrap">
+            <span class="quick-search-icon">🔍</span>
+            <input type="text" id="quick-search-location" placeholder="Search by city, college, or neighborhood (e.g. Shirpur, Karwand Naka, RCPIT, NMIMS)...">
+          </div>
+          <button type="button" class="btn btn-primary" id="btn-quick-search">
+            Find Roommates
+          </button>
+        </div>
+
+        <!-- Popular Locality Quick Chips -->
+        <div class="locality-pills-wrap">
+          <span class="locality-pills-label">Popular Areas:</span>
+          <button type="button" class="locality-pill" onclick="selectQuickLocality('Shirpur')">All Shirpur</button>
+          <button type="button" class="locality-pill" onclick="selectQuickLocality('Karwand Naka')">Karwand Naka</button>
+          <button type="button" class="locality-pill" onclick="selectQuickLocality('RCPIT Campus')">RCPIT Campus</button>
+          <button type="button" class="locality-pill" onclick="selectQuickLocality('NMIMS Campus')">NMIMS Campus</button>
+          <button type="button" class="locality-pill" onclick="selectQuickLocality('Nimzari Naka')">Nimzari Naka</button>
+          <button type="button" class="locality-pill" onclick="selectQuickLocality('Subhash Nagar')">Subhash Nagar</button>
+        </div>
+      </section>
+
+      <!-- Section Notice Banner (Dynamic when in Girls/Boys wing) -->
+      <div id="section-notice-banner"></div>
+
+      <!-- Discovery Toolbar -->
+      <div class="discovery-toolbar">
+        <div class="toolbar-left">
+          <span class="results-count-badge" id="results-count">Searching compatible profiles...</span>
+          <button type="button" class="mobile-filter-trigger" id="btn-open-mobile-filter">
+            <span>⚙️ Filters</span>
+            <span class="filter-active-count" id="mobile-filter-badge" style="display: none;">0</span>
+          </button>
+        </div>
+
+        <div class="toolbar-right">
+          <div class="sort-select-wrap">
+            <label for="sort-by-select">Sort by:</label>
+            <select id="sort-by-select" class="sort-select">
+              <option value="compatibility">Best Match</option>
+              <option value="budget-asc">Rent: Low to High</option>
+              <option value="budget-desc">Rent: High to Low</option>
+              <option value="newest">Newest Profile</option>
+            </select>
+          </div>
+
+          <div class="view-mode-toggle" role="group" aria-label="View layout switch">
+            <button type="button" class="view-btn active" id="btn-view-grid" title="Grid View" aria-label="Grid View">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </button>
+            <button type="button" class="view-btn" id="btn-view-list" title="List View" aria-label="List View">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Section Notice Banner (Dynamic) -->
-      <div id="section-notice-banner"></div>
+      <!-- Active Filter Chips Bar (Shown when any filter is active) -->
+      <div id="active-filters-container" style="display: none;">
+        <div class="active-filters-bar">
+          <span class="active-filters-label">Active Filters:</span>
+          <div id="active-filter-chips" style="display: flex; flex-wrap: wrap; gap: 0.4rem;"></div>
+          <button type="button" class="clear-all-filters-btn" id="btn-clear-all-chips">Clear All</button>
+        </div>
+      </div>
 
-      <!-- Main Discovery Layout Grid -->
+      <!-- Main Discovery Layout Grid (Desktop: Sidebar + Profiles) -->
       <div class="discovery-layout">
 
-        <!-- Left Filters Sidebar -->
-        <aside class="filter-card">
+        <!-- Left Filter Sidebar -->
+        <aside class="filter-card" id="desktop-filter-card">
           <div class="filter-header">
             <div>
               <h3 id="filter-sidebar-title">Filter Roommates</h3>
               <p id="filter-sidebar-subtitle" style="font-size: 0.785rem; color: var(--slate-500);">Personalized Criteria</p>
             </div>
-            <button type="button" id="reset-filters-btn" class="btn-link-reset">Reset</button>
+            <button type="button" id="reset-filters-btn" class="btn-link-reset">Reset All</button>
           </div>
 
           <form id="filter-form">
 
             <!-- Dynamic Gender & Security Protocol Filters Block -->
-            <div id="dynamic-security-filters" style="margin-bottom: 1.25rem;"></div>
+            <div id="dynamic-security-filters" class="filter-section-group" style="padding-top: 0;"></div>
 
-            <div class="form-group">
-              <label class="form-label" for="filter-location">Location / City / Campus</label>
-              <input type="text" id="filter-location" class="form-control" placeholder="e.g. Shirpur, Karwand Naka, RCPIT">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Monthly Rent Share (₹)</label>
-              <div style="display: flex; gap: 0.5rem;">
-                <input type="number" id="filter-min-budget" class="form-control" placeholder="Min ₹" min="0">
-                <input type="number" id="filter-max-budget" class="form-control" placeholder="Max ₹" min="0">
+            <!-- Location Section -->
+            <div class="filter-section-group">
+              <span class="filter-section-title">📍 Location & Campus</span>
+              <div class="form-group" style="margin-bottom: 0;">
+                <input type="text" id="filter-location" class="form-control" placeholder="City or College (e.g. Shirpur, Karwand Naka)">
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="filter-food">Dietary / Kitchen Habit</label>
-              <select id="filter-food" class="form-control">
-                <option value="">Any Food</option>
-                <option value="vegetarian">Vegetarian</option>
-                <option value="vegan">Vegan</option>
-                <option value="non-vegetarian">Non-vegetarian</option>
-              </select>
+            <!-- Budget Section -->
+            <div class="filter-section-group">
+              <span class="filter-section-title">💰 Monthly Rent Share (₹)</span>
+              <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <input type="number" id="filter-min-budget" class="form-control" placeholder="Min ₹" min="0">
+                <input type="number" id="filter-max-budget" class="form-control" placeholder="Max ₹" min="0">
+              </div>
+              <div class="budget-presets">
+                <button type="button" class="budget-chip-preset" onclick="setBudgetPreset(0, 3500)">&lt; ₹3.5k</button>
+                <button type="button" class="budget-chip-preset" onclick="setBudgetPreset(3000, 5000)">₹3k – ₹5k</button>
+                <button type="button" class="budget-chip-preset" onclick="setBudgetPreset(4500, 7000)">₹4.5k – ₹7k</button>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="filter-smoking">Smoking Preference</label>
-              <select id="filter-smoking" class="form-control">
-                <option value="">Any Policy</option>
-                <option value="non-smoker">Non-smoker Only</option>
-                <option value="outside-only">Outside Only</option>
-                <option value="smoker">Smoker</option>
-              </select>
+            <!-- Lifestyle Preferences -->
+            <div class="filter-section-group">
+              <span class="filter-section-title">🥗 Lifestyle Habits</span>
+              
+              <div class="form-group" style="margin-bottom: 0.65rem;">
+                <label class="form-label" style="font-size: 0.8rem;" for="filter-food">Dietary / Kitchen Habit</label>
+                <select id="filter-food" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+                  <option value="">Any Food Preference</option>
+                  <option value="vegetarian">Vegetarian Only</option>
+                  <option value="vegan">Vegan</option>
+                  <option value="non-vegetarian">Non-vegetarian</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0.65rem;">
+                <label class="form-label" style="font-size: 0.8rem;" for="filter-smoking">Smoking Preference</label>
+                <select id="filter-smoking" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+                  <option value="">Any Smoking Policy</option>
+                  <option value="non-smoker">Non-smoker Only</option>
+                  <option value="outside-only">Outside Only</option>
+                  <option value="smoker">Smoker Friendly</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0.65rem;">
+                <label class="form-label" style="font-size: 0.8rem;" for="filter-sleeping">Sleep Routine</label>
+                <select id="filter-sleeping" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+                  <option value="">Any Sleep Routine</option>
+                  <option value="early-bird">Early-bird (Early sleep)</option>
+                  <option value="night-owl">Night-owl (Late hours)</option>
+                  <option value="flexible">Flexible</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0.65rem;">
+                <label class="form-label" style="font-size: 0.8rem;" for="filter-study">Study & Work Schedule</label>
+                <select id="filter-study" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+                  <option value="">Any Study Schedule</option>
+                  <option value="morning">Morning Schedule</option>
+                  <option value="afternoon">Afternoon Schedule</option>
+                  <option value="late-night">Late-night Study</option>
+                  <option value="flexible">Flexible</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="font-size: 0.8rem;" for="filter-cleanliness">Cleanliness Standard</label>
+                <select id="filter-cleanliness" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+                  <option value="">Any Standard</option>
+                  <option value="very-clean">Very Clean / Spotless</option>
+                  <option value="moderate">Moderate / Normal</option>
+                  <option value="relaxed">Relaxed / Casual</option>
+                </select>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="filter-study">Study & Work Schedule</label>
-              <select id="filter-study" class="form-control">
-                <option value="">Any Schedule</option>
-                <option value="morning">Morning Schedule</option>
-                <option value="afternoon">Afternoon Schedule</option>
-                <option value="late-night">Late Night</option>
-              </select>
+            <!-- Household Sharing Section -->
+            <div class="filter-section-group" style="border-bottom: none; margin-bottom: 0.75rem;">
+              <span class="filter-section-title">🏠 Household & Flatmates</span>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="font-size: 0.8rem;" for="filter-roommates">Preferred Number of Flatmates</label>
+                <select id="filter-roommates" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+                  <option value="">Any Household Size</option>
+                  <option value="1">1 Roommate (2 in Flat)</option>
+                  <option value="2">2 Roommates (3 in Flat)</option>
+                  <option value="3">3+ Roommates</option>
+                </select>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="filter-sleeping">Sleep Routine</label>
-              <select id="filter-sleeping" class="form-control">
-                <option value="">Any Schedule</option>
-                <option value="early-bird">Early-bird</option>
-                <option value="night-owl">Night-owl</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="filter-cleanliness">Cleanliness Standard</label>
-              <select id="filter-cleanliness" class="form-control">
-                <option value="">Any Standard</option>
-                <option value="very-clean">Very Clean</option>
-                <option value="moderate">Moderate</option>
-                <option value="relaxed">Relaxed</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="filter-roommates">Roommate Count</label>
-              <select id="filter-roommates" class="form-control">
-                <option value="">Any Household</option>
-                <option value="1">1 Roommate</option>
-                <option value="2">2 Roommates</option>
-                <option value="3">3+ Roommates</option>
-              </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem; padding: 0.75rem;">
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-weight: 700;">
               Apply Filters
             </button>
           </form>
         </aside>
 
-        <!-- Right Profiles Grid Section -->
-        <section>
+        <!-- Right Profiles Results Area -->
+        <section id="discovery-content-area">
           <div class="roommates-grid" id="roommates-list">
-            <!-- Roommates rendered dynamically -->
+            <!-- Roommates loaded dynamically with skeleton states -->
           </div>
 
           <!-- Pagination Bar -->
@@ -162,28 +251,127 @@
     </div>
   </main>
 
+  <!-- Mobile Filter Slide-out Drawer Sheet -->
+  <div class="mobile-filter-backdrop" id="mobile-filter-backdrop">
+    <div class="mobile-filter-sheet">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--slate-200); margin-bottom: 1rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700;">Filter Roommates</h3>
+        <button type="button" class="modal-close" id="btn-close-mobile-filter">&times;</button>
+      </div>
+      <div id="mobile-filter-container-target" style="flex: 1; overflow-y: auto;">
+        <!-- Filter form clones or mirrors here for mobile -->
+      </div>
+      <div style="display: flex; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid var(--slate-200); margin-top: auto;">
+        <button type="button" class="btn btn-secondary" id="btn-mobile-reset" style="flex: 1;">Reset</button>
+        <button type="button" class="btn btn-primary" id="btn-mobile-apply" style="flex: 1.5;">Apply</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Express Interest Modal Dialog -->
   <div class="modal-backdrop" id="interest-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 style="font-size: 1.25rem;">Express Interest in <span id="modal-target-name">Roommate</span></h3>
+        <div>
+          <h3 style="font-size: 1.25rem; font-weight: 700;">Express Interest in <span id="modal-target-name">Roommate</span></h3>
+          <p style="font-size: 0.85rem; color: var(--slate-500); margin-top: 2px;">Direct connection request via RoommateFinder</p>
+        </div>
         <button type="button" class="modal-close" id="close-interest-modal">&times;</button>
       </div>
-      <p style="color: var(--slate-500); font-size: 0.9rem; margin-bottom: 1.25rem;">
-        Send a note introducing yourself. If they accept, you'll be able to exchange contact details and coordinate housing viewings.
-      </p>
+
+      <div style="background: var(--primary-50); border: 1px solid var(--primary-200); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 1.25rem; font-size: 0.85rem; color: var(--primary-900);">
+        💡 When they accept your interest, you'll be mutually connected to coordinate flat visits and exchange contact details.
+      </div>
+
       <form id="send-interest-form">
-        <div class="form-group">
-          <label class="form-label" for="interest-message">Introduction Message</label>
-          <textarea id="interest-message" class="form-control" rows="3" placeholder="Hi! I noticed our budgets and neighborhoods align well. Would love to chat about sharing an apartment!"></textarea>
+        <!-- Quick Preset Message Chips -->
+        <div style="margin-bottom: 0.75rem;">
+          <label class="form-label" style="font-size: 0.8rem;">Quick Note Starters:</label>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
+            <button type="button" class="locality-pill" style="font-size: 0.75rem;" onclick="setPresetMessage('Hi! Our budget and location preferences align nicely. Would love to chat about sharing a flat near campus!')">
+              Near campus &amp; budget
+            </button>
+            <button type="button" class="locality-pill" style="font-size: 0.75rem;" onclick="setPresetMessage('Hey! I noticed we have similar quiet study routines and cleanliness standards. Looking to connect!')">
+              Study habits match
+            </button>
+            <button type="button" class="locality-pill" style="font-size: 0.75rem;" onclick="setPresetMessage('Hello! I am actively looking for a flatmate in Shirpur. Are you available for a quick discussion?')">
+              Actively looking
+            </button>
+          </div>
         </div>
+
+        <div class="form-group">
+          <label class="form-label" for="interest-message">Personalized Note</label>
+          <textarea id="interest-message" class="form-control" rows="3" placeholder="Hi! I noticed our living habits and budgets align well. Would love to connect and coordinate shared housing!"></textarea>
+        </div>
+
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
           <button type="button" id="cancel-interest-btn" class="btn btn-secondary">Cancel</button>
-          <button type="submit" id="submit-interest-btn" class="btn btn-primary">Send Interest Request</button>
+          <button type="submit" id="submit-interest-btn" class="btn btn-primary">
+            Send Interest Request
+          </button>
         </div>
       </form>
     </div>
   </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="nav-brand" style="margin-bottom: 1rem;">
+            <div class="brand-icon-wrap">
+              <img src="/assets/logo.svg" alt="RoommateFinder Logo" width="32" height="32">
+            </div>
+            <div class="brand-text-group">
+              <span class="brand-name">ROOMMATE<span>FINDER</span></span>
+              <span class="brand-tagline-badge">Find your people. Share your space.</span>
+            </div>
+          </div>
+          <p style="color: var(--slate-500); font-size: 0.875rem; max-width: 340px;">
+            A modern, transparent roommate discovery platform connecting college students and young professionals based on verified habits, budgets, and safety protocols.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Roommate Wings</h4>
+          <ul class="footer-links">
+            <li><a href="/find-roommates.html">All Roommates</a></li>
+            <li><a href="/find-roommates.html?section=female">🌸 Girls Safe Wing</a></li>
+            <li><a href="/find-roommates.html?section=male">⚡ Boys Living Wing</a></li>
+            <li><a href="/register.html">Create Student Profile</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <ul class="footer-links">
+            <li><a href="/index.html#how-it-works">How It Works</a></li>
+            <li><a href="/index.html#features">Compatibility Engine</a></li>
+            <li><a href="/index.html#living-wings">Safety Protocols</a></li>
+            <li><a href="/index.html#faq">Frequently Asked Questions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>My Account</h4>
+          <ul class="footer-links">
+            <li><a href="/dashboard.html">Dashboard</a></li>
+            <li><a href="/interests.html">Interests &amp; Requests</a></li>
+            <li><a href="/profile.html">My Profile</a></li>
+            <li><a href="/preferences.html">Desired Criteria</a></li>
+            <li><a href="/settings.html">Account Settings</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>&copy; 2026 ROOMMATEFINDER. All rights reserved.</div>
+        <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+          <a href="/find-roommates.html" style="color: var(--slate-400);">Privacy Policy</a>
+          <a href="/find-roommates.html" style="color: var(--slate-400);">Community Guidelines</a>
+          <a href="/find-roommates.html" style="color: var(--slate-400);">Safety Verification</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>

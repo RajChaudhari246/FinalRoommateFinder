@@ -1,17 +1,32 @@
-/* Profile & Edit Profile Styles */
+/* =====================================================================
+   PROFILE, ROOMMATE DETAILS & EDIT PROFILE STYLES
+   ===================================================================== */
 
 .profile-header-card {
   background: #ffffff;
   border-radius: var(--radius-lg);
   border: var(--border-light);
-  padding: 2.5rem;
+  padding: 2.25rem;
   margin-bottom: 2rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-card);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
   flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-header-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 260px;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.05), transparent 70%);
+  pointer-events: none;
 }
 
 .profile-avatar-wrap {
@@ -24,33 +39,38 @@
   width: 5.5rem;
   height: 5.5rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-600), var(--accent-500));
+  background: linear-gradient(135deg, var(--primary-700), var(--accent-600));
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
   font-size: 2rem;
-  font-weight: 700;
-  box-shadow: var(--shadow-md);
+  font-weight: 800;
+  font-family: var(--font-heading);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+  flex-shrink: 0;
 }
 
 .profile-main-meta h1 {
-  font-size: 1.75rem;
+  font-size: 1.85rem;
+  font-weight: 800;
   margin-bottom: 0.25rem;
+  color: var(--slate-900);
 }
 
 .profile-main-meta p {
-  color: var(--slate-500);
+  color: var(--slate-600);
   font-size: 0.95rem;
 }
 
 .profile-grid-layout {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1.85fr 1.15fr;
   gap: 2rem;
+  align-items: start;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .profile-grid-layout {
     grid-template-columns: 1fr;
   }
@@ -58,8 +78,8 @@
 
 .attributes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1rem;
   margin-top: 1rem;
 }
 
@@ -67,36 +87,46 @@
   background: var(--slate-50);
   border: 1px solid var(--slate-200);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: 0.9rem 1.1rem;
+  transition: var(--transition-fast);
+}
+
+.attribute-item:hover {
+  background: #ffffff;
+  border-color: var(--slate-300);
+  box-shadow: var(--shadow-xs);
 }
 
 .attribute-label {
-  font-size: 0.775rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--slate-500);
-  margin-bottom: 0.25rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
 }
 
 .attribute-value {
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--slate-800);
   text-transform: capitalize;
 }
 
-/* Edit Profile multi-step sections */
+/* Edit Profile Sections */
 .edit-section {
   background: #ffffff;
   border-radius: var(--radius-lg);
   border: var(--border-light);
   padding: 2rem;
   margin-bottom: 1.75rem;
+  box-shadow: var(--shadow-card);
 }
 
 .edit-section h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+  margin-bottom: 0.35rem;
+  color: var(--slate-900);
 }
 
 .edit-section-desc {

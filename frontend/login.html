@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In - Roommate Finder</title>
+  <title>Sign In | ROOMMATEFINDER</title>
+  <meta name="description" content="Sign in to RoommateFinder to view matches, manage connection requests, and discover compatible roommates.">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/auth.css">
 </head>
@@ -13,8 +14,13 @@
   <header class="navbar">
     <div class="nav-container">
       <a href="/index.html" class="nav-brand">
-        <span class="brand-icon">🏠</span>
-        <span>Roommate Finder</span>
+        <div class="brand-icon-wrap">
+          <img src="/assets/logo.svg" alt="RoommateFinder" width="36" height="36">
+        </div>
+        <div class="brand-text-group">
+          <span class="brand-name">ROOMMATE<span>FINDER</span></span>
+          <span class="brand-tagline-badge">Verified Discovery</span>
+        </div>
       </a>
       <ul class="nav-menu" id="nav-menu"></ul>
       <div class="nav-actions" id="nav-actions">
@@ -26,9 +32,13 @@
   <!-- Auth Content -->
   <main class="main-content auth-wrapper">
     <div class="auth-card">
+      <div class="auth-brand-badge">
+        <img src="/assets/logo.svg" alt="RoommateFinder" width="48" height="48">
+      </div>
+
       <div class="auth-header">
         <h1>Welcome Back</h1>
-        <p>Log in to view matches, manage interests, and update your profile</p>
+        <p>Log in to view compatibility scores, connection requests, and manage your profile.</p>
       </div>
 
       <div id="alert-container"></div>
@@ -47,19 +57,40 @@
           </div>
         </div>
 
-        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.75rem; font-weight: 700;">
           Sign In
         </button>
       </form>
 
-      <!-- Quick Demo Account Helper for evaluation testing -->
-      <div style="margin-top: 1.5rem; padding: 0.85rem; background: var(--slate-50); border: 1px dashed var(--slate-300); border-radius: var(--radius-md); font-size: 0.8rem; color: var(--slate-600);">
-        <strong>Demo Accounts (Password: Password@123):</strong>
-        <div style="margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.2rem;">
-          <span style="color: #4f46e5; font-weight: 600;">🛡️ Admin: <code>admin@roommatefinder.com</code> (Full Admin Portal)</span>
-          <span><code>rajesh.patil@example.com</code> (Shirpur - RCPIT)</span>
-          <span><code>pooja.sharma@example.com</code> (Shirpur - RCPCOP)</span>
-          <span><code>aditya.c@example.com</code> (Shirpur - NMIMS)</span>
+      <!-- Quick Demo Account Helper with 1-Click Auto Fill -->
+      <div class="demo-accounts-box">
+        <div class="demo-accounts-header">
+          <span>⚡ Demo Test Accounts</span>
+          <span style="font-size: 0.75rem; color: var(--slate-400);">Click to auto-fill</span>
+        </div>
+        
+        <div class="demo-account-chip" onclick="fillCredentials('admin@roommatefinder.com', 'Password@123')">
+          <div>
+            <span class="label" style="color: #4f46e5;">🛡️ Admin Portal</span>
+            <div style="font-size: 0.75rem; color: var(--slate-400);">admin@roommatefinder.com</div>
+          </div>
+          <span class="fill-btn">Auto Fill</span>
+        </div>
+
+        <div class="demo-account-chip" onclick="fillCredentials('pooja.sharma@example.com', 'Password@123')">
+          <div>
+            <span class="label" style="color: #be123c;">🌸 Pooja Sharma (Girls Wing)</span>
+            <div style="font-size: 0.75rem; color: var(--slate-400);">pooja.sharma@example.com</div>
+          </div>
+          <span class="fill-btn">Auto Fill</span>
+        </div>
+
+        <div class="demo-account-chip" onclick="fillCredentials('rajesh.patil@example.com', 'Password@123')">
+          <div>
+            <span class="label" style="color: #1d4ed8;">⚡ Rajesh Patil (Boys Wing)</span>
+            <div style="font-size: 0.75rem; color: var(--slate-400);">rajesh.patil@example.com</div>
+          </div>
+          <span class="fill-btn">Auto Fill</span>
         </div>
       </div>
 
@@ -72,5 +103,14 @@
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>
   <script src="/js/login.js"></script>
+  <script>
+    function fillCredentials(email, password) {
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      if (emailInput) emailInput.value = email;
+      if (passwordInput) passwordInput.value = password;
+      clearAlert();
+    }
+  </script>
 </body>
 </html>
