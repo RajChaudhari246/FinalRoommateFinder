@@ -1,36 +1,55 @@
-/* Dashboard Specific Styling */
+/* =====================================================================
+   DASHBOARD SPECIFIC STYLING
+   JoinMyFlat Inspired PropTech Design System
+   Theme: Deep Navy (#06213f), Brand Teal (#0ba89a), Cream (#fafbfa)
+   ===================================================================== */
 
 .dashboard-hero {
-  background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+  background: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-navy-light) 60%, #0d3260 100%);
   color: #ffffff;
-  border-radius: var(--radius-lg);
-  padding: 2.25rem 2.5rem;
+  border-radius: var(--radius-2xl);
+  padding: 2.5rem 2.5rem;
   margin-bottom: 2rem;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 10px 25px -5px rgba(6, 33, 63, 0.15);
   position: relative;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(11, 168, 154, 0.2), transparent 70%);
+  pointer-events: none;
 }
 
 .dashboard-hero h1 {
   color: #ffffff;
-  font-size: 1.85rem;
+  font-size: 2rem;
+  font-weight: 800;
   margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
 }
 
 .dashboard-hero p {
-  color: var(--primary-100);
+  color: #c7d2fe;
   font-size: 1.05rem;
-  max-width: 600px;
+  max-width: 620px;
+  line-height: 1.55;
 }
 
 /* Completion Progress Bar */
 .completion-banner {
   background: #ffffff;
-  border-radius: var(--radius-lg);
-  border: var(--border-light);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--slate-200);
   padding: 1.5rem 2rem;
   margin-bottom: 2rem;
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -51,12 +70,14 @@
 
 .completion-title {
   font-weight: 700;
-  color: var(--slate-900);
+  font-family: var(--font-heading);
+  color: var(--brand-navy);
 }
 
 .completion-percent {
-  font-weight: 700;
-  color: var(--primary-600);
+  font-weight: 800;
+  font-family: var(--font-heading);
+  color: var(--brand-teal);
 }
 
 .progress-track {
@@ -69,7 +90,7 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--primary-500), var(--accent-500));
+  background: linear-gradient(90deg, var(--brand-navy), var(--brand-teal));
   border-radius: var(--radius-full);
   transition: width 0.6s ease;
 }
@@ -84,33 +105,41 @@
 
 .stat-card {
   background: #ffffff;
-  border-radius: var(--radius-lg);
-  border: var(--border-light);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-xs);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--slate-200);
+  padding: 1.5rem 1.75rem;
+  box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--brand-teal-border);
 }
 
 .stat-icon {
   width: 3.25rem;
   height: 3.25rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
 }
 
-.stat-icon.blue { background: var(--primary-50); color: var(--primary-600); }
-.stat-icon.green { background: var(--accent-50); color: var(--accent-600); }
+.stat-icon.blue { background: var(--brand-teal-tint); color: var(--brand-teal-dark); }
+.stat-icon.green { background: #ecfdf5; color: #059669; }
 .stat-icon.amber { background: #fef3c7; color: #b45309; }
 
 .stat-value {
-  font-size: 1.65rem;
+  font-size: 1.75rem;
   font-weight: 800;
-  color: var(--slate-900);
+  font-family: var(--font-heading);
+  color: var(--brand-navy);
   line-height: 1.1;
 }
 
@@ -118,6 +147,7 @@
   font-size: 0.85rem;
   color: var(--slate-500);
   margin-top: 0.25rem;
+  font-weight: 600;
 }
 
 /* Quick Actions Grid */
@@ -132,6 +162,12 @@
   margin-bottom: 1.25rem;
 }
 
+.section-title-wrap h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--brand-navy);
+}
+
 .actions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -140,20 +176,21 @@
 
 .action-card {
   background: #ffffff;
-  border-radius: var(--radius-lg);
-  border: var(--border-light);
-  padding: 1.5rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--slate-200);
+  padding: 1.65rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: var(--transition);
   text-decoration: none;
+  box-shadow: var(--shadow-sm);
 }
 
 .action-card:hover {
-  border-color: var(--primary-500);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  border-color: var(--brand-teal-border);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
 }
 
 .action-card-header {
@@ -164,21 +201,24 @@
 }
 
 .action-card h3 {
-  font-size: 1.1rem;
-  color: var(--slate-900);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--brand-navy);
 }
 
 .action-card p {
   color: var(--slate-500);
   font-size: 0.875rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
 }
 
 .action-arrow {
-  color: var(--primary-600);
-  font-weight: 600;
+  color: var(--brand-teal);
+  font-weight: 700;
   font-size: 0.875rem;
+  font-family: var(--font-heading);
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.35rem;
 }

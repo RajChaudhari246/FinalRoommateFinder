@@ -1,6 +1,7 @@
 /**
-2:  * Shared Auth State, Brand Identity & Responsive Navigation Controller
-3:  */
+ * Shared Auth State, Brand Identity & Responsive Navigation Controller
+ * RoommateFinder — JoinMyFlat Inspired Design System
+ */
 
 async function checkAuthState() {
   try {
@@ -31,7 +32,7 @@ async function renderNavbar() {
       </div>
       <div class="brand-text-group">
         <span class="brand-name">ROOMMATE<span>FINDER</span></span>
-        <span class="brand-tagline-badge">Verified Discovery</span>
+        <span class="brand-tagline-badge">Find your people. Share your space.</span>
       </div>
     `;
   }
@@ -48,8 +49,9 @@ async function renderNavbar() {
     if (navMenu) {
       navMenu.innerHTML = `
         <li><a href="/find-roommates.html" class="nav-link ${currentPath.includes('find-roommates') && !currentSearch ? 'active' : ''}" id="nav-find">Find Roommates</a></li>
-        <li><a href="/find-roommates.html?section=female" class="nav-link nav-link-girls ${currentSearch.includes('female') ? 'active' : ''}" id="nav-girls">🌸 Girls Wing</a></li>
-        <li><a href="/find-roommates.html?section=male" class="nav-link nav-link-boys ${currentSearch.includes('male') ? 'active' : ''}" id="nav-boys">⚡ Boys Wing</a></li>
+        <li><a href="/find-roommates.html?view=rooms" class="nav-link ${currentSearch.includes('rooms') ? 'active' : ''}" id="nav-rooms">Explore Rooms</a></li>
+        <li><a href="/index.html#how-it-works" class="nav-link" id="nav-how">How It Works</a></li>
+        <li><a href="/index.html#about-us" class="nav-link" id="nav-about">About Us</a></li>
         <li><a href="/dashboard.html" class="nav-link ${currentPath.includes('dashboard') ? 'active' : ''}" id="nav-dash">Dashboard</a></li>
         <li><a href="/interests.html" class="nav-link ${currentPath.includes('interests') ? 'active' : ''}" id="nav-interests">Interests</a></li>
         ${isAdmin ? `<li><a href="/admin.html" class="nav-link ${currentPath.includes('admin') ? 'active' : ''}" style="color: #6366f1; font-weight: 700;" id="nav-admin">🛡️ Admin</a></li>` : ''}
@@ -60,7 +62,7 @@ async function renderNavbar() {
     navActions.innerHTML = `
       <div style="display: flex; align-items: center; gap: 0.6rem;">
         ${isAdmin ? `
-          <a href="/admin.html" class="btn btn-sm" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #ffffff; border: none; font-size: 0.775rem; padding: 0.35rem 0.65rem; font-weight: 700; border-radius: var(--radius-full);" title="Admin Portal">
+          <a href="/admin.html" class="btn btn-sm" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #ffffff; border: none; font-size: 0.775rem; padding: 0.35rem 0.65rem; font-weight: 700; border-radius: var(--radius-full);" title="Admin Operations Portal">
             🛡️ Admin
           </a>
         ` : ''}
@@ -68,7 +70,7 @@ async function renderNavbar() {
           <span class="user-avatar-circle">${initials}</span>
           <span>${escapeHtml(firstName)}</span>
         </a>
-        <a href="/settings.html" class="btn btn-secondary btn-sm" title="Account Settings" style="padding: 0.4rem 0.6rem;">
+        <a href="/settings.html" class="btn btn-secondary btn-sm" title="Account Settings" style="padding: 0.45rem 0.65rem;">
           ⚙️
         </a>
         <button id="logout-btn" class="btn btn-outline btn-sm">Log Out</button>
@@ -89,16 +91,15 @@ async function renderNavbar() {
     if (navMenu) {
       navMenu.innerHTML = `
         <li><a href="/find-roommates.html" class="nav-link ${currentPath.includes('find-roommates') && !currentSearch ? 'active' : ''}">Find Roommates</a></li>
-        <li><a href="/find-roommates.html?section=female" class="nav-link nav-link-girls ${currentSearch.includes('female') ? 'active' : ''}">🌸 Girls Safe Wing</a></li>
-        <li><a href="/find-roommates.html?section=male" class="nav-link nav-link-boys ${currentSearch.includes('male') ? 'active' : ''}">⚡ Boys Living Wing</a></li>
+        <li><a href="/find-roommates.html?view=rooms" class="nav-link ${currentSearch.includes('rooms') ? 'active' : ''}">Explore Rooms</a></li>
         <li><a href="/index.html#how-it-works" class="nav-link">How It Works</a></li>
-        <li><a href="/index.html#features" class="nav-link">Features</a></li>
+        <li><a href="/index.html#about-us" class="nav-link">About Us</a></li>
       `;
     }
 
     navActions.innerHTML = `
       <a href="/login.html" class="btn btn-secondary btn-sm">Log In</a>
-      <a href="/register.html" class="btn btn-primary btn-sm">Get Started</a>
+      <a href="/register.html" class="btn btn-primary btn-sm">Sign Up</a>
     `;
 
     setupMobileDrawer(null);
@@ -117,7 +118,7 @@ function setupMobileDrawer(user) {
     mobileToggle.className = 'nav-mobile-toggle';
     mobileToggle.setAttribute('aria-label', 'Open navigation drawer');
     mobileToggle.innerHTML = `
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="3" y1="12" x2="21" y2="12"></line>
         <line x1="3" y1="6" x2="21" y2="6"></line>
         <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -135,9 +136,12 @@ function setupMobileDrawer(user) {
     drawerBackdrop.innerHTML = `
       <div class="mobile-nav-drawer">
         <div class="mobile-drawer-header">
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <img src="/assets/logo.svg" alt="RoommateFinder" width="28" height="28">
-            <span style="font-weight: 800; font-size: 1.05rem; color: var(--slate-900);">ROOMMATEFINDER</span>
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <img src="/assets/logo.svg" alt="RoommateFinder" width="30" height="30">
+            <div>
+              <div style="font-weight: 800; font-size: 1.05rem; color: var(--brand-navy); line-height: 1.1;">ROOMMATE<span style="color: var(--brand-teal);">FINDER</span></div>
+              <div style="font-size: 0.65rem; color: var(--slate-500); font-weight: 600;">Find your people. Share your space.</div>
+            </div>
           </div>
           <button type="button" class="mobile-drawer-close" id="mobile-drawer-close" aria-label="Close menu">&times;</button>
         </div>
@@ -169,6 +173,7 @@ function setupMobileDrawer(user) {
     if (drawerLinks) {
       drawerLinks.innerHTML = `
         <li><a href="/find-roommates.html" class="${currentPath.includes('find-roommates') ? 'active' : ''}">🔍 Find Roommates</a></li>
+        <li><a href="/find-roommates.html?view=rooms">🏠 Explore Rooms</a></li>
         <li><a href="/find-roommates.html?section=female" style="color: var(--girls-primary);">🌸 Girls Safe Wing</a></li>
         <li><a href="/find-roommates.html?section=male" style="color: var(--boys-primary);">⚡ Boys Living Wing</a></li>
         <li><a href="/dashboard.html" class="${currentPath.includes('dashboard') ? 'active' : ''}">📊 Dashboard</a></li>
@@ -181,7 +186,7 @@ function setupMobileDrawer(user) {
     }
     if (drawerFooter) {
       drawerFooter.innerHTML = `
-        <div style="font-size: 0.85rem; color: var(--slate-500); margin-bottom: 0.25rem;">Signed in as <strong>${escapeHtml(user.full_name)}</strong></div>
+        <div style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 0.25rem;">Signed in as <strong>${escapeHtml(user.full_name)}</strong></div>
         <button id="mobile-logout-btn" class="btn btn-outline btn-sm" style="width: 100%;">Log Out</button>
       `;
       document.getElementById('mobile-logout-btn')?.addEventListener('click', async () => {
@@ -195,17 +200,19 @@ function setupMobileDrawer(user) {
     if (drawerLinks) {
       drawerLinks.innerHTML = `
         <li><a href="/find-roommates.html">🔍 Find Roommates</a></li>
+        <li><a href="/find-roommates.html?view=rooms">🏠 Explore Rooms</a></li>
         <li><a href="/find-roommates.html?section=female" style="color: var(--girls-primary);">🌸 Girls Safe Wing</a></li>
         <li><a href="/find-roommates.html?section=male" style="color: var(--boys-primary);">⚡ Boys Living Wing</a></li>
         <li><a href="/index.html#how-it-works">💡 How It Works</a></li>
+        <li><a href="/index.html#about-us">ℹ️ About Us</a></li>
         <li><a href="/index.html#features">🛡️ Safety & Features</a></li>
         <li><a href="/index.html#faq">❓ FAQ</a></li>
       `;
     }
     if (drawerFooter) {
       drawerFooter.innerHTML = `
-        <a href="/login.html" class="btn btn-secondary btn-sm" style="width: 100%;">Sign In</a>
-        <a href="/register.html" class="btn btn-primary btn-sm" style="width: 100%;">Get Started</a>
+        <a href="/login.html" class="btn btn-secondary btn-sm" style="width: 100%;">Log In</a>
+        <a href="/register.html" class="btn btn-primary btn-sm" style="width: 100%;">Sign Up</a>
       `;
     }
   }

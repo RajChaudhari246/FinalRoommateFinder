@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connection Interests | ROOMMATEFINDER</title>
+  <title>Connection Interests | ROOMMATEFINDER — Find your people. Share your space.</title>
   <meta name="description" content="Manage your incoming and outgoing roommate connection requests on ROOMMATEFINDER.">
   <link rel="stylesheet" href="/css/style.css">
   <style>
@@ -15,7 +15,7 @@
       border-radius: var(--radius-full);
       border: 1px solid var(--slate-200);
       margin-bottom: 2rem;
-      max-width: 420px;
+      max-width: 440px;
     }
     .tab-btn {
       flex: 1;
@@ -32,13 +32,28 @@
       text-align: center;
     }
     .tab-btn:hover {
-      color: var(--slate-900);
+      color: var(--brand-navy);
       background: var(--slate-100);
     }
     .tab-btn.active {
-      background: linear-gradient(135deg, var(--slate-900), var(--primary-900));
+      background: var(--brand-navy);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+      box-shadow: 0 4px 12px rgba(6, 33, 63, 0.2);
+    }
+    .badge-status.pending {
+      background: var(--brand-teal-tint);
+      color: var(--brand-teal-dark);
+      border: 1px solid var(--brand-teal-border);
+    }
+    .badge-status.accepted {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .badge-status.rejected {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
     }
   </style>
 </head>
@@ -49,11 +64,11 @@
     <div class="nav-container">
       <a href="/index.html" class="nav-brand">
         <div class="brand-icon-wrap">
-          <img src="/assets/logo.svg" alt="RoommateFinder" width="36" height="36">
+          <img src="/assets/logo.svg" alt="RoommateFinder Logo" width="36" height="36">
         </div>
         <div class="brand-text-group">
           <span class="brand-name">ROOMMATE<span>FINDER</span></span>
-          <span class="brand-tagline-badge">Verified Discovery</span>
+          <span class="brand-tagline-badge">Find your people. Share your space.</span>
         </div>
       </a>
       <ul class="nav-menu" id="nav-menu"></ul>
@@ -65,9 +80,9 @@
   <main class="main-content">
     <div class="container" style="max-width: 920px;">
 
-      <div style="margin-bottom: 1.75rem;">
-        <h1 style="font-size: 2rem; margin-bottom: 0.35rem;">Connection Requests</h1>
-        <p style="color: var(--slate-500);">Review incoming interest requests or manage requests you've sent to potential roommates.</p>
+      <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 2.15rem; margin-bottom: 0.35rem; color: var(--brand-navy); font-weight: 800;">Connection Requests</h1>
+        <p style="color: var(--slate-500); font-size: 1rem;">Review incoming interest requests or manage requests you've sent to potential roommates.</p>
       </div>
 
       <div id="alert-container"></div>
@@ -92,8 +107,10 @@
       <div class="footer-bottom" style="border: none; padding-top: 0;">
         <div>&copy; 2026 ROOMMATEFINDER. All rights reserved.</div>
         <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
-          <a href="/find-roommates.html" style="color: var(--slate-400);">Discovery</a>
-          <a href="/dashboard.html" style="color: var(--slate-400);">Dashboard</a>
+          <a href="/find-roommates.html">Discovery</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="/find-roommates.html?section=female">Girls Wing</a>
+          <a href="/find-roommates.html?section=male">Boys Wing</a>
         </div>
       </div>
     </div>

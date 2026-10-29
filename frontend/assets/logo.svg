@@ -1,13 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
   <defs>
     <linearGradient id="rf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0F172A" />
-      <stop offset="60%" stop-color="#1E3A8A" />
-      <stop offset="100%" stop-color="#0D9488" />
+      <stop offset="0%" stop-color="#06213F" />
+      <stop offset="100%" stop-color="#0BA89A" />
     </linearGradient>
     <linearGradient id="rf-accent" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38BDF8" />
-      <stop offset="100%" stop-color="#34D399" />
+      <stop offset="0%" stop-color="#0BA89A" />
+      <stop offset="100%" stop-color="#14B8A6" />
     </linearGradient>
   </defs>
   <rect width="48" height="48" rx="12" fill="url(#rf-grad)" />
@@ -15,5 +14,5 @@
   <path d="M24 9L9 21.5H15V37H21V28H27V37H33V21.5H39L24 9Z" fill="#FFFFFF" fill-opacity="0.95" />
   <!-- Two overlapping roommate connection dots -->
   <circle cx="21" cy="20" r="2.75" fill="url(#rf-accent)" />
-  <circle cx="27" cy="20" r="2.75" fill="#38BDF8" />
+  <circle cx="27" cy="20" r="2.75" fill="#FFFFFF" />
 </svg>

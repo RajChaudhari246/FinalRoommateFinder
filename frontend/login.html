@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In | ROOMMATEFINDER</title>
+  <title>Sign In | ROOMMATEFINDER — Find your people. Share your space.</title>
   <meta name="description" content="Sign in to RoommateFinder to view matches, manage connection requests, and discover compatible roommates.">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/auth.css">
@@ -15,16 +15,16 @@
     <div class="nav-container">
       <a href="/index.html" class="nav-brand">
         <div class="brand-icon-wrap">
-          <img src="/assets/logo.svg" alt="RoommateFinder" width="36" height="36">
+          <img src="/assets/logo.svg" alt="RoommateFinder Logo" width="36" height="36">
         </div>
         <div class="brand-text-group">
           <span class="brand-name">ROOMMATE<span>FINDER</span></span>
-          <span class="brand-tagline-badge">Verified Discovery</span>
+          <span class="brand-tagline-badge">Find your people. Share your space.</span>
         </div>
       </a>
       <ul class="nav-menu" id="nav-menu"></ul>
       <div class="nav-actions" id="nav-actions">
-        <a href="/register.html" class="btn btn-primary btn-sm">Get Started</a>
+        <a href="/register.html" class="btn btn-primary btn-sm">Sign Up</a>
       </div>
     </div>
   </header>
@@ -57,7 +57,7 @@
           </div>
         </div>
 
-        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.75rem; font-weight: 700;">
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.85rem; font-weight: 700;">
           Sign In
         </button>
       </form>
@@ -66,7 +66,7 @@
       <div class="demo-accounts-box">
         <div class="demo-accounts-header">
           <span>⚡ Demo Test Accounts</span>
-          <span style="font-size: 0.75rem; color: var(--slate-400);">Click to auto-fill</span>
+          <span style="font-size: 0.725rem; color: var(--slate-400); text-transform: none; font-weight: 500;">Click to auto-fill</span>
         </div>
         
         <div class="demo-account-chip" onclick="fillCredentials('admin@roommatefinder.com', 'Password@123')">
@@ -103,14 +103,5 @@
   <script src="/js/api.js"></script>
   <script src="/js/auth.js"></script>
   <script src="/js/login.js"></script>
-  <script>
-    function fillCredentials(email, password) {
-      const emailInput = document.getElementById('email');
-      const passwordInput = document.getElementById('password');
-      if (emailInput) emailInput.value = email;
-      if (passwordInput) passwordInput.value = password;
-      clearAlert();
-    }
-  </script>
 </body>
 </html>

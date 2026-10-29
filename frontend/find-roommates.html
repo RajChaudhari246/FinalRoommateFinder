@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Discover Roommates | ROOMMATEFINDER</title>
+  <title>Discover Roommates | ROOMMATEFINDER — Find your people. Share your space.</title>
   <meta name="description" content="Discover verified roommates in India who match your accommodation budget, lifestyle habits, and safety protocols. Zero brokerage, genuine matches.">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/roommates.css">
@@ -15,11 +15,11 @@
     <div class="nav-container">
       <a href="/index.html" class="nav-brand">
         <div class="brand-icon-wrap">
-          <img src="/assets/logo.svg" alt="RoommateFinder" width="36" height="36">
+          <img src="/assets/logo.svg" alt="RoommateFinder Logo" width="36" height="36">
         </div>
         <div class="brand-text-group">
           <span class="brand-name">ROOMMATE<span>FINDER</span></span>
-          <span class="brand-tagline-badge">Verified Discovery</span>
+          <span class="brand-tagline-badge">Find your people. Share your space.</span>
         </div>
       </a>
       <ul class="nav-menu" id="nav-menu"></ul>
@@ -27,57 +27,121 @@
     </div>
   </header>
 
+  <!-- Hero Section -->
+  <section class="discovery-hero-wrap">
+    <div class="container">
+      <div class="discovery-hero-card">
+        <div class="hero-badge-pill">
+          <span class="badge-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+          <span>Verified Profiles • Zero Brokerage • Direct Connections</span>
+        </div>
+        <h1>Find a Roommate Who Fits Your Life</h1>
+        <p class="hero-lead-text">
+          Discover people who match your budget, lifestyle, and location. Find a better way to share your space.
+        </p>
+
+        <!-- Prominent Search Interface -->
+        <div class="hero-search-console">
+          <div class="search-console-grid">
+            <!-- 1. City or Locality -->
+            <div class="search-field-unit">
+              <label for="hero-search-location">City or Locality</label>
+              <div class="search-input-wrap">
+                <span class="field-icon">📍</span>
+                <input type="text" id="hero-search-location" placeholder="e.g. Shirpur, Karwand Naka...">
+              </div>
+            </div>
+
+            <!-- 2. College or University -->
+            <div class="search-field-unit">
+              <label for="hero-search-college">College or Campus</label>
+              <div class="search-input-wrap">
+                <span class="field-icon">🎓</span>
+                <input type="text" id="hero-search-college" placeholder="e.g. RCPIT, NMIMS...">
+              </div>
+            </div>
+
+            <!-- 3. Monthly Budget -->
+            <div class="search-field-unit">
+              <label for="hero-search-budget">Max Budget (₹/mo)</label>
+              <div class="search-input-wrap">
+                <span class="field-icon">💰</span>
+                <input type="number" id="hero-search-budget" placeholder="Max ₹ (e.g. 5000)" min="0">
+              </div>
+            </div>
+
+            <!-- 4. Preferred Wing / Arrangement -->
+            <div class="search-field-unit">
+              <label for="hero-search-arrangement">Living Wing</label>
+              <div class="search-input-wrap">
+                <span class="field-icon">👥</span>
+                <select id="hero-search-arrangement">
+                  <option value="all">All Roommates</option>
+                  <option value="female">🌸 Girls Safe Wing</option>
+                  <option value="male">⚡ Boys Living Wing</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Action CTA -->
+            <div class="search-field-action">
+              <button type="button" class="btn btn-primary" id="btn-hero-search">
+                Find My Roommate
+              </button>
+            </div>
+          </div>
+
+          <!-- Popular Locality Quick Chips -->
+          <div class="locality-pills-wrap">
+            <span class="locality-pills-label">Popular Localities:</span>
+            <button type="button" class="locality-pill" onclick="selectQuickLocality('Shirpur')">All Shirpur</button>
+            <button type="button" class="locality-pill" onclick="selectQuickLocality('Karwand Naka')">Karwand Naka</button>
+            <button type="button" class="locality-pill" onclick="selectQuickLocality('RCPIT Campus')">RCPIT Campus</button>
+            <button type="button" class="locality-pill" onclick="selectQuickLocality('NMIMS Campus')">NMIMS Campus</button>
+            <button type="button" class="locality-pill" onclick="selectQuickLocality('Nimzari Naka')">Nimzari Naka</button>
+            <button type="button" class="locality-pill" onclick="selectQuickLocality('Subhash Nagar')">Subhash Nagar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Discovery Main Page -->
-  <main class="main-content">
+  <main class="main-content" style="padding-top: 1.5rem;">
     <div class="container discovery-container">
 
-      <!-- Header & Search Box Card -->
-      <section class="discovery-header-card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.25rem;">
-          <div class="discovery-title-wrap">
-            <h1 id="page-heading">Discover Roommates</h1>
-            <p>Find people who match your lifestyle, preferences, and budget.</p>
-          </div>
-
-          <!-- Section Switcher Tabs -->
-          <div class="section-tabs" role="tablist">
-            <button type="button" class="section-tab-btn active-all" id="tab-all" onclick="switchSection('all')">
-              🌐 All Roommates
-            </button>
-            <button type="button" class="section-tab-btn" id="tab-girls" onclick="switchSection('female')">
-              🌸 Girls Wing <span style="font-size: 0.725rem; opacity: 0.85;">(Safe Zone)</span>
-            </button>
-            <button type="button" class="section-tab-btn" id="tab-boys" onclick="switchSection('male')">
-              ⚡ Boys Wing <span style="font-size: 0.725rem; opacity: 0.85;">(Living Space)</span>
-            </button>
-          </div>
+      <!-- Section Switcher & Discovery Title -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.25rem;">
+        <div class="discovery-title-wrap">
+          <h2 id="page-heading" style="font-size: 1.85rem;">Discover Roommates</h2>
+          <p>Find people who match your lifestyle, preferences, and budget.</p>
         </div>
 
-        <!-- Quick Search Bar -->
-        <div class="quick-search-bar">
-          <div class="quick-search-input-wrap">
-            <span class="quick-search-icon">🔍</span>
-            <input type="text" id="quick-search-location" placeholder="Search by city, college, or neighborhood (e.g. Shirpur, Karwand Naka, RCPIT, NMIMS)...">
-          </div>
-          <button type="button" class="btn btn-primary" id="btn-quick-search">
-            Find Roommates
+        <!-- Section Switcher Tabs -->
+        <div class="section-tabs" role="tablist">
+          <button type="button" class="section-tab-btn active-all" id="tab-all" onclick="switchSection('all')">
+            🌐 All Roommates
+          </button>
+          <button type="button" class="section-tab-btn" id="tab-girls" onclick="switchSection('female')">
+            🌸 Girls Wing <span style="font-size: 0.725rem; opacity: 0.85;">(Safe Zone)</span>
+          </button>
+          <button type="button" class="section-tab-btn" id="tab-boys" onclick="switchSection('male')">
+            ⚡ Boys Wing <span style="font-size: 0.725rem; opacity: 0.85;">(Living Space)</span>
           </button>
         </div>
-
-        <!-- Popular Locality Quick Chips -->
-        <div class="locality-pills-wrap">
-          <span class="locality-pills-label">Popular Areas:</span>
-          <button type="button" class="locality-pill" onclick="selectQuickLocality('Shirpur')">All Shirpur</button>
-          <button type="button" class="locality-pill" onclick="selectQuickLocality('Karwand Naka')">Karwand Naka</button>
-          <button type="button" class="locality-pill" onclick="selectQuickLocality('RCPIT Campus')">RCPIT Campus</button>
-          <button type="button" class="locality-pill" onclick="selectQuickLocality('NMIMS Campus')">NMIMS Campus</button>
-          <button type="button" class="locality-pill" onclick="selectQuickLocality('Nimzari Naka')">Nimzari Naka</button>
-          <button type="button" class="locality-pill" onclick="selectQuickLocality('Subhash Nagar')">Subhash Nagar</button>
-        </div>
-      </section>
+      </div>
 
       <!-- Section Notice Banner (Dynamic when in Girls/Boys wing) -->
       <div id="section-notice-banner"></div>
+
+      <!-- Search Summary Badge (Displays active criteria summary) -->
+      <div id="search-summary-bar" style="display: none; background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 0.65rem 1rem; font-size: 0.875rem; color: var(--slate-600); align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-weight: 700; color: var(--brand-navy);">Search Criteria:</span>
+          <span id="search-summary-text"></span>
+        </div>
+        <button type="button" class="clear-all-filters-btn" onclick="resetFilters()">Clear Search</button>
+      </div>
 
       <!-- Discovery Toolbar -->
       <div class="discovery-toolbar">
@@ -140,9 +204,14 @@
 
             <!-- Location Section -->
             <div class="filter-section-group">
-              <span class="filter-section-title">📍 Location & Campus</span>
+              <span class="filter-section-title">📍 Location &amp; Campus</span>
+              <div class="form-group" style="margin-bottom: 0.65rem;">
+                <label class="form-label" for="filter-location">City or Locality</label>
+                <input type="text" id="filter-location" class="form-control" placeholder="e.g. Shirpur, Karwand Naka">
+              </div>
               <div class="form-group" style="margin-bottom: 0;">
-                <input type="text" id="filter-location" class="form-control" placeholder="City or College (e.g. Shirpur, Karwand Naka)">
+                <label class="form-label" for="filter-college">College or University</label>
+                <input type="text" id="filter-college" class="form-control" placeholder="e.g. RCPIT, NMIMS">
               </div>
             </div>
 
@@ -165,7 +234,7 @@
               <span class="filter-section-title">🥗 Lifestyle Habits</span>
               
               <div class="form-group" style="margin-bottom: 0.65rem;">
-                <label class="form-label" style="font-size: 0.8rem;" for="filter-food">Dietary / Kitchen Habit</label>
+                <label class="form-label" for="filter-food">Dietary Preference</label>
                 <select id="filter-food" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
                   <option value="">Any Food Preference</option>
                   <option value="vegetarian">Vegetarian Only</option>
@@ -175,7 +244,7 @@
               </div>
 
               <div class="form-group" style="margin-bottom: 0.65rem;">
-                <label class="form-label" style="font-size: 0.8rem;" for="filter-smoking">Smoking Preference</label>
+                <label class="form-label" for="filter-smoking">Smoking Preference</label>
                 <select id="filter-smoking" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
                   <option value="">Any Smoking Policy</option>
                   <option value="non-smoker">Non-smoker Only</option>
@@ -185,7 +254,7 @@
               </div>
 
               <div class="form-group" style="margin-bottom: 0.65rem;">
-                <label class="form-label" style="font-size: 0.8rem;" for="filter-sleeping">Sleep Routine</label>
+                <label class="form-label" for="filter-sleeping">Sleep Routine</label>
                 <select id="filter-sleeping" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
                   <option value="">Any Sleep Routine</option>
                   <option value="early-bird">Early-bird (Early sleep)</option>
@@ -195,7 +264,7 @@
               </div>
 
               <div class="form-group" style="margin-bottom: 0.65rem;">
-                <label class="form-label" style="font-size: 0.8rem;" for="filter-study">Study & Work Schedule</label>
+                <label class="form-label" for="filter-study">Study &amp; Work Schedule</label>
                 <select id="filter-study" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
                   <option value="">Any Study Schedule</option>
                   <option value="morning">Morning Schedule</option>
@@ -206,7 +275,7 @@
               </div>
 
               <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label" style="font-size: 0.8rem;" for="filter-cleanliness">Cleanliness Standard</label>
+                <label class="form-label" for="filter-cleanliness">Cleanliness Standard</label>
                 <select id="filter-cleanliness" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
                   <option value="">Any Standard</option>
                   <option value="very-clean">Very Clean / Spotless</option>
@@ -216,11 +285,11 @@
               </div>
             </div>
 
-            <!-- Household Sharing Section -->
+            <!-- Accommodation Sharing Section -->
             <div class="filter-section-group" style="border-bottom: none; margin-bottom: 0.75rem;">
-              <span class="filter-section-title">🏠 Household & Flatmates</span>
+              <span class="filter-section-title">🏠 Accommodation &amp; Sharing</span>
               <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label" style="font-size: 0.8rem;" for="filter-roommates">Preferred Number of Flatmates</label>
+                <label class="form-label" for="filter-roommates">Preferred Number of Flatmates</label>
                 <select id="filter-roommates" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
                   <option value="">Any Household Size</option>
                   <option value="1">1 Roommate (2 in Flat)</option>
@@ -255,11 +324,11 @@
   <div class="mobile-filter-backdrop" id="mobile-filter-backdrop">
     <div class="mobile-filter-sheet">
       <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--slate-200); margin-bottom: 1rem;">
-        <h3 style="font-size: 1.15rem; font-weight: 700;">Filter Roommates</h3>
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--brand-navy);">Filter Roommates</h3>
         <button type="button" class="modal-close" id="btn-close-mobile-filter">&times;</button>
       </div>
       <div id="mobile-filter-container-target" style="flex: 1; overflow-y: auto;">
-        <!-- Filter form clones or mirrors here for mobile -->
+        <!-- Filter form cloned or mirrored here for mobile -->
       </div>
       <div style="display: flex; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid var(--slate-200); margin-top: auto;">
         <button type="button" class="btn btn-secondary" id="btn-mobile-reset" style="flex: 1;">Reset</button>
@@ -273,13 +342,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <div>
-          <h3 style="font-size: 1.25rem; font-weight: 700;">Express Interest in <span id="modal-target-name">Roommate</span></h3>
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--brand-navy);">Express Interest in <span id="modal-target-name">Roommate</span></h3>
           <p style="font-size: 0.85rem; color: var(--slate-500); margin-top: 2px;">Direct connection request via RoommateFinder</p>
         </div>
         <button type="button" class="modal-close" id="close-interest-modal">&times;</button>
       </div>
 
-      <div style="background: var(--primary-50); border: 1px solid var(--primary-200); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 1.25rem; font-size: 0.85rem; color: var(--primary-900);">
+      <div style="background: var(--brand-teal-tint); border: 1px solid var(--brand-teal-border); border-radius: var(--radius-md); padding: 0.85rem; margin-bottom: 1.25rem; font-size: 0.85rem; color: var(--brand-teal-dark);">
         💡 When they accept your interest, you'll be mutually connected to coordinate flat visits and exchange contact details.
       </div>
 
@@ -315,6 +384,9 @@
     </div>
   </div>
 
+  <!-- Toast Notification Feedback -->
+  <div id="toast-notification" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 2000; display: none;"></div>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
@@ -325,11 +397,11 @@
               <img src="/assets/logo.svg" alt="RoommateFinder Logo" width="32" height="32">
             </div>
             <div class="brand-text-group">
-              <span class="brand-name">ROOMMATE<span>FINDER</span></span>
-              <span class="brand-tagline-badge">Find your people. Share your space.</span>
+              <span class="brand-name" style="color: #ffffff;">ROOMMATE<span style="color: var(--brand-teal);">FINDER</span></span>
+              <span class="brand-tagline-badge" style="color: var(--slate-400);">Find your people. Share your space.</span>
             </div>
           </div>
-          <p style="color: var(--slate-500); font-size: 0.875rem; max-width: 340px;">
+          <p style="color: var(--slate-300); font-size: 0.875rem; max-width: 340px; line-height: 1.6;">
             A modern, transparent roommate discovery platform connecting college students and young professionals based on verified habits, budgets, and safety protocols.
           </p>
         </div>
@@ -346,8 +418,8 @@
           <h4>Platform</h4>
           <ul class="footer-links">
             <li><a href="/index.html#how-it-works">How It Works</a></li>
+            <li><a href="/index.html#about-us">About Us</a></li>
             <li><a href="/index.html#features">Compatibility Engine</a></li>
-            <li><a href="/index.html#living-wings">Safety Protocols</a></li>
             <li><a href="/index.html#faq">Frequently Asked Questions</a></li>
           </ul>
         </div>
@@ -365,9 +437,9 @@
       <div class="footer-bottom">
         <div>&copy; 2026 ROOMMATEFINDER. All rights reserved.</div>
         <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
-          <a href="/find-roommates.html" style="color: var(--slate-400);">Privacy Policy</a>
-          <a href="/find-roommates.html" style="color: var(--slate-400);">Community Guidelines</a>
-          <a href="/find-roommates.html" style="color: var(--slate-400);">Safety Verification</a>
+          <a href="/find-roommates.html">Privacy Policy</a>
+          <a href="/find-roommates.html">Community Guidelines</a>
+          <a href="/find-roommates.html">Safety Verification</a>
         </div>
       </div>
     </div>

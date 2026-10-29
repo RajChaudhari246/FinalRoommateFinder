@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const sectionParam = urlParams.get('section') || (urlParams.get('gender') ? urlParams.get('gender').toLowerCase() : null);
   const locParam = urlParams.get('location');
+  const collegeParam = urlParams.get('college');
   const minBParam = urlParams.get('minBudget');
   const maxBParam = urlParams.get('maxBudget');
 
@@ -48,9 +49,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (locParam) {
     const locInput = document.getElementById('filter-location');
     const qLocInput = document.getElementById('quick-search-location');
+    const heroLoc = document.getElementById('hero-search-location');
     if (locInput) locInput.value = locParam;
     if (qLocInput) qLocInput.value = locParam;
+    if (heroLoc) heroLoc.value = locParam;
     currentFilters.location = locParam;
+  }
+  if (collegeParam) {
+    const colInput = document.getElementById('filter-college');
+    const heroCol = document.getElementById('hero-search-college');
+    if (colInput) colInput.value = collegeParam;
+    if (heroCol) heroCol.value = collegeParam;
   }
   if (minBParam) {
     const minInput = document.getElementById('filter-min-budget');
@@ -59,7 +68,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   if (maxBParam) {
     const maxInput = document.getElementById('filter-max-budget');
+    const heroB = document.getElementById('hero-search-budget');
     if (maxInput) maxInput.value = maxBParam;
+    if (heroB) heroB.value = maxBParam;
     currentFilters.maxBudget = maxBParam;
   }
 
@@ -76,12 +87,56 @@ document.addEventListener('DOMContentLoaded', async () => {
 function setupEventListeners() {
   const filterForm = document.getElementById('filter-form');
   const resetBtn = document.getElementById('reset-filters-btn');
-  const btnQuickSearch = document.getElementById('btn-quick-search');
-  const quickSearchInput = document.getElementById('quick-search-location');
   const sortSelect = document.getElementById('sort-by-select');
   const btnViewGrid = document.getElementById('btn-view-grid');
   const btnViewList = document.getElementById('btn-view-list');
   const clearAllChipsBtn = document.getElementById('btn-clear-all-chips');
+
+  // Hero Search Console
+  const btnHeroSearch = document.getElementById('btn-hero-search');
+  const heroLocInput = document.getElementById('hero-search-location');
+  const heroColInput = document.getElementById('hero-search-college');
+  const heroBudInput = document.getElementById('hero-search-budget');
+  const heroArrSelect = document.getElementById('hero-search-arrangement');
+
+  btnHeroSearch?.addEventListener('click', () => {
+    const locVal = heroLocInput?.value.trim() || '';
+    const colVal = heroColInput?.value.trim() || '';
+    const budVal = heroBudInput?.value || '';
+    const arrVal = heroArrSelect?.value || 'all';
+
+    // Synchronize to sidebar form
+    const filterLoc = document.getElementById('filter-location');
+    const filterCol = document.getElementById('filter-college');
+    const filterMaxB = document.getElementById('filter-max-budget');
+
+    if (filterLoc) filterLoc.value = locVal;
+    if (filterCol) filterCol.value = colVal;
+    if (filterMaxB) filterMaxB.value = budVal;
+
+    // Handle Wing/Arrangement
+    if (arrVal === 'female') {
+      currentSection = 'female';
+      updateSectionUI('female');
+    } else if (arrVal === 'male') {
+      currentSection = 'male';
+      updateSectionUI('male');
+    } else {
+      currentSection = 'all';
+      updateSectionUI('all');
+    }
+
+    applyFilters(true);
+  });
+
+  [heroLocInput, heroColInput, heroBudInput].forEach(inp => {
+    inp?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        btnHeroSearch?.click();
+      }
+    });
+  });
 
   // Filter Form Submit
   filterForm?.addEventListener('submit', (e) => {
@@ -96,22 +151,6 @@ function setupEventListeners() {
 
   clearAllChipsBtn?.addEventListener('click', () => {
     resetFilters();
-  });
-
-  // Quick Search Bar
-  btnQuickSearch?.addEventListener('click', () => {
-    const val = quickSearchInput?.value.trim() || '';
-    const locInput = document.getElementById('filter-location');
-    if (locInput) locInput.value = val;
-    currentFilters.location = val;
-    applyFilters(true);
-  });
-
-  quickSearchInput?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      btnQuickSearch?.click();
-    }
   });
 
   // Sorting
@@ -158,6 +197,9 @@ function switchSection(section) {
   }
   window.history.pushState({}, '', newUrl);
 
+  const heroArrSelect = document.getElementById('hero-search-arrangement');
+  if (heroArrSelect) heroArrSelect.value = section;
+
   updateSectionUI(section);
   applyFilters(true);
 }
@@ -178,21 +220,25 @@ function updateSectionUI(section) {
 
   if (section === 'female') {
     tabGirls?.classList.add('active-girls');
-    if (pageHeading) pageHeading.innerHTML = '🌸 Girls Safe Wing <span style="font-size: 1rem; font-weight: 700; color: #be123c; margin-left: 0.5rem; vertical-align: middle;">Women\'s Verified Living Zone</span>';
+    if (pageHeading) pageHeading.innerHTML = '🌸 Girls Safe Wing <span style="font-size: 0.95rem; font-weight: 700; color: #be123c; margin-left: 0.5rem; vertical-align: middle;">Women\'s Verified Living Zone</span>';
     if (sidebarTitle) sidebarTitle.textContent = 'Girls Wing Safety Filters';
     if (sidebarSub) sidebarSub.textContent = 'Protected & Verified Roommate Criteria';
 
     if (bannerEl) {
       bannerEl.innerHTML = `
-        <div class="section-notice-card section-notice-girls">
-          <div>
-            <h3>🛡️ Girls Section — Women's Verified Safe Living Space</h3>
-            <p>Protected flatmate listings for female students and working professionals. Filter flatmates by male-visitor policies, society gate curfews, 24/7 security guard presence, and emergency contact readiness.</p>
-            <div class="section-notice-pills">
-              <span>🔒 Zero Unauthorized Male Visitors</span>
-              <span>⏰ Transparent Gate/Curfew Hours</span>
-              <span>🛡️ 24/7 Gated Societies & CCTV</span>
-              <span>📞 Guardian Contact Verified</span>
+        <div class="card" style="background: var(--girls-soft); border-color: var(--girls-border); margin-bottom: 1.5rem; padding: 1.25rem 1.5rem;">
+          <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+            <span style="font-size: 1.5rem;">🛡️</span>
+            <div>
+              <h3 style="color: var(--girls-dark); font-size: 1.1rem; margin-bottom: 0.25rem;">Girls Wing — Women's Verified Safe Living Space</h3>
+              <p style="color: var(--girls-text); font-size: 0.875rem; margin-bottom: 0.65rem;">
+                Protected roommate listings for female students and working professionals. Filter potential flatmates by male-guest policies, society gate curfews, 24/7 security guard presence, and emergency contact readiness.
+              </p>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="badge wing-badge-girls">🔒 Zero Unauthorized Male Visitors</span>
+                <span class="badge wing-badge-girls">⏰ Transparent Gate/Curfew Hours</span>
+                <span class="badge wing-badge-girls">🛡️ 24/7 Gated Societies &amp; CCTV</span>
+              </div>
             </div>
           </div>
         </div>
@@ -201,62 +247,60 @@ function updateSectionUI(section) {
 
     if (dynamicFilterBox) {
       dynamicFilterBox.innerHTML = `
-        <div class="protocol-box protocol-box-girls" style="padding: 1rem; margin-bottom: 0.5rem;">
-          <div class="protocol-header" style="margin-bottom: 0.75rem; padding-bottom: 0.4rem;">
-            <div class="protocol-title" style="font-size: 0.925rem;">🌸 Safety & Guest Policies</div>
-            <span class="protocol-badge" style="color: #be123c;">Security</span>
-          </div>
+        <span class="filter-section-title">🌸 Safety &amp; Guest Protocols</span>
+        <div class="form-group" style="margin-bottom: 0.65rem;">
+          <label class="form-label" style="font-size: 0.8rem;" for="filter-security-visitor">Visitor &amp; Male Guest Policy</label>
+          <select id="filter-security-visitor" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+            <option value="">Any Policy</option>
+            <option value="no-male-guests">Strictly No Male Guests (Women-Only)</option>
+            <option value="female-friends-only">Female Friends Only (Daytime)</option>
+            <option value="pre-informed-daytime">Pre-informed Day Guests Only</option>
+          </select>
+        </div>
 
-          <div class="form-group" style="margin-bottom: 0.65rem;">
-            <label class="form-label" style="font-size: 0.8rem;" for="filter-security-visitor">Visitor & Male Guest Policy</label>
-            <select id="filter-security-visitor" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
-              <option value="">Any Policy</option>
-              <option value="no-male-guests">Strictly No Male Guests (Women-Only)</option>
-              <option value="female-friends-only">Female Friends Only (Daytime)</option>
-              <option value="pre-informed-daytime">Pre-informed Day Guests Only</option>
-            </select>
-          </div>
+        <div class="form-group" style="margin-bottom: 0.65rem;">
+          <label class="form-label" style="font-size: 0.8rem;" for="filter-security-curfew">Society Gate / Curfew Timing</label>
+          <select id="filter-security-curfew" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+            <option value="">Any Timing</option>
+            <option value="strict-curfew">Strict Gate Timing (Back by 9:00 PM)</option>
+            <option value="moderate-curfew">Moderate Timing (Back by 10:30 PM)</option>
+            <option value="flexible">Flexible / Shift Timing (11:00 PM+)</option>
+          </select>
+        </div>
 
-          <div class="form-group" style="margin-bottom: 0.65rem;">
-            <label class="form-label" style="font-size: 0.8rem;" for="filter-security-curfew">Society Gate / Curfew Timing</label>
-            <select id="filter-security-curfew" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
-              <option value="">Any Timing</option>
-              <option value="strict-curfew">Strict Gate Timing (Back by 9:00 PM)</option>
-              <option value="moderate-curfew">Moderate Timing (Back by 10:30 PM)</option>
-              <option value="flexible">Flexible / Shift Timing (11:00 PM+)</option>
-            </select>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label" style="font-size: 0.8rem;" for="filter-security-amenities">Building & Society Security</label>
-            <select id="filter-security-amenities" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
-              <option value="">Any Amenities</option>
-              <option value="gated-cctv">24/7 Guarded Society & CCTV</option>
-              <option value="secure-lock">Keypad / Biometric Door Lock</option>
-              <option value="safe-colony">Safe Well-Lit Colony</option>
-            </select>
-          </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" style="font-size: 0.8rem;" for="filter-security-amenities">Building &amp; Society Security</label>
+          <select id="filter-security-amenities" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+            <option value="">Any Amenities</option>
+            <option value="gated-cctv">24/7 Guarded Society &amp; CCTV</option>
+            <option value="secure-lock">Keypad / Biometric Door Lock</option>
+            <option value="safe-colony">Safe Well-Lit Colony</option>
+          </select>
         </div>
       `;
     }
 
   } else if (section === 'male') {
     tabBoys?.classList.add('active-boys');
-    if (pageHeading) pageHeading.innerHTML = '⚡ Boys Living Wing <span style="font-size: 1rem; font-weight: 700; color: #1d4ed8; margin-left: 0.5rem; vertical-align: middle;">Student & Bachelor Wing</span>';
+    if (pageHeading) pageHeading.innerHTML = '⚡ Boys Living Wing <span style="font-size: 0.95rem; font-weight: 700; color: #1d4ed8; margin-left: 0.5rem; vertical-align: middle;">Student &amp; Bachelor Living Space</span>';
     if (sidebarTitle) sidebarTitle.textContent = 'Boys Wing Living Filters';
     if (sidebarSub) sidebarSub.textContent = 'Living Protocol & Flat Harmony';
 
     if (bannerEl) {
       bannerEl.innerHTML = `
-        <div class="section-notice-card section-notice-boys">
-          <div>
-            <h3>⚡ Boys Section — Men's Student & Professional Living Wing</h3>
-            <p>Focused living spaces for male college students and working bachelors. Find flatmates based on study-first environments, quiet hours, responsible door lock custody, and transparent UPI bill splitting.</p>
-            <div class="section-notice-pills">
-              <span>📚 Quiet Study & Non-Party Options</span>
-              <span>🔑 Main Door & Key Custody Protocol</span>
-              <span>⏰ Late Study / Quiet Hours Agreement</span>
-              <span>💳 Prompt UPI Bill Splitting</span>
+        <div class="card" style="background: var(--boys-soft); border-color: var(--boys-border); margin-bottom: 1.5rem; padding: 1.25rem 1.5rem;">
+          <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+            <span style="font-size: 1.5rem;">⚡</span>
+            <div>
+              <h3 style="color: var(--boys-dark); font-size: 1.1rem; margin-bottom: 0.25rem;">Boys Wing — Focused Student &amp; Professional Living Space</h3>
+              <p style="color: var(--boys-text); font-size: 0.875rem; margin-bottom: 0.65rem;">
+                Curated flatmate discovery for male college students and bachelors. Find roommates who respect quiet study schedules, rent transparency, clean shared spaces, and nighttime hours.
+              </p>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="badge wing-badge-boys">📚 Quiet Study Hours</span>
+                <span class="badge wing-badge-boys">🔑 Door Lock Discipline</span>
+                <span class="badge wing-badge-boys">🎮 Gaming / Late Night Alignment</span>
+              </div>
             </div>
           </div>
         </div>
@@ -265,40 +309,34 @@ function updateSectionUI(section) {
 
     if (dynamicFilterBox) {
       dynamicFilterBox.innerHTML = `
-        <div class="protocol-box protocol-box-boys" style="padding: 1rem; margin-bottom: 0.5rem;">
-          <div class="protocol-header" style="margin-bottom: 0.75rem; padding-bottom: 0.4rem;">
-            <div class="protocol-title" style="font-size: 0.925rem;">⚡ Living Harmony Protocol</div>
-            <span class="protocol-badge" style="color: #1d4ed8;">Protocol</span>
-          </div>
+        <span class="filter-section-title">⚡ Living Harmony &amp; Routine</span>
+        <div class="form-group" style="margin-bottom: 0.65rem;">
+          <label class="form-label" style="font-size: 0.8rem;" for="filter-security-visitor">Guest &amp; Gathering Policy</label>
+          <select id="filter-security-visitor" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+            <option value="">Any Policy</option>
+            <option value="no-overnight-guests">No Overnight Guests (Quiet Study)</option>
+            <option value="weekend-friends-only">Weekend Friends Only</option>
+            <option value="prior-consent">Prior Flatmate Consent Required</option>
+          </select>
+        </div>
 
-          <div class="form-group" style="margin-bottom: 0.65rem;">
-            <label class="form-label" style="font-size: 0.8rem;" for="filter-security-visitor">Overnight Guests & Parties</label>
-            <select id="filter-security-visitor" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
-              <option value="">Any Policy</option>
-              <option value="no-overnight-guests">Quiet Study (Strictly No Overnight Guests)</option>
-              <option value="weekend-friends-only">Weekend Friends with Notice</option>
-              <option value="prior-consent">Prior Consent Allowed</option>
-            </select>
-          </div>
+        <div class="form-group" style="margin-bottom: 0.65rem;">
+          <label class="form-label" style="font-size: 0.8rem;" for="filter-security-curfew">Night Hours &amp; Silence Rules</label>
+          <select id="filter-security-curfew" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+            <option value="">Any Schedule</option>
+            <option value="strict-curfew">Quiet After 10:30 PM (Early Riser)</option>
+            <option value="moderate-curfew">Headphones Only at Night</option>
+            <option value="night-owl">Night-Owl / Late Gaming Friendly</option>
+          </select>
+        </div>
 
-          <div class="form-group" style="margin-bottom: 0.65rem;">
-            <label class="form-label" style="font-size: 0.8rem;" for="filter-security-curfew">Quiet Hours & Night Discipline</label>
-            <select id="filter-security-curfew" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
-              <option value="">Any Rhythm</option>
-              <option value="strict-curfew">Strict Silence After 10:30 PM (Early Sleep)</option>
-              <option value="moderate-curfew">Moderate (Headphones required at night)</option>
-              <option value="night-owl">Late Night Gaming/Coding Friendly</option>
-            </select>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label" style="font-size: 0.8rem;" for="filter-security-amenities">Flat Security & Key Custody</label>
-            <select id="filter-security-amenities" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
-              <option value="">Any Standard</option>
-              <option value="strict-lock-discipline">Strict Door Lock & Key Discipline</option>
-              <option value="cctv-parking">CCTV & Vehicle/Bike Parking</option>
-            </select>
-          </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" style="font-size: 0.8rem;" for="filter-security-amenities">Flat Security &amp; Parking</label>
+          <select id="filter-security-amenities" class="form-control" style="font-size: 0.85rem; padding: 0.5rem;">
+            <option value="">Any Amenities</option>
+            <option value="strict-lock-discipline">Door Lock Discipline &amp; Hygiene</option>
+            <option value="cctv-parking">CCTV Security &amp; Two-Wheeler Parking</option>
+          </select>
         </div>
       `;
     }
@@ -307,7 +345,7 @@ function updateSectionUI(section) {
     tabAll?.classList.add('active-all');
     if (pageHeading) pageHeading.textContent = 'Discover Roommates';
     if (sidebarTitle) sidebarTitle.textContent = 'Filter Roommates';
-    if (sidebarSub) sidebarSub.textContent = 'All Verified Community Listings';
+    if (sidebarSub) sidebarSub.textContent = 'Personalized Criteria';
     if (bannerEl) bannerEl.innerHTML = '';
 
     if (dynamicFilterBox) {
@@ -315,7 +353,7 @@ function updateSectionUI(section) {
         <span class="filter-section-title">🚻 Target Gender / Wing</span>
         <div class="form-group" style="margin-bottom: 0;">
           <select id="filter-gender-select" class="form-control" onchange="handleGenderSelectChange(this.value)">
-            <option value="">All Genders & Community</option>
+            <option value="">All Genders &amp; Community</option>
             <option value="Female">🌸 Girls Wing (Women's Safe Zone)</option>
             <option value="Male">⚡ Boys Wing (Men's Living Wing)</option>
           </select>
@@ -332,19 +370,26 @@ function handleGenderSelectChange(val) {
 }
 
 function selectQuickLocality(loc) {
+  const actualVal = loc === 'All Shirpur' ? 'Shirpur' : loc;
   const locInput = document.getElementById('filter-location');
-  const qLocInput = document.getElementById('quick-search-location');
-  if (locInput) locInput.value = loc;
-  if (qLocInput) qLocInput.value = loc;
-  currentFilters.location = loc;
+  const heroLoc = document.getElementById('hero-search-location');
+
+  if (locInput) locInput.value = actualVal;
+  if (heroLoc) heroLoc.value = actualVal;
+
+  currentFilters.location = actualVal;
   applyFilters(true);
 }
 
 function setBudgetPreset(min, max) {
   const minInput = document.getElementById('filter-min-budget');
   const maxInput = document.getElementById('filter-max-budget');
+  const heroBud = document.getElementById('hero-search-budget');
+
   if (minInput) minInput.value = min || '';
   if (maxInput) maxInput.value = max || '';
+  if (heroBud) heroBud.value = max || '';
+
   currentFilters.minBudget = min || '';
   currentFilters.maxBudget = max || '';
   applyFilters(true);
@@ -352,23 +397,38 @@ function setBudgetPreset(min, max) {
 
 function resetFilters() {
   const filterForm = document.getElementById('filter-form');
-  const quickSearchInput = document.getElementById('quick-search-location');
+  const heroLoc = document.getElementById('hero-search-location');
+  const heroCol = document.getElementById('hero-search-college');
+  const heroBud = document.getElementById('hero-search-budget');
+  const heroArr = document.getElementById('hero-search-arrangement');
+
   filterForm?.reset();
-  if (quickSearchInput) quickSearchInput.value = '';
+  if (heroLoc) heroLoc.value = '';
+  if (heroCol) heroCol.value = '';
+  if (heroBud) heroBud.value = '';
+  if (heroArr) heroArr.value = 'all';
+
+  const filterCol = document.getElementById('filter-college');
+  if (filterCol) filterCol.value = '';
 
   currentFilters = {};
   if (currentSection === 'female') currentFilters.gender = 'Female';
   if (currentSection === 'male') currentFilters.gender = 'Male';
   currentPage = 1;
-  loadRoommates();
+  renderActiveFilterChips();
+  loadRoommates(false);
 }
 
 function applyFilters(shouldScroll = false) {
   const locVal = document.getElementById('filter-location')?.value.trim() ||
-                 document.getElementById('quick-search-location')?.value.trim() || '';
+                 document.getElementById('hero-search-location')?.value.trim() || '';
+
+  const colVal = document.getElementById('filter-college')?.value.trim() ||
+                 document.getElementById('hero-search-college')?.value.trim() || '';
 
   const minBVal = document.getElementById('filter-min-budget')?.value || '';
-  const maxBVal = document.getElementById('filter-max-budget')?.value || '';
+  const maxBVal = document.getElementById('filter-max-budget')?.value ||
+                  document.getElementById('hero-search-budget')?.value || '';
 
   // Validate budget range if both provided
   if (minBVal && maxBVal && parseFloat(maxBVal) < parseFloat(minBVal)) {
@@ -376,8 +436,14 @@ function applyFilters(shouldScroll = false) {
     return;
   }
 
+  // Combine location and college if needed for search query
+  let finalSearchLoc = locVal;
+  if (!finalSearchLoc && colVal) {
+    finalSearchLoc = colVal;
+  }
+
   currentFilters = {
-    location: locVal,
+    location: finalSearchLoc,
     minBudget: minBVal,
     maxBudget: maxBVal,
     food: document.getElementById('filter-food')?.value || '',
@@ -398,6 +464,27 @@ function applyFilters(shouldScroll = false) {
   } else {
     const selGender = document.getElementById('filter-gender-select')?.value;
     if (selGender) currentFilters.gender = selGender;
+  }
+
+  // Update Search Summary Bar
+  const summaryBar = document.getElementById('search-summary-bar');
+  const summaryText = document.getElementById('search-summary-text');
+  if (summaryBar && summaryText) {
+    const activeParts = [];
+    if (locVal) activeParts.push(`📍 ${locVal}`);
+    if (colVal) activeParts.push(`🎓 ${colVal}`);
+    if (minBVal && maxBVal) activeParts.push(`💰 ₹${minBVal} – ₹${maxBVal}`);
+    else if (maxBVal) activeParts.push(`💰 Up to ₹${maxBVal}`);
+    else if (minBVal) activeParts.push(`💰 From ₹${minBVal}`);
+    if (currentSection === 'female') activeParts.push('🌸 Girls Wing');
+    if (currentSection === 'male') activeParts.push('⚡ Boys Wing');
+
+    if (activeParts.length > 0) {
+      summaryText.textContent = activeParts.join(' • ');
+      summaryBar.style.display = 'flex';
+    } else {
+      summaryBar.style.display = 'none';
+    }
   }
 
   currentPage = 1;
@@ -448,18 +535,22 @@ function renderActiveFilterChips() {
   if (currentFilters.securityCurfew) {
     chips.push({ key: 'securityCurfew', label: `⏰ Gate Timing` });
   }
+  if (currentFilters.securityAmenities) {
+    chips.push({ key: 'securityAmenities', label: `🛡️ Security Amenities` });
+  }
 
   if (chips.length > 0) {
     container.style.display = 'block';
     chipsBox.innerHTML = chips.map(c => `
       <span class="filter-chip-removable">
         <span>${escapeHtml(c.label)}</span>
-        <button type="button" onclick="removeFilterChip('${c.key}')" title="Remove filter" aria-label="Remove filter">&times;</button>
+        <button type="button" onclick="removeFilterChip('${c.key}')" aria-label="Remove filter">&times;</button>
       </span>
     `).join('');
+
     if (mobileBadge) {
-      mobileBadge.style.display = 'inline-block';
       mobileBadge.textContent = chips.length;
+      mobileBadge.style.display = 'inline-block';
     }
   } else {
     container.style.display = 'none';
@@ -470,26 +561,69 @@ function renderActiveFilterChips() {
 
 function removeFilterChip(key) {
   if (key === 'location') {
-    const locInput = document.getElementById('filter-location');
-    const qLocInput = document.getElementById('quick-search-location');
-    if (locInput) locInput.value = '';
-    if (qLocInput) qLocInput.value = '';
-    delete currentFilters.location;
+    const loc = document.getElementById('filter-location');
+    const heroLoc = document.getElementById('hero-search-location');
+    if (loc) loc.value = '';
+    if (heroLoc) heroLoc.value = '';
+    currentFilters.location = '';
   } else if (key === 'budget') {
     const minInput = document.getElementById('filter-min-budget');
     const maxInput = document.getElementById('filter-max-budget');
+    const heroB = document.getElementById('hero-search-budget');
     if (minInput) minInput.value = '';
     if (maxInput) maxInput.value = '';
-    delete currentFilters.minBudget;
-    delete currentFilters.maxBudget;
-  } else {
-    const el = document.getElementById(`filter-${key}`);
+    if (heroB) heroB.value = '';
+    currentFilters.minBudget = '';
+    currentFilters.maxBudget = '';
+  } else if (key === 'minBudget') {
+    const minInput = document.getElementById('filter-min-budget');
+    if (minInput) minInput.value = '';
+    currentFilters.minBudget = '';
+  } else if (key === 'maxBudget') {
+    const maxInput = document.getElementById('filter-max-budget');
+    const heroB = document.getElementById('hero-search-budget');
+    if (maxInput) maxInput.value = '';
+    if (heroB) heroB.value = '';
+    currentFilters.maxBudget = '';
+  } else if (key === 'food') {
+    const el = document.getElementById('filter-food');
     if (el) el.value = '';
-    delete currentFilters[key];
+    currentFilters.food = '';
+  } else if (key === 'smoking') {
+    const el = document.getElementById('filter-smoking');
+    if (el) el.value = '';
+    currentFilters.smoking = '';
+  } else if (key === 'sleeping') {
+    const el = document.getElementById('filter-sleeping');
+    if (el) el.value = '';
+    currentFilters.sleeping = '';
+  } else if (key === 'study') {
+    const el = document.getElementById('filter-study');
+    if (el) el.value = '';
+    currentFilters.study = '';
+  } else if (key === 'cleanliness') {
+    const el = document.getElementById('filter-cleanliness');
+    if (el) el.value = '';
+    currentFilters.cleanliness = '';
+  } else if (key === 'roommateCount') {
+    const el = document.getElementById('filter-roommates');
+    if (el) el.value = '';
+    currentFilters.roommateCount = '';
+  } else if (key === 'securityVisitorPolicy') {
+    const el = document.getElementById('filter-security-visitor');
+    if (el) el.value = '';
+    currentFilters.securityVisitorPolicy = '';
+  } else if (key === 'securityCurfew') {
+    const el = document.getElementById('filter-security-curfew');
+    if (el) el.value = '';
+    currentFilters.securityCurfew = '';
+  } else if (key === 'securityAmenities') {
+    const el = document.getElementById('filter-security-amenities');
+    if (el) el.value = '';
+    currentFilters.securityAmenities = '';
   }
 
-  renderActiveFilterChips();
-  loadRoommates(false);
+  applyFilters(true);
 }
 
 async function loadRoommates(shouldScroll = false) {
@@ -660,13 +794,15 @@ function renderRoommateCard(r) {
     const curfewTag = curfewMap[r.security_curfew];
     const amenityTag = amenityMap[r.security_amenities];
 
-    securityChipsHtml = `
-      <div class="security-highlights-container">
-        ${visitorTag ? `<span class="sec-chip safe-alert">${visitorTag}</span>` : ''}
-        ${curfewTag ? `<span class="sec-chip safe-alert">${curfewTag}</span>` : ''}
-        ${amenityTag ? `<span class="sec-chip safe-alert">${amenityTag}</span>` : ''}
-      </div>
-    `;
+    if (visitorTag || curfewTag || amenityTag) {
+      securityChipsHtml = `
+        <div class="security-highlights-container">
+          ${visitorTag ? `<span class="sec-chip safe-alert">${visitorTag}</span>` : ''}
+          ${curfewTag ? `<span class="sec-chip safe-alert">${curfewTag}</span>` : ''}
+          ${amenityTag ? `<span class="sec-chip safe-alert">${amenityTag}</span>` : ''}
+        </div>
+      `;
+    }
   } else if (isMale) {
     const guestMap = {
       'no-overnight-guests': '📚 Quiet Study Only',
@@ -689,13 +825,15 @@ function renderRoommateCard(r) {
     const quietTag = quietMap[r.security_curfew];
     const lockTag = lockMap[r.security_amenities];
 
-    securityChipsHtml = `
-      <div class="security-highlights-container">
-        ${guestTag ? `<span class="sec-chip harmony-alert">${guestTag}</span>` : ''}
-        ${quietTag ? `<span class="sec-chip harmony-alert">${quietTag}</span>` : ''}
-        ${lockTag ? `<span class="sec-chip harmony-alert">${lockTag}</span>` : ''}
-      </div>
-    `;
+    if (guestTag || quietTag || lockTag) {
+      securityChipsHtml = `
+        <div class="security-highlights-container">
+          ${guestTag ? `<span class="sec-chip harmony-alert">${guestTag}</span>` : ''}
+          ${quietTag ? `<span class="sec-chip harmony-alert">${quietTag}</span>` : ''}
+          ${lockTag ? `<span class="sec-chip harmony-alert">${lockTag}</span>` : ''}
+        </div>
+      `;
+    }
   }
 
   // Highlights Reason list
@@ -809,7 +947,7 @@ function renderPagination(page, totalPages) {
     <button type="button" class="btn btn-secondary btn-sm" ${page <= 1 ? 'disabled' : ''} onclick="goToPage(${page - 1})">
       ← Previous
     </button>
-    <span style="font-size: 0.875rem; color: var(--slate-600); font-weight: 600;">
+    <span style="font-size: 0.875rem; color: var(--slate-600); font-weight: 700; font-family: var(--font-heading);">
       Page ${page} of ${totalPages}
     </span>
     <button type="button" class="btn btn-secondary btn-sm" ${page >= totalPages ? 'disabled' : ''} onclick="goToPage(${page + 1})">
@@ -868,7 +1006,7 @@ function setupInterestModal() {
         cardBtn.outerHTML = `<button type="button" class="btn btn-secondary btn-sm" disabled style="flex: 1.35; color: var(--slate-700);">Request Sent ✓</button>`;
       }
 
-      alert(`Interest request sent successfully to ${selectedRoommate.name}! They will receive your notification.`);
+      showToast(`Interest request sent successfully to ${selectedRoommate.name}! They will be notified.`, 'success');
       close();
     } catch (err) {
       if (err.status === 409) {
@@ -877,8 +1015,10 @@ function setupInterestModal() {
         if (cardBtn) {
           cardBtn.outerHTML = `<button type="button" class="btn btn-secondary btn-sm" disabled style="flex: 1.35; color: var(--slate-700);">Request Sent ✓</button>`;
         }
+        showToast('You have already sent an interest request to this roommate.', 'warning');
+      } else {
+        showToast(err.message || 'Could not express interest.', 'danger');
       }
-      alert(err.message || 'Could not express interest.');
     } finally {
       submitBtn.disabled = false;
       submitBtn.innerHTML = 'Send Interest Request';
@@ -901,7 +1041,7 @@ function openInterestModal(userId, name) {
       return;
     }
     if (user.id === userId) {
-      alert('You cannot express interest in your own profile.');
+      showToast('You cannot express interest in your own profile.', 'warning');
       return;
     }
     selectedRoommate = { id: userId, name };
@@ -909,6 +1049,31 @@ function openInterestModal(userId, name) {
     if (nameEl) nameEl.textContent = name;
     document.getElementById('interest-modal')?.classList.add('open');
   });
+}
+
+function showToast(message, type = 'success') {
+  let toastEl = document.getElementById('toast-notification');
+  if (!toastEl) {
+    toastEl = document.createElement('div');
+    toastEl.id = 'toast-notification';
+    toastEl.style.cssText = 'position: fixed; bottom: 2rem; right: 2rem; z-index: 2000; display: none;';
+    document.body.appendChild(toastEl);
+  }
+  const isSuccess = type === 'success';
+  const isWarning = type === 'warning';
+  const bgColor = isSuccess ? 'var(--brand-navy)' : isWarning ? '#d97706' : '#dc2626';
+  const icon = isSuccess ? '✅' : isWarning ? 'ℹ️' : '⚠️';
+
+  toastEl.innerHTML = `
+    <div style="background: ${bgColor}; color: #ffffff; padding: 0.85rem 1.35rem; border-radius: var(--radius-md); box-shadow: 0 10px 25px rgba(6, 33, 63, 0.25); display: flex; align-items: center; gap: 0.65rem; font-size: 0.9rem; font-family: var(--font-heading); font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.2);">
+      <span>${icon}</span>
+      <span>${escapeHtml(message)}</span>
+    </div>
+  `;
+  toastEl.style.display = 'block';
+  setTimeout(() => {
+    toastEl.style.display = 'none';
+  }, 4000);
 }
 
 /* =====================================================================
@@ -926,7 +1091,6 @@ function setupMobileFilterDrawer() {
   if (!trigger || !backdrop) return;
 
   trigger.addEventListener('click', () => {
-    // Clone desktop form content for mobile
     if (desktopForm && target && target.children.length === 0) {
       target.appendChild(desktopForm);
     }
@@ -934,7 +1098,6 @@ function setupMobileFilterDrawer() {
   });
 
   const closeDrawer = () => {
-    // Restore form back to desktop filter card if window resizes
     const desktopCard = document.getElementById('desktop-filter-card');
     if (desktopCard && desktopForm && !desktopCard.contains(desktopForm)) {
       desktopCard.appendChild(desktopForm);
@@ -976,3 +1139,4 @@ window.openInterestModal = openInterestModal;
 window.setPresetMessage = setPresetMessage;
 window.goToPage = goToPage;
 window.handleGenderSelectChange = handleGenderSelectChange;
+window.showToast = showToast;
